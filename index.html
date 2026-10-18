@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>مسیر منظومه آری</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@200;300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#05121a;
+  --bg2:#0a1e2b;
+  --ink:#eaf1f7;
+  --mute:#7e95a7;
+  --faint:rgba(190,215,235,.14);
+  --blue:#3c82d8;
+  --sign:#154ade;
+  --glow:#2a6db8;
+  --stop:100vw;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);
+  font-family:Vazirmatn,Tahoma,sans-serif;-webkit-font-smoothing:antialiased}
+body{overscroll-behavior:none;touch-action:none}
+
+/* ambient light that takes the colour of the current year */
+.ambient{position:fixed;inset:0;pointer-events:none;
+  background:
+    radial-gradient(60vmax 40vmax at 50% 55%, color-mix(in srgb,var(--glow) 22%,transparent), transparent 70%),
+    radial-gradient(120vmax 80vmax at 50% 120%, var(--bg2), transparent 60%);
+  transition:background .8s}
+.grain{position:fixed;inset:-50%;pointer-events:none;opacity:.06;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ---------- chrome ---------- */
+header{position:fixed;top:0;inset-inline:0;z-index:5;display:flex;justify-content:space-between;align-items:center;
+  padding:clamp(16px,3vw,36px) clamp(16px,4vw,56px);pointer-events:none}
+.brand{height:clamp(30px,3vw,42px);width:auto;color:var(--ink)}
+.counter{font-weight:300;font-size:13px;color:var(--mute);font-variant-numeric:tabular-nums}
+.counter b{display:inline-block;color:var(--ink);font-weight:700;font-size:22px;margin-inline-start:4px;animation:roll .6s cubic-bezier(.16,1,.3,1)}
+@keyframes roll{from{transform:translateY(70%);opacity:0;filter:blur(4px)}}
+.spin{transform-box:fill-box;transform-origin:center;animation:spin 60s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---------- track ---------- */
+.viewport{position:fixed;inset:0;direction:ltr}
+.track{position:absolute;top:0;left:0;height:100%;will-change:transform}
+.rail,.rail-fill{position:absolute;top:50%;left:0;height:1px;background:var(--faint)}
+.rail-fill{height:2px;margin-top:-.5px;background:linear-gradient(90deg,#cfe0ee,var(--blue) 60%,#7fb3ef);
+  box-shadow:0 0 18px rgba(60,130,216,.55);transform-origin:left}
+.rail-head{position:absolute;top:50%;height:2px;width:calc(10px + var(--va,0) * 260px);transform-origin:0 50%;
+  background:linear-gradient(90deg,#f2f8ff,rgba(127,179,239,.6) 30%,transparent);border-radius:2px;
+  filter:drop-shadow(0 0 6px rgba(120,175,255,.9));opacity:calc(var(--va,0) * 6);pointer-events:none}
+.bgfx{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.bgfx svg{position:absolute;left:0;fill:rgba(190,215,235,1);will-change:transform}
+.bgfx svg.b{fill:var(--sign)}
+.rail-end{position:absolute;top:50%;height:0;border-top:1px dashed rgba(190,215,235,.35)}
+
+.stop{position:absolute;top:0;height:100%;width:var(--stop);--a:0;--d:0}
+.ghost{position:absolute;left:50%;top:50%;font-weight:900;font-size:min(36vw,56vh);line-height:1;white-space:nowrap;
+  color:transparent;-webkit-text-stroke:1px rgba(190,215,235,.09);
+  transform:translate(calc(-50% + var(--d) * -28vw),-46%);pointer-events:none;user-select:none}
+
+.node{position:absolute;left:50%;top:50%;width:clamp(78px,8.5vw,124px);aspect-ratio:1;border-radius:50%;
+  display:grid;place-items:center;background:var(--c);color:var(--t,#fff);
+  font-weight:900;font-size:clamp(20px,2.1vw,32px);letter-spacing:-.5px;
+  transform:translate(-50%,-50%) scale(calc(.42 + .58 * var(--a)));
+  box-shadow:0 0 0 1px rgba(255,255,255,.12) inset,0 20px 60px -10px color-mix(in srgb,var(--c) 70%,transparent);
+  cursor:pointer;z-index:2}
+.node::after{content:"";position:absolute;inset:-12px;border-radius:50%;
+  border:1px solid color-mix(in srgb,var(--c) 70%,white 10%);animation:pulse 2.6s ease-out infinite;opacity:0}
+.node .ring{position:absolute;inset:-13px;width:calc(100% + 26px);height:calc(100% + 26px);transform:rotate(-90deg);overflow:visible}
+.node .ring circle{fill:none;stroke:color-mix(in srgb,var(--c) 70%,white 25%);stroke-width:1.2;stroke-dasharray:1;stroke-dashoffset:1;
+  transition:stroke-dashoffset .3s}
+.stop.active .node .ring circle{stroke-dashoffset:0;transition:stroke-dashoffset 1.3s cubic-bezier(.65,0,.35,1) .15s}
+.node b{display:block;overflow:hidden;line-height:1.3;font-weight:inherit}
+.node b i{display:block;font-style:normal;transform:translateY(100%);transition:transform .3s}
+.stop.active .node b i{transform:none;transition:transform .9s cubic-bezier(.16,1,.3,1) .25s}
+.stop.active .node::after{opacity:1}
+@keyframes pulse{from{transform:scale(1);opacity:.6}to{transform:scale(1.5);opacity:0}}
+
+/* text block above the rail */
+.head{position:absolute;left:50%;bottom:calc(50% + clamp(70px,8vw,110px));width:min(680px,86vw);
+  direction:rtl;text-align:center;transform:translateX(calc(-50% + var(--d) * -14vw)) skewX(calc(var(--v,0) * -7deg));opacity:var(--a)}
+.meta{display:inline-flex;align-items:center;gap:10px;font-size:12.5px;color:var(--mute);margin-bottom:14px}
+.tag{padding:4px 11px;border-radius:99px;border:1px solid var(--faint);color:var(--ink);font-weight:500;
+  background:rgba(255,255,255,.03)}
+.head h2{font-weight:700;font-size:clamp(24px,3.2vw,46px);line-height:1.35;letter-spacing:-.6px;text-wrap:balance}
+.head h2 .note{display:block;font-weight:300;color:#a9bfd0;font-size:.58em;letter-spacing:0;margin-top:4px}
+.head p{margin-top:14px;font-size:clamp(13px,1.05vw,15.5px);line-height:2;color:var(--mute);font-weight:300;text-wrap:pretty}
+
+.w{display:inline-block;overflow:hidden;vertical-align:top;padding:0 .04em .12em;margin-bottom:-.12em}
+.w > span{display:inline-block;transform:translateY(110%) rotate(4deg);filter:blur(8px);opacity:0;
+  transition:transform 1s cubic-bezier(.16,1,.3,1),filter .8s,opacity .6s}
+.stop.active .w > span{transform:none;filter:none;opacity:1;transition-delay:calc(var(--w) * 60ms + 180ms)}
+.head h2 .note{opacity:0;transform:translateY(10px);transition:opacity .7s,transform .9s cubic-bezier(.16,1,.3,1)}
+.stop.active .head h2 .note{opacity:1;transform:none;transition-delay:.55s}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s,transform .9s cubic-bezier(.2,.7,0,1)}
+.stop.active .reveal{opacity:1;transform:none;transition-delay:calc(var(--i,0) * 90ms + 120ms)}
+
+/* nested mini timeline below the rail */
+.sub{position:absolute;left:50%;top:50%;width:min(720px,90vw);transform:translateX(-50%);padding-top:clamp(70px,8vw,104px);
+  opacity:var(--a)}
+.sub .stem{position:absolute;left:50%;top:0;width:1px;height:clamp(70px,8vw,104px);
+  background:linear-gradient(var(--c),rgba(190,215,235,.3));transform:scaleY(0);transform-origin:top;transition:transform .6s .2s}
+.sub ol{list-style:none;position:relative;display:flex;justify-content:space-between;padding-top:22px}
+.sub ol::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:rgba(190,215,235,.3);
+  transform:scaleX(0);transition:transform .9s .55s cubic-bezier(.6,0,.2,1)}
+.sub li{flex:1;position:relative;direction:rtl;text-align:center;padding:0 6px;
+  opacity:0;transform:translateY(10px);transition:opacity .5s,transform .6s}
+.sub li::before{content:"";position:absolute;top:-26px;left:50%;width:9px;height:9px;margin-left:-4.5px;border-radius:50%;
+  background:var(--bg);border:1.5px solid var(--c2,#9dbbd3)}
+.sub li::before{transform:scale(0);transition:transform .3s}
+.stop.active .sub li::before{transform:scale(1);transition:transform .6s cubic-bezier(.34,1.9,.64,1) calc(var(--i) * 120ms + 950ms)}
+.sub li time{display:block;font-size:11.5px;color:var(--mute);margin-bottom:4px}
+.sub li b{font-weight:500;font-size:clamp(12px,1vw,14px);line-height:1.7}
+.stop.active .sub .stem{transform:none}
+.stop.active .sub ol::before{transform:none}
+.stop.active .sub li{opacity:1;transform:none;transition-delay:calc(var(--i) * 120ms + 800ms)}
+
+/* intro + outro */
+.intro .head{bottom:calc(50% + 70px)}
+.intro h1{font-weight:900;font-size:clamp(38px,6vw,92px);letter-spacing:-2px;line-height:1.15}
+.intro .en{direction:ltr;font-weight:300;font-size:clamp(14px,1.4vw,20px);color:#a9bfd0;letter-spacing:.4px;margin-top:10px}
+.intro .en b{font-weight:700;color:var(--ink)}
+.intro .range{margin-top:22px;display:inline-flex;gap:14px;align-items:center;color:var(--mute);font-size:14px}
+.intro .range i{width:48px;height:1px;background:var(--faint)}
+.star{position:absolute;left:50%;top:50%;width:clamp(64px,6vw,88px);height:auto;transform:translate(-50%,-50%) scale(calc(.6 + .4 * var(--a))) rotate(calc(var(--d) * 90deg));color:var(--sign);filter:drop-shadow(0 0 24px rgba(21,74,222,.6))}
+.hint{position:absolute;left:50%;top:calc(50% + 70px);transform:translateX(-50%);direction:rtl;display:flex;gap:10px;align-items:center;
+  font-size:12.5px;color:var(--mute);opacity:var(--a)}
+.hint svg{width:22px;animation:nudge 1.8s ease-in-out infinite}
+@keyframes nudge{50%{transform:translateX(6px)}}
+
+/* ---------- bottom navigator ---------- */
+nav{position:fixed;bottom:0;inset-inline:0;z-index:5;padding:0 clamp(16px,4vw,56px) clamp(18px,3vw,34px);direction:ltr}
+.mini{position:relative;height:38px}
+.mini .base,.mini .fill{position:absolute;top:10px;left:0;right:0;height:1px;background:var(--faint)}
+.mini .fill{background:var(--ink);transform-origin:left;right:auto;width:100%}
+.mini button{position:absolute;top:10px;width:22px;height:22px;margin:-11px 0 0 -11px;border:0;background:none;cursor:pointer}
+.mini button::after{content:"";position:absolute;inset:7px;border-radius:50%;background:#33495a;transition:transform .3s,background .3s}
+.mini button:hover::after{transform:scale(1.5);background:#9dbbd3}
+.mini button.on::after{background:var(--ink);transform:scale(1.7)}
+.mini button:focus-visible{outline:1px solid var(--blue);border-radius:50%}
+.mini .yr{position:absolute;top:22px;transform:translateX(-50%);font-size:11px;color:var(--mute);direction:rtl;transition:color .3s}
+.mini .yr.on{color:var(--ink);font-weight:700}
+
+/* ---------- overview: zoomed-out tree ---------- */
+.viewport{transition:transform 1.1s cubic-bezier(.2,.7,0,1),opacity .7s}
+body.ov .viewport{transform:scale(.32);opacity:0}
+/* fly-to: the tree zooms the clicked event to the centre, the real page grows out of the same spot */
+body.fly .overview{transition:transform 1.05s cubic-bezier(.65,0,.35,1),opacity .45s cubic-bezier(.4,0,1,1) .5s}
+body.fly .viewport{transition:transform 1.1s cubic-bezier(.16,1,.3,1) .45s,opacity .5s .45s}
+body.fly .ov-stage .ov-ev.go .ov-dot{transform:scale(2.2);transition:transform .6s cubic-bezier(.34,1.6,.64,1)}
+body.fly .ov-stage:has(.ov-ev.go) .ov-ev:not(.go){opacity:.12}
+nav{transition:opacity .5s}
+body.ov nav{opacity:0;pointer-events:none}
+.overview{position:fixed;inset:0;z-index:3;display:flex;overflow:auto;direction:ltr;touch-action:pan-x pan-y;scrollbar-width:none;
+  opacity:0;pointer-events:none;transform:translate(var(--tx,0px),var(--ty,0px)) scale(var(--z,1.25));
+  transition:opacity .8s,transform 1.1s cubic-bezier(.2,.7,0,1)}
+.overview::-webkit-scrollbar{display:none}
+body.ov .overview{opacity:1;pointer-events:auto;transform:none}
+.ov-fit{margin:auto;flex:none;position:relative;width:calc(1600px * var(--s,1));height:calc(700px * var(--s,1))}
+.ov-stage{position:absolute;left:0;top:0;width:1600px;height:700px;transform:scale(var(--s,1));transform-origin:0 0}
+.ov-stage > svg{position:absolute;left:0;top:0;overflow:visible;fill:none}
+.ov-stage path{stroke-width:1.5;stroke-dasharray:1;stroke-dashoffset:1;stroke-linecap:round;
+  transition:stroke-dashoffset .7s cubic-bezier(.6,0,.2,1) calc(var(--i) * 45ms + 250ms),opacity .35s}
+.ov-trunk path{stroke-width:2.5}
+.ov-stage path.ov-pulse{stroke:#eaf4ff;stroke-width:3;stroke-dasharray:.05 .95;opacity:0;filter:drop-shadow(0 0 6px #7fb3ef);
+  animation:run 7s linear infinite;transition:opacity 1s}
+body.ovk .ov-stage path.ov-pulse{opacity:.85;transition-delay:1.8s}
+@keyframes run{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+body.ovk .ov-stage path{stroke-dashoffset:0}
+.ov-year{position:absolute;top:350px;transform:translate(-50%,-50%);padding:3px 10px;border-radius:99px;font-size:13px;font-weight:700;
+  color:var(--c);background:var(--bg);border:1px solid color-mix(in srgb,var(--c) 55%,transparent);direction:rtl}
+.ov-stage > svg.ov-start{left:44px;top:350px;width:34px;height:36px;transform:translate(-50%,-50%);fill:currentColor;color:var(--sign);
+  filter:drop-shadow(0 0 14px rgba(21,74,222,.7))}
+.ov-end{position:absolute;top:350px;width:110px;border-top:1px dashed rgba(190,215,235,.4);direction:rtl}
+.ov-end span{position:absolute;top:10px;left:0;width:100%;text-align:center;font-size:11px;color:var(--mute)}
+.ov-ev{position:absolute;top:350px;width:0;height:0;cursor:pointer;transition:opacity .35s}
+.ov-stage:has(.ov-ev:hover) .ov-ev:not(:hover){opacity:.25}
+.ov-stem{position:absolute;left:-.5px;width:1px;background:linear-gradient(var(--c),color-mix(in srgb,var(--c) 25%,transparent));
+  transform:scaleY(0);transition:transform .5s cubic-bezier(.2,.7,0,1) calc(var(--i) * 45ms + 450ms)}
+.up .ov-stem{bottom:0;transform-origin:bottom;background:linear-gradient(color-mix(in srgb,var(--c) 25%,transparent),var(--c))}
+.dn .ov-stem{top:0;transform-origin:top}
+body.ovk .ov-stem{transform:none}
+.ov-dot{position:absolute;left:-6px;top:-6px;width:12px;height:12px;border-radius:50%;background:var(--c);
+  box-shadow:0 0 0 4px var(--bg),0 0 18px var(--c);transform:scale(0);transition:transform .4s calc(var(--i) * 45ms + 350ms)}
+body.ovk .ov-dot{transform:none}
+body.ovk .ov-ev:hover .ov-dot{transform:scale(1.45);transition-delay:0s}
+.ov-card,.ov-sub{position:absolute;direction:rtl;text-align:center;opacity:0;transition:opacity .5s calc(var(--i) * 45ms + 650ms)}
+body.ovk .ov-card,body.ovk .ov-sub{opacity:1}
+.ov-card{left:-72px;width:144px}
+.up .ov-card,.up .ov-sub{bottom:var(--o)}
+.dn .ov-card,.dn .ov-sub{top:var(--o)}
+.ov-card small{display:block;font-size:11px;color:var(--c);margin-bottom:3px}
+.ov-card b{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font-weight:500;font-size:14px;line-height:1.6;transition:color .3s}
+.ov-ev:hover .ov-card b{color:#fff;text-shadow:0 0 18px color-mix(in srgb,var(--c) 70%,transparent)}
+.ov-sub{width:78px;margin-left:-39px;font-size:11px;line-height:1.55;color:#a9bfd0;transition-delay:calc(var(--i) * 45ms + 950ms)}
+.ov-sub time{display:block;color:var(--mute);font-size:9.5px}
+.ov-stage circle{fill:var(--bg);stroke-width:1.5;opacity:0;transition:opacity .4s calc(var(--i) * 45ms + 900ms)}
+body.ovk .ov-stage circle{opacity:1}
+body:not(.ovk) .overview *{transition-delay:0s!important;transition-duration:.3s!important}
+.ov-hint{position:fixed;bottom:clamp(18px,3vw,34px);left:50%;transform:translateX(-50%);z-index:4;font-size:12.5px;color:var(--mute);
+  white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .6s}
+body.ov .ov-hint{opacity:1;transition-delay:1.2s}
+.hdr-end{display:flex;align-items:center;gap:18px}
+.ov-btn{pointer-events:auto;font:inherit;font-size:12.5px;color:var(--ink);background:rgba(255,255,255,.04);border:1px solid var(--faint);
+  border-radius:99px;padding:7px 14px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:background .3s,border-color .3s}
+.ov-btn:hover{background:rgba(255,255,255,.09);border-color:rgba(190,215,235,.35)}
+.ov-btn svg{width:15px;height:15px}
+
+@media (max-width:640px){
+  .ov-hint{font-size:10.5px}
+  .ov-btn span{display:none}
+  .sub li b{font-size:11.5px}
+  .sub li time{font-size:10px}
+  .mini .yr{font-size:9.5px}
+  .head p{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+}
+@media (prefers-reduced-motion:reduce){
+  .node::after,.hint svg,.spin,.ov-pulse{animation:none}
+  .w > span{filter:none}
+}
+</style>
+</head>
+<body>
+<div class="ambient"></div>
+<div class="grain"></div>
+
+<header>
+  <svg class="brand" viewBox="0 0 607.55 183.89" fill="currentColor" role="img" aria-label="منظومه آری — ARiVerse"><path d="M606.46,86.11c-.58-.42-1.29-.66-1.98-.85-1.96-.56-3.97-.92-5.98-1.27-8.27-1.45-16.54-2.84-24.84-4.15-.56-.09-1.12-.18-1.68-.26-1.37-.22-1.72-1.21-.57-2.09,9.2-7,19.22-12.98,28.91-19.29.61-.4,1.23-.8,1.67-1.38.98-1.27.42-3.02-1.18-3.39-.73-.17-1.49-.04-2.22.08-8.81,1.52-17.53,3.55-26.14,5.96-2.91.81-6.28,2.24-9.38,1.9-.39-.06-.77-.32-.84-.71-.06-.31.09-.62.24-.9.92-1.61,2.19-3.07,3.26-4.57,6.64-9.34,14.18-18.29,19.29-28.61.5-1.01.98-2.25.38-3.22-.44-.71-1.36-1.01-2.2-.94s-1.61.46-2.35.84c-10.33,5.33-19.89,12.21-29.22,19.1-.09.07-.19.14-.28.21-1.23.91-2.46,1.84-3.69,2.75-1.74,1.18-1.92-.45-1.6-1.86.28-1.24.38-2.53.74-3.75.42-1.41.89-2.81,1.31-4.21.85-2.82,1.65-5.65,2.39-8.5.84-3.22,1.61-6.46,2.3-9.71.55-2.56.94-5.13,1.41-7.7.18-1,.26-2.06-.12-3s-1.36-1.69-2.37-1.53c-1.04.17-1.72,1.09-2.24,1.92-3.21,5.08-18.13,28.5-19.04,29.44-.38.4-.94.78-1.45.57-.5-.2-.65-.83-.72-1.37-1.16-8.62-2.31-17.32-4.34-25.79-.58-2.42-1.24-4.82-2.02-7.18-.21-.64-.44-1.29-.86-1.82s-1.09-.9-1.76-.81c-.57.08-1.05.5-1.35.99s-.45,1.06-.59,1.62c-2.19,8.7-3.65,17.55-5.04,26.41-.35,2.23-.86,4.42-1.28,6.64-.07.38-.15.78-.35,1.11s-.57.6-.96.57c-.48-.03-.82-.47-1.09-.87-4.62-6.87-8.7-14.14-13.12-21.14-1.56-2.51-3.18-4.99-4.88-7.4-.61-.87-1.21-1.85-2.09-2.48-.45-.33-1-.54-1.55-.48-.71.08-1.32.63-1.61,1.28s-.32,1.4-.24,2.11c.16,1.42.5,2.84.8,4.23.32,1.47.67,2.92,1.03,4.38.72,2.91,1.49,5.8,2.19,8.72.07.27.13.55.2.82,1.39,5.93,2.78,11.86,4.18,17.78.14.62.2,1.45-.37,1.73-.47.23-1-.09-1.42-.4-.57-.41-1.13-.83-1.69-1.25-6.93-5.19-13.91-10.32-21.22-14.97-3.59-2.29-7.28-4.4-10.97-6.51-.86-.49-1.89-1-2.79-.58-.7.32-1.08,1.14-1.08,1.91s.28,1.51.6,2.22c1.72,3.83,4.18,7.4,6.46,10.91,2.37,3.66,4.86,7.23,7.37,10.79,2.75,3.91,5.47,7.83,8.18,11.77.22.32.44.72.27,1.06-.2.4-.78.39-1.22.32-4.53-.74-9.02-1.9-13.51-2.89-6.47-1.42-12.94-2.94-19.46-4.08-1.17-.21-2.35-.37-3.53-.51-.46-.05-.92-.1-1.37,0s-.89.35-1.1.76c-.21.42-.15.94.06,1.36s.55.76.9,1.07c1.43,1.27,17.11,11.4,20.92,13.93,3.27,2.17,6.51,4.41,9.82,6.52.43.27.98.73.75,1.3-.15.33-.56.45-.92.53-5.55,1.23-11.18,1.83-16.78,2.79-5.4.93-10.75,2.13-16.11,3.27-.69.15-1.39.3-2.01.65s-1.14.92-1.25,1.62c-.12.82.36,1.63,1.02,2.13s1.48.73,2.28.94c2.56.66,5.16,1.11,7.76,1.55,4.11.7,8.22,1.38,12.33,2.05,3.94.65,7.92,1.11,11.75,2.29,1.75.45,1.68,1.73.26,2.72-6.87,5.12-14.32,9.42-21.5,14.06-1.37.89-2.75,1.77-4.13,2.65-.85.54-1.72,1.04-2.56,1.59-.75.48-1.47,1.07-1.91,1.86-.34.62-.49,1.41-.15,2.03.22.39.61.66,1.04.81.42.15.87.19,1.32.19,1.01.01,2.02-.12,3.01-.32.5-.1,1-.22,1.49-.34.46-.12.91-.2,1.37-.3,2.12-.47,4.23-1,6.34-1.55,2.11-.55,4.21-1.13,6.32-1.7,2.11-.56,4.22-1.12,6.34-1.64,3.99-.98,8-1.64,12.06-2.24.31-.05.69-.06.85.21.16.26-.02.59-.2.84-1.28,1.81-2.54,3.63-3.85,5.42-1.28,1.74-2.53,3.49-3.78,5.25s-2.49,3.55-3.71,5.35c-1.22,1.8-2.42,3.61-3.6,5.44-2.76,4.29-5.28,8.71-7.83,13.13-.36.63-.73,1.27-.84,1.98s.08,1.52.65,1.96c.43.32,1.01.39,1.54.3s1.02-.33,1.5-.57c6.91-3.44,13.05-8.16,19.43-12.45,4.83-3.24,9.63-6.76,14.4-10,1.07-.9,2.31-.47,1.82,1.03-2.92,11.44-5.57,22.9-8.01,34.45-.26,1.24-.45,2.71.44,3.61.8.8,2.18.72,3.15.13.97-.59,1.62-1.58,2.24-2.53,3.55-5.47,7.11-10.94,10.59-16.46,2.1-3.34,4.16-6.7,6.23-10.05.55-.98,1.51-2.18,2.77-1.8.94.32,1.21,1.49,1.34,2.48.12.96.25,1.92.37,2.88,1.12,8.93,2.13,17.88,3.53,26.77.44,2.83.97,5.64,1.44,8.47.16.95.42,1.92,1.02,2.66s1.63,1.22,2.55.94c1.04-.32,1.61-1.45,1.81-2.52,1.58-8.75,2.25-17.64,3.37-26.46.4-3.22.75-6.47,1.47-9.63.37-1.64.79-4.23,2.72-4.75,1.64-.44,2.86,1.21,3.6,2.42,1.09,1.77,12.37,20.61,13.63,22.54,1.1,1.69,2.11,3.9,3.87,5.01.79.5,1.87.66,2.64.13.5-.34.8-.92.92-1.52s.08-1.21.03-1.81c-.37-4.3-1.61-8.4-2.7-12.56-1.76-7.03-3.68-14.03-5.53-21.04-.14-.55-.29-1.11-.22-1.67s.42-1.13.96-1.28c.53-.15,1.09.11,1.57.38,2.54,1.38,4.81,3.18,7.16,4.86s4.85,3.45,7.29,5.15c4.88,3.4,9.81,6.74,14.78,10.02,1.09.72,2.18,1.45,3.29,2.14.74.46,1.51.93,2.37,1.03,1.49.17,2.52-.99,2.14-2.43-.23-.88-.71-1.67-1.15-2.46-.52-.94-1.05-1.88-1.59-2.81-2.18-3.75-4.67-7.31-7.09-10.9-2.52-3.75-5.08-7.49-7.63-11.22-1.79-2.61-3.57-5.22-5.35-7.84-1.23-1.67-.32-2.8,1.62-2.31,4.38.9,8.72,1.97,13.07,3.01,4.37,1.05,8.74,2.14,13.1,3.23,2.17.54,4.35,1.08,6.52,1.62.2.05.39.1.59.15.7.17,1.41.35,2.14.33s1.47-.27,1.94-.81c.72-.82.62-2.13.05-3.05s-1.53-1.54-2.49-2.06c-1.38-.74-2.66-1.58-3.98-2.41-1.52-.96-3.03-1.92-4.55-2.88-6.4-4.05-12.98-7.91-19.05-12.46-.3-.22-.61-.46-.8-.78s-.25-.76-.03-1.06c.22-.32.64-.41,1.02-.48,7.82-1.44,15.65-2.89,23.47-4.34,2.77-.51,5.54-1.03,8.32-1.54.81-.15,1.63-.3,2.34-.71s1.3-1.13,1.32-1.95c.02-.75-.43-1.44-1.03-1.89-.02-.01-.04-.03-.06-.04ZM539.3,88.93c-.07,2.49-.4,4.99-1.22,7.34-2.01,5.7-6.86,8.97-12.68,9.98-8.45,1.46-18.61.67-22.78-7.99-1.64-3.41-2.12-7.28-2.07-11.07.07-4.41.92-8.99,3.6-12.49,3.88-5.05,10.42-6.52,16.49-6.27,3.71.16,7.06.67,10.32,2.51,2.74,1.55,4.88,4.05,6.24,6.87,1.46,3.06,2.06,6.47,2.1,9.86.01.42.01.84,0,1.26Z"/><path d="M115.18,119.08l-13.1,45.38h8.15l2.52-9.59h14.76l2.52,9.59h8.15l-13.1-45.38h-9.91ZM114.62,147.78l5.23-19.84h.58l5.23,19.84h-11.03Z"/><path d="M170.53,143.71c2.62-2.59,3.93-6.21,3.93-10.88,0-4.39-1.31-7.78-3.93-10.16-2.62-2.39-6.34-3.58-11.15-3.58h-15.91v45.38h7.7v-16.87h8.21c.12,0,.24-.01.36-.01l7.28,16.88h9.11l-8.8-18.5c1.21-.59,2.28-1.34,3.21-2.26ZM164.49,138.64c-1.21,1.24-2.92,1.85-5.11,1.85h-8.21v-14.32h8.21c2.19,0,3.9.63,5.11,1.9,1.21,1.27,1.82,3.06,1.82,5.38s-.61,3.94-1.82,5.18Z"/><polygon points="202.99 137.75 202.99 132.51 202.99 130.59 184.36 130.59 184.36 137.75 195.13 137.75 195.13 157.3 182.45 157.3 182.45 164.46 195.13 164.46 195.77 164.46 202.36 164.46 202.99 164.46 213.19 164.46 213.19 157.3 202.99 157.3 202.99 137.75"/><path d="M198.74,125.7c1.51,0,2.76-.49,3.74-1.47.98-.98,1.47-2.23,1.47-3.74s-.49-2.76-1.47-3.74c-.98-.98-2.23-1.47-3.74-1.47s-2.76.49-3.74,1.47c-.98.98-1.47,2.23-1.47,3.74s.49,2.76,1.47,3.74c.98.98,2.23,1.47,3.74,1.47Z"/><polygon points="235.46 157.59 234.89 157.59 226.42 130.59 218.24 130.59 230.03 164.46 240.32 164.46 252.11 130.59 243.93 130.59 235.46 157.59"/><path d="M273.49,129.95c-4.9,0-8.7,1.53-11.39,4.6-2.7,3.07-4.04,7.37-4.04,12.91s1.59,10.05,4.76,13.09c3.18,3.04,7.67,4.55,13.49,4.55,1.34,0,2.88-.05,4.62-.16,1.74-.11,3.66-.35,5.77-.74l-.83-7.29c-1.49.28-2.96.49-4.39.65-1.44.16-2.9.24-4.39.24-3.64,0-6.45-.91-8.44-2.73-1.22-1.12-2.06-2.55-2.53-4.3h22.05c.13-1.36.19-2.82.19-4.38,0-5.35-1.29-9.43-3.88-12.24-2.59-2.81-6.25-4.22-10.98-4.22ZM265.78,145.1c.24-2.24.89-4.05,1.96-5.4,1.39-1.75,3.32-2.62,5.82-2.62,2.28,0,4.06.69,5.34,2.08,1.28,1.39,1.92,3.37,1.92,5.94h-15.03Z"/><path d="M319.86,129.95c-5.58,0-8.55,2.9-8.92,8.69h-1.05l-1.06-8.05h-12.62v6.84h6.04v20.2h-7.32v6.84h23.26v-6.84h-8.08v-7.73c0-4.07.6-7.21,1.79-9.43,1.19-2.22,3-3.32,5.43-3.32,1.62,0,2.8.48,3.53,1.44.73.96,1.1,2.54,1.1,4.73h7.86c0-4.47-.83-7.82-2.49-10.03-1.66-2.22-4.15-3.32-7.48-3.32Z"/><path d="M355.39,145.1l-8.18-2.21c-.98-.26-1.71-.55-2.17-.89-.47-.34-.7-.87-.7-1.6,0-1.09.79-1.87,2.38-2.36,1.59-.49,4.14-.73,7.65-.73,1.11,0,2.36.03,3.75.1,1.39.06,3.02.18,4.87.35l.83-7.16c-1.64-.21-3.21-.37-4.71-.48-1.5-.11-3.02-.16-4.55-.16-6.28,0-10.91.87-13.88,2.6-2.97,1.74-4.46,4.44-4.46,8.1,0,2.39.65,4.23,1.96,5.54,1.31,1.31,3.31,2.34,5.99,3.08l9.75,2.72c.87.23,1.51.54,1.92.93.4.38.61.93.61,1.63,0,1.11-.7,1.92-2.09,2.43-1.4.51-3.65.77-6.76.77-1.23,0-2.75-.08-4.54-.26-1.79-.17-3.93-.43-6.42-.77l-.93,7.41c1.51.32,3.23.56,5.14.72,1.92.16,4.17.24,6.74.24,5.86,0,10.18-.86,12.96-2.57s4.17-4.38,4.17-8c0-2.54-.76-4.54-2.28-6.01-1.52-1.47-3.87-2.61-7.05-3.42Z"/><path d="M403.39,146.41c0-5.35-1.29-9.43-3.88-12.24-2.59-2.81-6.25-4.22-10.98-4.22s-8.7,1.53-11.39,4.6c-2.7,3.07-4.04,7.37-4.04,12.91s1.59,10.05,4.76,13.09c3.17,3.04,7.67,4.55,13.49,4.55,1.34,0,2.88-.05,4.62-.16,1.74-.11,3.66-.35,5.77-.74l-.83-7.29c-1.49.28-2.95.49-4.39.65s-2.9.24-4.39.24c-3.64,0-6.46-.91-8.44-2.73-1.22-1.12-2.06-2.55-2.53-4.3h22.05c.13-1.36.19-2.82.19-4.38ZM380.82,145.1c.24-2.24.89-4.05,1.96-5.4,1.38-1.75,3.32-2.62,5.82-2.62,2.28,0,4.06.69,5.34,2.08,1.28,1.39,1.92,3.37,1.92,5.94h-15.03Z"/><path d="M53.02,88.32c2.46-1.33,4.22-3.05,5.29-5.15,1.07-2.11,1.6-4.93,1.6-8.47,0-4.34-.35-7.59-1.05-9.76-.7-2.17-1.92-3.68-3.66-4.53-1.74-.85-4.35-1.28-7.83-1.28h-13.56c.09-3.63.46-6.15,1.1-7.56.64-1.4,2.18-2.71,4.63-3.92,2.44-1.21,7.47-3.23,15.07-6.07l-2.56-10.49c-9.56,3.85-15.88,6.82-18.96,8.91-3.08,2.09-5.01,4.97-5.77,8.63-.76,3.66-1.14,10.73-1.14,21.21h26.11v9.89c-10.84,2.41-19.59,3.62-26.24,3.62-4.46,0-7.96-.41-10.51-1.24-2.55-.82-4.39-2.15-5.52-3.96-1.13-1.82-1.69-4.3-1.69-7.44,0-1.47.19-3.7.57-6.71.38-3.01.86-6.21,1.44-9.6H2.02c-1.34,8.95-2.02,15.41-2.02,19.37,0,7.05,1.89,12.27,5.68,15.64,3.79,3.37,9.74,5.06,17.86,5.06,2.63,0,5.6-.21,8.93-.64,3.33-.43,6.69-1.05,10.08-1.88,4.52-1.1,8.01-2.31,10.47-3.64Z"/><path d="M62.98,55.94l4.58,29.31c-2.14,4.89-4.91,8.53-8.31,10.92-3.4,2.4-7.52,3.6-12.34,3.6-1.71,0-3.65-.17-5.82-.5v10.4c2.66.79,5.33,1.19,8.02,1.19,4.76,0,9.13-1.24,13.1-3.73,3.97-2.49,7.1-5.92,9.39-10.28,2.29-4.37,3.44-9.27,3.44-14.7,0-7.85-.55-17.45-1.65-28.81l-10.4,2.61Z"/><polygon points="78.21 35.97 80.41 89.78 88.93 89.78 88.84 34.78 78.21 35.97"/><path d="M80.46,20.53c-2.11-.4-4.55-.98-7.33-1.74l-3.85,10.26,5.22,1.97,1.28-3.66c3.39.98,6.89,1.47,10.49,1.47s7.36-.49,11.27-1.47l.37-7.51c-3.85.86-7.4,1.28-10.67,1.28-2.41,0-4.67-.2-6.78-.6Z"/><path d="M198.64,65.96c-1.22-2.34-3.11-4.58-5.68-6.68l-12.58-10.4-14.62,18.79c-2.83,3.66-5.17,6.37-7,8.13-1.84,1.76-3.66,2.97-5.46,3.64-1.42.52-3.12.84-5.09.95-3.01-.18-5.34-.89-6.97-2.13-1.93-1.46-2.89-3.64-2.89-6.56l-.04-34.08-10.62,1.33.26,7.55c-7.26,1.75-12.64,3.47-16.13,5.17-3.51,1.72-6,4.13-7.5,7.25-1.5,3.11-2.24,7.63-2.24,13.55,0,2.23.1,4.7.28,7.43l.41,6.73,27.2.1,2.61-5.68c1.53,3.33,3.77,5.84,6.73,7.56,2.79,1.61,6.08,2.45,9.87,2.54,2.16-.08,4.15-.59,6-1.51,2.01-1.03,3.74-2.24,5.2-3.64,1.44-1.4,3.23-3.3,5.34-5.68.91,4.3,2.61,7.87,5.07,10.67,2.48,2.81,5.54,4.36,9.21,4.68.33.03.84.04,1.51.04,3.23,0,6.23-.85,8.97-2.57,2.75-1.71,5.01-4.08,6.77-7.14,1.75-3.05,2.79-6.52,3.14-10.4.05-.85.1-1.47.1-1.83,0-2.85-.62-5.45-1.84-7.8ZM109.86,75.95c-.12-1.43-.18-2.85-.18-4.25,0-3.15.5-5.51,1.51-7.1,1-1.6,2.59-2.83,4.73-3.71,2.16-.89,5.82-2.02,10.97-3.4l2.15-.59,1.1,19.05h-20.29ZM191.75,79.18c-1.17,1.88-2.61,3.34-4.3,4.37-1.69,1.05-3.48,1.57-5.34,1.57-2.41,0-4.63-.87-6.68-2.6-2.05-1.72-3.53-3.99-4.44-6.79l10.4-12.87,12.64,9.94c-.34,2.38-1.09,4.51-2.27,6.38Z"/><path d="M401.56,65.96c-1.22-2.34-3.12-4.58-5.68-6.68l-12.6-10.4-14.61,18.79c-2.85,3.66-5.18,6.37-7.01,8.13-1.83,1.76-3.64,2.97-5.45,3.64-1.25.45-2.7.76-4.37.91-1.1-.08-2.15-.21-3.14-.39-1.77-.32-3.55-.81-5.31-1.49l-.23-24.41h-8.98l-.08,24.63c-1.87.65-3.86,1.1-6.01,1.36-2.13.25-4.84.38-8.1.38h-15.21c.55-1.43,1-3.14,1.38-5.1.37-1.98.55-4,.55-6.08,0-4.48-.74-8.31-2.24-11.44-1.5-3.15-3.69-5.54-6.55-7.19-2.87-1.65-6.34-2.48-10.4-2.48-4.77,0-9.46,1.28-14.07,3.85-4.61,2.56-9.02,6.29-13.23,11.17l-.1-37.15-10.63,1.43,1.16,41.12v1.47c0,2.23-.17,4.15-.48,5.79-.33,1.64-.87,3.18-1.62,4.61h-4.95c-.11-10.99-1.9-19.14-5.35-24.47-3.45-5.31-8.61-7.96-15.49-7.96-4.68,0-8.18,1.03-10.53,3.11-2.35,2.08-3.89,4.98-4.65,8.69-.74,3.7-1.11,8.66-1.11,14.85,0,3.91.55,7.07,1.64,9.49,1.1,2.41,2.85,4.18,5.25,5.34,2.39,1.14,5.58,1.72,9.54,1.72s8.14-.26,12.23-.78c-.51,2.68-1.87,4.69-4.04,6-2.19,1.32-4.55,2.15-7.08,2.48-2.53.33-5.39.51-8.57.51h-8.42v10.12c4.39.63,8.39.96,11.99.96,4.85,0,8.91-.66,12.18-1.98,3.27-1.31,5.87-3.38,7.81-6.23,1.94-2.83,3.26-6.55,3.96-11.13h13.92l15.61-.04c12.49,0,21.21-1.38,26.16-4.13,1.86,1.35,4.26,2.38,7.21,3.09,2.96.72,6.29,1.07,10.01,1.07h4.13c3.96,0,7.47-.36,10.51-1.1,3.04-.73,5.76-1.86,8.18-3.38,1.95,1.31,4.4,2.39,7.37,3.23,2.32.66,4.58,1.06,6.74,1.18,1.9-.14,3.66-.63,5.29-1.46,2.02-1.03,3.75-2.24,5.2-3.64,1.46-1.4,3.23-3.3,5.34-5.68.92,4.3,2.61,7.87,5.09,10.67,2.48,2.81,5.54,4.36,9.2,4.68.34.03.84.04,1.51.04,3.25,0,6.23-.85,8.98-2.57,2.75-1.71,5.01-4.08,6.75-7.14,1.76-3.05,2.81-6.52,3.14-10.4.07-.85.1-1.47.1-1.83,0-2.85-.61-5.45-1.83-7.8ZM224.27,80.48c-2.68,0-4.74-.25-6.16-.76-1.42-.5-2.42-1.33-3.03-2.52-.59-1.17-.89-2.86-.89-5.06,0-4.25.22-8.5.65-12.78,1.25-.25,2.34-.41,3.25-.51.92-.08,1.97-.14,3.12-.14,3.36,0,5.98.66,7.88,1.97,1.88,1.32,3.27,3.53,4.14,6.64.87,3.12,1.33,7.5,1.4,13.15h-10.36ZM297.31,70.09c0,3.03-.62,5.34-1.87,6.92-1.25,1.6-3.18,2.49-5.78,2.71-2.75.21-5.32.37-7.72.49-2.39.12-5.28.19-8.64.19h-16.35c2.63-4.32,5.64-8.09,9.02-11.32,3.4-3.23,6.9-5.72,10.52-7.47,3.62-1.73,7.08-2.61,10.41-2.61,3.82,0,7.29,1.18,10.4,3.53v7.55ZM394.67,79.18c-1.18,1.88-2.61,3.34-4.3,4.37-1.71,1.05-3.48,1.57-5.34,1.57-2.42,0-4.65-.87-6.7-2.6-2.04-1.72-3.52-3.99-4.44-6.79l10.4-12.87,12.65,9.94c-.34,2.38-1.1,4.51-2.27,6.38Z"/><path d="M334.57,44.21c-2.02,0-3.74-.71-5.16-2.13-1.42-1.42-2.13-3.14-2.13-5.16s.71-3.74,2.13-5.16c1.42-1.42,3.14-2.13,5.16-2.13s3.74.71,5.16,2.13c1.42,1.42,2.13,3.14,2.13,5.16s-.71,3.74-2.13,5.16c-1.42,1.42-3.14,2.13-5.16,2.13Z"/><path d="M288.27,36.92c-2.02,0-3.74-.71-5.16-2.13-1.42-1.42-2.13-3.14-2.13-5.16s.71-3.74,2.13-5.16c1.42-1.42,3.14-2.13,5.16-2.13s3.74.71,5.16,2.13c1.42,1.42,2.13,3.14,2.13,5.16s-.71,3.74-2.13,5.16c-1.42,1.42-3.14,2.13-5.16,2.13Z"/></svg>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="sign" viewBox="0 0 175.48 183.89"><path d="M174.45,86.15s-.04-.02-.06-.04c-.58-.42-1.28-.65-1.98-.85-1.96-.57-3.97-.92-5.98-1.27-8.27-1.45-16.54-2.85-24.84-4.16-.56-.09-1.12-.18-1.68-.26-1.36-.22-1.72-1.22-.57-2.1,9.2-7,19.23-12.98,28.91-19.29.61-.39,1.23-.8,1.67-1.38.98-1.26.43-3.02-1.18-3.39-.72-.16-1.48-.04-2.22.09-8.81,1.52-17.53,3.55-26.14,5.95-2.91.82-6.28,2.25-9.38,1.9-.38-.06-.77-.32-.84-.7-.06-.31.09-.62.24-.9.92-1.6,2.19-3.06,3.27-4.57,6.64-9.34,14.17-18.29,19.29-28.61.5-1.01.97-2.25.38-3.22-.44-.71-1.36-1.01-2.19-.93-.84.07-1.61.45-2.36.84-10.32,5.33-19.89,12.21-29.21,19.1-.1.07-.19.14-.29.21-1.23.91-2.45,1.84-3.69,2.75-1.74,1.18-1.92-.45-1.6-1.86.28-1.24.38-2.53.74-3.75.42-1.41.89-2.8,1.32-4.21.84-2.82,1.64-5.65,2.38-8.5.84-3.22,1.61-6.46,2.31-9.71.54-2.57.93-5.14,1.41-7.71.18-1,.26-2.06-.13-2.99-.38-.94-1.36-1.7-2.36-1.54-1.04.17-1.72,1.1-2.24,1.92-3.21,5.08-18.14,28.5-19.04,29.44-.38.4-.94.78-1.45.57-.5-.2-.65-.83-.72-1.37-1.16-8.62-2.31-17.32-4.34-25.79-.58-2.42-1.24-4.81-2.02-7.18-.21-.64-.44-1.29-.86-1.81-.43-.53-1.09-.91-1.76-.81-.57.08-1.05.5-1.35.99-.3.49-.45,1.06-.59,1.62-2.19,8.7-3.65,17.55-5.04,26.41-.35,2.23-.86,4.41-1.28,6.64-.07.38-.15.77-.35,1.11-.21.33-.57.6-.96.57-.48-.03-.82-.47-1.09-.87-4.63-6.87-8.7-14.14-13.13-21.15-1.56-2.51-3.18-4.98-4.88-7.4-.61-.87-1.21-1.84-2.08-2.48-.45-.33-1-.55-1.55-.49-.72.08-1.32.63-1.61,1.28-.3.66-.33,1.4-.25,2.12.16,1.41.5,2.83.81,4.22.32,1.47.66,2.93,1.02,4.38.72,2.91,1.49,5.81,2.2,8.72.06.27.13.55.19.82,1.39,5.93,2.78,11.86,4.18,17.78.14.62.2,1.45-.37,1.73-.47.23-1-.09-1.42-.4-.57-.41-1.13-.83-1.69-1.25-6.92-5.19-13.91-10.31-21.21-14.97-3.59-2.28-7.28-4.39-10.97-6.51-.86-.49-1.89-1-2.79-.58-.7.32-1.08,1.13-1.09,1.9,0,.78.29,1.52.6,2.22,1.72,3.84,4.18,7.4,6.46,10.92,2.37,3.65,4.86,7.23,7.37,10.79,2.76,3.91,5.47,7.83,8.18,11.77.21.32.44.72.27,1.06-.21.4-.78.39-1.22.32-4.54-.74-9.03-1.9-13.51-2.89-6.47-1.42-12.94-2.94-19.46-4.08-1.17-.21-2.35-.38-3.53-.51-.46-.05-.93-.1-1.38-.01-.45.1-.89.35-1.1.76-.21.42-.15.93.07,1.35.21.42.55.76.9,1.07,1.43,1.28,17.11,11.41,20.92,13.94,3.27,2.17,6.51,4.41,9.82,6.51.43.27.98.73.75,1.3-.15.33-.56.45-.92.53-5.55,1.23-11.18,1.83-16.78,2.79-5.39.93-10.74,2.13-16.11,3.28-.68.14-1.39.3-2,.64-.62.35-1.14.93-1.25,1.62-.12.82.36,1.64,1.02,2.13.66.5,1.48.74,2.28.94,2.55.66,5.16,1.11,7.76,1.55,4.11.7,8.22,1.38,12.33,2.05,3.94.65,7.92,1.11,11.75,2.29,1.75.45,1.68,1.73.26,2.72-6.86,5.12-14.31,9.42-21.5,14.07-1.37.89-2.75,1.77-4.13,2.64-.85.54-1.72,1.04-2.56,1.59-.75.48-1.47,1.07-1.91,1.86-.34.62-.49,1.41-.15,2.03.22.39.61.66,1.04.81.42.15.87.19,1.32.19,1.01,0,2.02-.12,3.01-.32.5-.1,1-.22,1.49-.34.46-.12.91-.2,1.37-.3,2.12-.47,4.23-1,6.34-1.55,2.11-.55,4.21-1.13,6.32-1.7,2.11-.56,4.22-1.12,6.34-1.64,3.99-.97,8-1.63,12.06-2.23.31-.05.69-.06.85.2.16.26-.02.59-.2.84-1.27,1.82-2.54,3.64-3.85,5.42-1.28,1.74-2.54,3.49-3.78,5.25-1.25,1.77-2.49,3.56-3.71,5.35-1.22,1.8-2.42,3.61-3.59,5.44-2.76,4.29-5.28,8.71-7.83,13.13-.36.63-.73,1.27-.84,1.98-.12.72.07,1.53.65,1.96.43.32,1.01.39,1.54.3.53-.1,1.02-.33,1.5-.57,6.91-3.44,13.05-8.16,19.43-12.45,4.83-3.24,9.63-6.76,14.4-10,1.07-.9,2.31-.47,1.82,1.03-2.92,11.44-5.57,22.9-8.01,34.45-.26,1.24-.45,2.71.44,3.61.8.8,2.18.72,3.15.13.97-.59,1.62-1.58,2.24-2.53,3.55-5.47,7.11-10.94,10.59-16.46,2.1-3.34,4.16-6.7,6.23-10.05.55-.98,1.51-2.18,2.77-1.8.94.32,1.21,1.49,1.34,2.48.12.96.25,1.92.37,2.88,1.12,8.94,2.13,17.88,3.53,26.77.44,2.84.97,5.65,1.44,8.47.16.95.42,1.92,1.02,2.66.61.75,1.64,1.22,2.56.94,1.04-.31,1.61-1.45,1.8-2.52,1.58-8.75,2.25-17.64,3.37-26.46.41-3.21.76-6.47,1.48-9.63.37-1.64.79-4.23,2.72-4.75,1.64-.44,2.86,1.21,3.6,2.42,1.09,1.77,12.37,20.6,13.63,22.53,1.1,1.69,2.11,3.91,3.87,5.01.78.5,1.86.66,2.63.13.5-.34.8-.92.92-1.51.13-.6.09-1.21.04-1.82-.38-4.3-1.62-8.4-2.7-12.55-1.76-7.04-3.69-14.03-5.54-21.04-.14-.55-.29-1.11-.21-1.68.07-.56.42-1.12.96-1.28.53-.15,1.09.11,1.58.38,2.54,1.38,4.81,3.18,7.16,4.86,2.42,1.73,4.85,3.45,7.29,5.15,4.89,3.4,9.81,6.74,14.78,10.02,1.1.72,2.18,1.45,3.29,2.14.74.46,1.51.93,2.37,1.03,1.5.18,2.52-.99,2.15-2.43-.23-.88-.72-1.67-1.15-2.46-.52-.95-1.05-1.88-1.59-2.81-2.18-3.75-4.67-7.31-7.09-10.9-2.52-3.76-5.08-7.49-7.63-11.22-1.79-2.61-3.57-5.22-5.35-7.85-1.23-1.67-.32-2.8,1.62-2.31,4.38.9,8.73,1.97,13.07,3.01,4.38,1.05,8.74,2.15,13.1,3.24,2.18.54,4.35,1.08,6.52,1.62.2.05.4.1.59.15.7.17,1.42.34,2.14.32s1.47-.27,1.95-.81c.71-.82.62-2.13.04-3.06-.58-.92-1.53-1.54-2.49-2.06-1.38-.74-2.66-1.58-3.98-2.41-1.52-.96-3.04-1.92-4.55-2.88-6.41-4.06-12.98-7.91-19.06-12.47-.3-.22-.6-.46-.8-.78-.19-.32-.24-.75-.03-1.06.22-.32.64-.41,1.02-.48,7.82-1.44,15.64-2.89,23.47-4.34,2.77-.51,5.54-1.03,8.31-1.54.81-.15,1.63-.31,2.34-.72.71-.41,1.3-1.13,1.32-1.95.01-.74-.44-1.44-1.03-1.89ZM107.23,88.93c-.07,2.49-.4,4.99-1.22,7.34-2.01,5.7-6.86,8.97-12.68,9.98-8.45,1.46-18.61.67-22.78-7.99-1.64-3.41-2.12-7.28-2.07-11.07.07-4.41.92-8.99,3.6-12.49,3.88-5.05,10.42-6.52,16.49-6.27,3.71.16,7.06.67,10.32,2.51,2.74,1.55,4.88,4.05,6.24,6.87,1.46,3.06,2.06,6.47,2.1,9.86.01.42.01.84,0,1.26Z"/></symbol></svg>
+  <div class="hdr-end"><div class="counter" id="counter"></div><button class="ov-btn" id="ovBtn" aria-label="نمای کلی"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M1 8h14M4 8V3M8 8v5M12 8V4"/></svg><span>نمای کلی</span></button></div>
+</header>
+
+<main class="viewport"><div class="track" id="track"></div></main>
+<section class="overview" id="ov" aria-label="نمای کلی مسیر"><div class="ov-fit"><div class="ov-stage" id="ovStage"></div></div></section>
+<div class="ov-hint">برای ورود به هر رویداد روی آن کلیک کنید · اسکرول به عقب برای بازگشت</div>
+<nav><div class="mini" id="mini"><div class="base"></div><div class="fill" id="miniFill"></div></div></nav>
+
+<script>
+/* ================= DATA — edit only this part =================
+   tag   : short category chip
+   title : main line;  note : optional second line
+   desc  : paragraph (placeholder for now)
+   sub   : optional nested mini-timeline [{date, title}]  (3–5 items fit best)
+================================================================ */
+const EVENTS = [
+  {year:1398, tag:'همکاری',     title:'همکاری با سازمان مدیریت صنعتی'},
+  {year:1398, tag:'تفاهم‌نامه', title:'تفاهم‌نامه مرکز توسعه تجارت الکترونیکی', note:'رتبه‌بندی کسب‌وکارهای اینترنتی',
+    sub:[{date:'بهار ۱۳۹۸',title:'طراحی مدل ارزیابی'},{date:'تابستان ۱۳۹۸',title:'اجرای آزمایشی'},{date:'پاییز ۱۳۹۸',title:'رتبه‌بندی دور نخست'},{date:'زمستان ۱۳۹۸',title:'انتشار نتایج'}]},
+  {year:1399, tag:'تاسیس',      title:'تاسیس گروه در سازمان مدیریت صنعتی', note:'بازرگانی، تجارت الکترونیکی، علوم داده'},
+  {year:1399, tag:'تاسیس',      title:'تاسیس شرکت مشاوران آری'},
+  {year:1401, tag:'تاسیس',      title:'تاسیس دفتر تخصصی مشاوره بازرگانی'},
+  {year:1401, tag:'تاسیس',      title:'تاسیس شرکت آکو بین‌الملل'},
+  {year:1401, tag:'تفاهم‌نامه', title:'تفاهم‌نامه وزارت صمت', note:'خدمات کسب‌وکار'},
+  {year:1402, tag:'تفاهم‌نامه', title:'تفاهم‌نامه وزارت صمت', note:'آماد و توزیع'},
+  {year:1402, tag:'تفاهم‌نامه', title:'تفاهم‌نامه بانک سامان', note:'صندوق ضمانت'},
+  {year:1402, tag:'تفاهم‌نامه', title:'تفاهم‌نامه وزارت صمت', note:'صنایع لوازم خانگی و اداری',
+    sub:[{date:'فروردین',title:'امضای تفاهم‌نامه'},{date:'خرداد',title:'ارزیابی واردکنندگان'},{date:'مهر',title:'موبیکام — دوره اول'},{date:'اسفند',title:'موبیکام — دوره دوم'}]},
+  {year:1402, tag:'همکاری',     title:'همکاری با موسیاد', note:'انجمن تجار و صنعتگران ترکیه'},
+  {year:1402, tag:'تاسیس',      title:'تاسیس شرکت انرژی مدیا'},
+  {year:1403, tag:'تفاهم‌نامه', title:'تفاهم‌نامه مرکز آموزش بازرگانی ایران'},
+  {year:1403, tag:'تاسیس',      title:'تاسیس شرکت سروسامان'},
+  {year:1403, tag:'تاسیس',      title:'تاسیس مرکز داده‌پژوهی ژرفا',
+    sub:[{date:'گام ۱',title:'تشکیل تیم داده'},{date:'گام ۲',title:'زیرساخت داده'},{date:'گام ۳',title:'نخستین گزارش'}]},
+  {year:1404, tag:'تفاهم‌نامه', title:'تفاهم‌نامه اتاق بازرگانی تهران'},
+  {year:1404, tag:'همکاری',     title:'همکاری با اتاق دیجیتال تهران'},
+  {year:1405, tag:'تاسیس',      title:'تاسیس کنسرسیوم توسعه و تسهیل تجارت'},
+  {year:1405, tag:'انتشار',     title:'تالیف و انتشار کتاب سال بازرگانی ایران'},
+];
+const PLACEHOLDER = 'توضیحات این رویداد در این بخش قرار می‌گیرد؛ چند جمله‌ی کوتاه درباره‌ی اهمیت، طرف‌های همکاری و دستاوردهای آن.';
+
+/* year palette taken from the credential deck (light → deep navy) */
+/* the deck's navy years vanish on the dark overview, so it uses a lifted ramp */
+const OV_COLOR = {1398:'#d4e2ee',1399:'#a9c6de',1400:'#8dbbe6',1401:'#79b0ea',1402:'#4f94e6',1403:'#3f80ec',1404:'#4a74f2',1405:'#6a7cff'};
+const YEAR_COLOR = {1398:['#c9d9e6','#0b2232'],1399:['#9dbbd3','#0b2232'],1400:['#8ab4dc','#fff'],1401:['#78acdf','#fff'],
+  1402:['#2a6db8','#fff'],1403:['#1d4a88','#fff'],1404:['#18406f','#fff'],1405:['#143559','#fff']};
+
+/* ================= engine ================= */
+const fa = s => String(s).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+const pad = n => fa(String(n).padStart(2,'0'));
+// split a title into words so each can rise on its own (letters can't be split: Persian joins them)
+const words = s => s.split(' ').map((w, k) => `<span class="w"><span style="--w:${k}">${w}</span></span>`).join(' ');
+const $ = (t, c, h) => { const e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; };
+
+const track = document.getElementById('track'), mini = document.getElementById('mini');
+const N = EVENTS.length, STOPS = N + 2;              // intro + events + outro
+const first = EVENTS[0].year, last = EVENTS[N-1].year;
+const stops = [];
+
+// intro
+{
+  const s = $('div','stop intro');
+  s.innerHTML = `<div class="ghost">ARi</div>
+    <div class="head"><h1>${words("مسیر منظومه آری")}</h1>
+      <div class="en reveal" style="--i:1"><b>ARiVerse</b> Business Developer</div>
+      <div class="range reveal" style="--i:2"><span>${fa(first)}</span><i></i><span>${fa(last)}</span></div></div>
+    <svg class="star" viewBox="0 0 175.48 183.89" fill="currentColor"><g class="spin"><use href="#sign"/></g></svg>
+    <div class="hint">برای حرکت در مسیر اسکرول کنید <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M0 6h22M17 1l5 5-5 5"/></svg></div>`;
+  stops.push(s);
+}
+
+EVENTS.forEach((e, i) => {
+  const [c, t] = YEAR_COLOR[e.year] || ['#3c82d8','#fff'];
+  const firstOfYear = i === 0 || EVENTS[i-1].year !== e.year;
+  const s = $('div','stop');
+  s.style.setProperty('--c', c); s.style.setProperty('--t', t);
+  s.innerHTML = `${firstOfYear ? `<div class="ghost">${fa(e.year)}</div>` : ''}
+    <div class="head">
+      <div class="meta reveal"><span class="tag">${e.tag}</span><span>${pad(i+1)} / ${pad(N)}</span></div>
+      <h2>${words(e.title)}${e.note ? `<span class="note">${e.note}</span>` : ''}</h2>
+      <p class="reveal" style="--i:2">${e.desc || PLACEHOLDER}</p>
+    </div>
+    <div class="node" role="button" aria-label="${e.year}"><svg class="ring" viewBox="0 0 100 100"><circle cx="50" cy="50" r="49" pathLength="1"/></svg><b><i>${fa(e.year)}</i></b></div>
+    ${e.sub ? `<div class="sub"><div class="stem"></div><ol>${
+      e.sub.map((x,k)=>`<li style="--i:${k}"><time>${fa(x.date)}</time><b>${x.title}</b></li>`).join('')}</ol></div>` : ''}`;
+  stops.push(s);
+});
+
+// outro
+{
+  const s = $('div','stop outro');
+  s.innerHTML = `<div class="head"><h2>${words("ادامه دارد…")}<span class="note">مسیر ما همچنان در حال ساخته شدن است</span></h2></div>
+    <svg class="star" viewBox="0 0 175.48 183.89" fill="currentColor"><g class="spin"><use href="#sign"/></g></svg>`;
+  stops.push(s);
+}
+
+const rail = $('div','rail'), fill = $('div','rail-fill'), railEnd = $('div','rail-end'), railHead = $('div','rail-head');
+track.append(rail, fill, railHead, railEnd, ...stops);
+
+// brand shapes (circle, cross, corner) floating at different depths behind the track
+const bgfx = $('div','bgfx'); track.parentNode.insertBefore(bgfx, track);
+const SHAPES = ['<circle cx="50" cy="50" r="50"/>', '<path d="M18 0 50 32 82 0 100 18 68 50 100 82 82 100 50 68 18 100 0 82 32 50 0 18z"/>', '<path d="M0 0h100v34H34v66H0z"/>'];
+const rnd = (s => () => (s = s * 16807 % 2147483647) / 2147483647)(11);
+const bits = Array.from({length: 44}, (_, k) => {
+  const depth = .1 + rnd() * .4, size = 36 + rnd() * 130 * depth * 2, blue = k % 9 === 0;
+  const el = $('div'); el.innerHTML = `<svg viewBox="0 0 100 100" class="${blue ? 'b' : ''}" style="width:${size}px;top:${(rnd() * 92).toFixed(1)}%;opacity:${(blue ? .1 : .02 + depth * .07).toFixed(3)}">${SHAPES[k % 3]}</svg>`;
+  const svg = el.firstChild; bgfx.append(svg);
+  return {svg, depth, size, fx: rnd(), rot: Math.floor(rnd() * 4) * 90, spin: (rnd() - .5) * .04};
+});
+
+// mini navigator (one dot per event, year label at each year change)
+const dots = [], yrs = [];
+EVENTS.forEach((e, i) => {
+  const x = (i / (N - 1)) * 100;
+  const b = $('button'); b.style.left = x + '%'; b.title = fa(e.year) + ' — ' + e.title;
+  b.onclick = () => go(i + 1); mini.append(b); dots.push(b);
+  if (i === 0 || EVENTS[i-1].year !== e.year) { const y = $('span','yr',fa(e.year)); y.style.left = x + '%'; y.dataset.year = e.year; mini.append(y); yrs.push(y); }
+});
+const miniFill = document.getElementById('miniFill'), counter = document.getElementById('counter');
+
+/* overview tree, drawn once in a fixed 1600×700 space and scaled to fit */
+const ov = document.getElementById('ov'), ovStage = document.getElementById('ovStage');
+{
+  const TY = 350, X0 = 140, X1 = 1460, GAP = (X1 - X0) / (N - 1), ox = i => X0 + i * GAP;
+  let paths = '', twigs = '', html = '';
+  [...new Set(EVENTS.map(e => e.year))].forEach(y => {
+    const a = EVENTS.findIndex(e => e.year === y), b = EVENTS.findLastIndex(e => e.year === y), c = OV_COLOR[y];
+    paths += `<path d="M${ox(a) - GAP / 2} ${TY}H${ox(b) + GAP / 2}" stroke="${c}" pathLength="1" style="--i:${a}"/>`;
+    html += `<span class="ov-year" style="left:${ox(a) - GAP / 2}px;--c:${c}">${fa(y)}</span>`;
+  });
+  const sideCount = [0, 0];
+  EVENTS.forEach((e, i) => {
+    const up = i % 2 === 0, s = up ? -1 : 1, c = OV_COLOR[e.year], cx = ox(i);
+    const L = e.sub ? 150 : [80, 150, 110, 170][sideCount[+up]++ % 4];
+    let subs = '';
+    if (e.sub) {
+      const n = e.sub.length, y0 = L + 92, y1 = L + 128;
+      e.sub.forEach((x, j) => {
+        const sx = cx + (j - (n - 1) / 2) * 80;
+        twigs += `<path d="M${cx} ${TY + s * y0}C${cx} ${TY + s * (y0 + 24)} ${sx} ${TY + s * (y1 - 24)} ${sx} ${TY + s * y1}" stroke="${c}" pathLength="1" style="--i:${i + 6}" data-ev="${i}"/>`
+               + `<circle cx="${sx}" cy="${TY + s * y1}" r="3.5" stroke="${c}" style="--i:${i}" data-ev="${i}"/>`;
+        subs += `<div class="ov-sub" style="left:${sx - cx}px;--o:${y1 + 9}px"><time>${fa(x.date)}</time>${x.title}</div>`;
+      });
+    }
+    html += `<div class="ov-ev ${up ? 'up' : 'dn'}" data-i="${i}" style="left:${cx}px;--c:${c};--i:${i}">`
+          + `<i class="ov-stem" style="height:${L}px"></i><i class="ov-dot"></i>`
+          + `<div class="ov-card" style="--o:${L + 10}px"><small>${fa(e.year)} · ${e.tag}</small><b>${e.title}</b></div>${subs}</div>`;
+  });
+  ovStage.innerHTML = `<svg class="ov-trunk" width="1600" height="700">${paths}<path class="ov-pulse" d="M${X0 - GAP / 2} ${TY}H${X1 + GAP / 2}" pathLength="1"/></svg><svg class="ov-twigs" width="1600" height="700">${twigs}</svg>`
+    + `<svg class="ov-start" viewBox="0 0 175.48 183.89"><g class="spin"><use href="#sign"/></g></svg>`
+    + `<div class="ov-end" style="left:${X1 + GAP / 2}px"><span>ادامه دارد…</span></div>${html}`;
+  // twigs live in a shared svg, so dim them by hand to match the hovered card
+  const allTwigs = ovStage.querySelectorAll('.ov-twigs > *');
+  ovStage.querySelectorAll('.ov-ev').forEach(el => {
+    el.onmouseenter = () => allTwigs.forEach(t => t.style.opacity = t.dataset.ev === el.dataset.i ? '' : .25);
+    el.onmouseleave = () => allTwigs.forEach(t => t.style.opacity = '');
+    el.onclick = () => exitOv(+el.dataset.i + 1, el);
+  });
+}
+function fitOv() {
+  const w = innerWidth, h = innerHeight;
+  // landscape: fit the whole tree; portrait phones: fit height and pan sideways
+  ov.style.setProperty('--s', w >= h ? Math.min(w / 1600, (h - 150) / 700) : (h - 170) / 700);
+}
+
+let W = innerWidth, target = 0, cur = 0, active = -1, vel = 0;
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function layout() {
+  W = innerWidth;
+  stops.forEach((s, i) => s.style.left = i * W + 'px');
+  rail.style.left = fill.style.left = W / 2 + 'px';
+  rail.style.width = (STOPS - 2) * W + 'px';
+  railEnd.style.left = ((STOPS - 2) * W + W / 2) + 'px';
+  railEnd.style.width = W + 'px';
+}
+const clamp = v => Math.max(0, Math.min((STOPS - 1) * W, v));
+const go = i => { target = clamp(i * W); };
+
+// snap with a direction bias so a short flick is enough to move one stop
+let snapT, lastDir = 0;
+function snap() {
+  const f = target / W, base = Math.floor(f), frac = f - base;
+  const idx = lastDir > 0 ? (frac > .1 ? base + 1 : base) : lastDir < 0 ? (frac < .9 ? base : base + 1) : Math.round(f);
+  go(idx);
+}
+function nudge(delta) {
+  if (!delta) return;
+  lastDir = Math.sign(delta);
+  target = clamp(target + delta);
+  clearTimeout(snapT); snapT = setTimeout(snap, 140);
+}
+
+/* overview mode: one more scroll past the last stop zooms out */
+let inOv = false, lockT = 0, over = 0, backTo = STOPS - 1, holdT = 0, flyT;
+const atEnd = () => target >= (STOPS - 1) * W - 1 && Math.abs(cur - target) < W * .05;
+function enterOv() {
+  if (inOv) return;
+  inOv = true; over = 0; lockT = performance.now() + 1100; backTo = Math.round(target / W) || 0;
+  clearTimeout(flyT); document.body.classList.remove('fly');
+  ovStage.querySelector('.go')?.classList.remove('go');
+  // reset the camera without animating, then zoom out into the tree
+  ov.style.transition = 'none';
+  ov.style.setProperty('--tx', '0px'); ov.style.setProperty('--ty', '0px'); ov.style.setProperty('--z', 1.25);
+  ov.offsetWidth; ov.style.transition = '';
+  document.body.classList.add('ov', 'ovk');
+  counter.textContent = 'نمای کلی مسیر';
+}
+function exitOv(i = backTo, el) {
+  if (!inOv) return;
+  inOv = false; lockT = performance.now() + 900;
+  const b = document.body;
+  if (el) {
+    // fly the camera so the clicked dot lands on the screen centre, where the real node will appear
+    const r = el.getBoundingClientRect(), z = 4;
+    ov.style.setProperty('--tx', z * (innerWidth / 2 - r.left) + 'px');
+    ov.style.setProperty('--ty', z * (innerHeight / 2 - r.top) + 'px');
+    ov.style.setProperty('--z', z);
+    el.classList.add('go'); b.classList.add('fly');
+  }
+  target = cur = clamp(i * W);
+  stops.forEach(s => s.classList.remove('active')); active = -1;   // replay the reveal of the stop we land on
+  holdT = performance.now() + (el ? 650 : 250);                     // ...once the page is actually visible
+  b.classList.remove('ov');
+  clearTimeout(flyT);
+  flyT = setTimeout(() => { b.classList.remove('ovk', 'fly'); el?.classList.remove('go'); }, 1600);
+}
+document.getElementById('ovBtn').onclick = () => inOv ? exitOv() : enterOv();
+
+addEventListener('wheel', e => {
+  e.preventDefault();
+  const d = (Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX) * (e.deltaMode === 1 ? 40 : 1);
+  if (performance.now() < lockT) return;
+  if (inOv) { if (d < -20) exitOv(); return; }
+  if (d > 0 && atEnd()) { if ((over += d) > 120) enterOv(); return; }
+  over = 0;
+  nudge(d * 1.6);
+}, {passive:false});
+
+let tx = 0, ty = 0, sx0 = 0, sy0 = 0, startEnd = false;
+addEventListener('touchstart', e => {
+  tx = sx0 = e.touches[0].clientX; ty = sy0 = e.touches[0].clientY; startEnd = atEnd(); clearTimeout(snapT);
+}, {passive:true});
+addEventListener('touchmove', e => {
+  const x = e.touches[0].clientX, y = e.touches[0].clientY;
+  const dx = tx - x, dy = ty - y; tx = x; ty = y;
+  if (inOv) return;   // the overview pans natively
+  lastDir = Math.sign(Math.abs(dx) > Math.abs(dy) ? dx : dy) || lastDir;
+  target = clamp(target + (Math.abs(dx) > Math.abs(dy) ? dx : dy) * 1.3);
+}, {passive:true});
+addEventListener('touchend', () => {
+  const dx = sx0 - tx, dy = sy0 - ty, horiz = Math.abs(dx) > Math.abs(dy), d = horiz ? dx : dy;
+  if (inOv) { if ((!horiz && dy < -90) || (horiz && dx < -90 && ov.scrollLeft <= 0)) exitOv(); return; }
+  if (startEnd && d > 70) return enterOv();
+  snap();
+});
+
+addEventListener('keydown', e => {
+  const back = ['ArrowLeft','ArrowUp','PageUp','Escape'].includes(e.key), fwd = ['ArrowRight','ArrowDown','PageDown',' '].includes(e.key);
+  if (back || fwd) e.preventDefault();
+  if (inOv) { if (back) exitOv(); return; }
+  const i = Math.round(target / W) || 0;
+  if (fwd) i >= STOPS - 1 ? enterOv() : go(i + 1);
+  if (back && e.key !== 'Escape') go(i - 1);
+  if (e.key === 'Home') go(0);
+  if (e.key === 'End') go(STOPS - 1);
+});
+track.addEventListener('click', e => { const s = e.target.closest('.node') && e.target.closest('.stop'); if (s) go(stops.indexOf(s)); });
+
+addEventListener('resize', () => { const i = Math.round(target / W) || 0; layout(); fitOv(); target = cur = i * W; });
+
+function frame() {
+  cur += (target - cur) * (reduce ? 1 : .085);
+  if (Math.abs(target - cur) < .1) cur = target;
+  track.style.transform = `translate3d(${-cur}px,0,0)`;
+
+  // velocity drives the lean of the text and the comet on the line
+  vel += (Math.max(-1, Math.min(1, W ? (target - cur) / W : 0)) - vel) * .18;
+  const v = reduce ? 0 : vel;
+  track.style.setProperty('--v', v.toFixed(3));
+  track.style.setProperty('--va', Math.abs(v).toFixed(3));
+  railHead.style.left = W / 2 + Math.min(cur, (STOPS - 2) * W) + 'px';
+  railHead.style.transform = `translateY(-50%) scaleX(${v > 0 ? -1 : 1})`;
+  if (!reduce) bits.forEach(b => {
+    const span = (STOPS - 1) * W * b.depth + W + b.size;
+    b.svg.style.transform = `translate3d(${b.fx * span - b.size - cur * b.depth}px,0,0) rotate(${b.rot + cur * b.spin}deg)`;
+  });
+  fill.style.width = Math.min(cur, (STOPS - 2) * W) + 'px';
+
+  const pos = W ? cur / W : 0;   // W is 0 while the page loads in a hidden tab
+  stops.forEach((s, i) => {
+    const d = i - pos, a = Math.max(0, 1 - Math.abs(d) * 1.5);
+    if (Math.abs(d) < 1.6) { s.style.setProperty('--d', d.toFixed(4)); s.style.setProperty('--a', a.toFixed(4)); }
+  });
+
+  const idx = Math.round(pos);
+  if (idx !== active && performance.now() > holdT) {
+    stops[active]?.classList.remove('active');
+    stops[idx].classList.add('active');
+    active = idx;
+    const ev = EVENTS[idx - 1];
+    if (!inOv) counter.innerHTML = ev ? `رویداد<b>${pad(idx)}</b> / ${pad(N)}` : '';
+    document.documentElement.style.setProperty('--glow', ev ? (YEAR_COLOR[ev.year]||['#2a6db8'])[0] : '#2a6db8');
+    dots.forEach((b, k) => b.classList.toggle('on', k === idx - 1));
+    const yr = ev ? ev.year : null;
+    yrs.forEach(y => y.classList.toggle('on', +y.dataset.year === yr));
+  }
+  miniFill.style.transform = `scaleX(${Math.max(0, Math.min(1, (pos - 1) / (N - 1)))})`;
+  requestAnimationFrame(frame);
+}
+layout(); fitOv(); requestAnimationFrame(frame);
+</script>
+</body>
+</html>
