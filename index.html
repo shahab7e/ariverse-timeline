@@ -181,7 +181,7 @@ body.ovk .ov-stage path{stroke-dashoffset:0}
 .ov-end span{position:absolute;top:10px;left:0;width:100%;text-align:center;font-size:11px;color:var(--mute)}
 .ov-ev{position:absolute;top:350px;width:0;height:0;cursor:pointer;transition:opacity .35s}
 .ov-stage:has(.ov-ev:hover) .ov-ev:not(:hover){opacity:.25}
-.up .dn body.ovk .ov-dot{position:absolute;left:-6px;top:-6px;width:12px;height:12px;border-radius:50%;background:var(--c);
+.ov-dot{position:absolute;left:-6px;top:-6px;width:12px;height:12px;border-radius:50%;background:var(--c);
   box-shadow:0 0 0 4px var(--bg),0 0 18px var(--c);transform:scale(0);transition:transform .4s calc(var(--i) * 45ms + 350ms)}
 body.ovk .ov-dot{transform:none}
 body.ovk .ov-ev:hover .ov-dot{transform:scale(1.45);transition-delay:0s}
@@ -362,7 +362,10 @@ const ov = document.getElementById('ov'), ovStage = document.getElementById('ovS
   EVENTS.forEach((e, i) => {
     const up = i % 2 === 0, s = up ? -1 : 1, c = OV_COLOR[e.year], cx = ox(i);
     const L = e.sub ? 150 : [80, 150, 110, 170][sideCount[+up]++ % 4];
-    twigs += `<path d="M${cx} ${TY}V${TY + s * L}" stroke="${c}" stroke-opacity=".6" pathLength="1" style="--i:${i + 4}" data-ev="${i}"/>`;
+    // stem fades from the trunk outward (userSpaceOnUse: a zero-width line has no bounding box for the gradient)
+    twigs += `<linearGradient id="st${i}" gradientUnits="userSpaceOnUse" x1="${cx}" y1="${TY}" x2="${cx}" y2="${TY + s * L}">`
+           + `<stop offset="0" stop-color="${c}"/><stop offset="1" stop-color="${c}" stop-opacity=".25"/></linearGradient>`
+           + `<path d="M${cx} ${TY}V${TY + s * L}" stroke="url(#st${i})" pathLength="1" style="--i:${i + 4}" data-ev="${i}"/>`;
     let subs = '';
     if (e.sub) {
       const n = e.sub.length, y0 = L + 92, y1 = L + 128;
