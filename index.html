@@ -181,12 +181,7 @@ body.ovk .ov-stage path{stroke-dashoffset:0}
 .ov-end span{position:absolute;top:10px;left:0;width:100%;text-align:center;font-size:11px;color:var(--mute)}
 .ov-ev{position:absolute;top:350px;width:0;height:0;cursor:pointer;transition:opacity .35s}
 .ov-stage:has(.ov-ev:hover) .ov-ev:not(:hover){opacity:.25}
-.ov-stem{position:absolute;left:-.5px;width:1px;background:linear-gradient(var(--c),color-mix(in srgb,var(--c) 25%,transparent));
-  transform:scaleY(0);transition:transform .5s cubic-bezier(.2,.7,0,1) calc(var(--i) * 45ms + 450ms)}
-.up .ov-stem{bottom:0;transform-origin:bottom;background:linear-gradient(color-mix(in srgb,var(--c) 25%,transparent),var(--c))}
-.dn .ov-stem{top:0;transform-origin:top}
-body.ovk .ov-stem{transform:none}
-.ov-dot{position:absolute;left:-6px;top:-6px;width:12px;height:12px;border-radius:50%;background:var(--c);
+.up .dn body.ovk .ov-dot{position:absolute;left:-6px;top:-6px;width:12px;height:12px;border-radius:50%;background:var(--c);
   box-shadow:0 0 0 4px var(--bg),0 0 18px var(--c);transform:scale(0);transition:transform .4s calc(var(--i) * 45ms + 350ms)}
 body.ovk .ov-dot{transform:none}
 body.ovk .ov-ev:hover .ov-dot{transform:scale(1.45);transition-delay:0s}
@@ -367,6 +362,7 @@ const ov = document.getElementById('ov'), ovStage = document.getElementById('ovS
   EVENTS.forEach((e, i) => {
     const up = i % 2 === 0, s = up ? -1 : 1, c = OV_COLOR[e.year], cx = ox(i);
     const L = e.sub ? 150 : [80, 150, 110, 170][sideCount[+up]++ % 4];
+    twigs += `<path d="M${cx} ${TY}V${TY + s * L}" stroke="${c}" stroke-opacity=".6" pathLength="1" style="--i:${i + 4}" data-ev="${i}"/>`;
     let subs = '';
     if (e.sub) {
       const n = e.sub.length, y0 = L + 92, y1 = L + 128;
@@ -378,7 +374,7 @@ const ov = document.getElementById('ov'), ovStage = document.getElementById('ovS
       });
     }
     html += `<div class="ov-ev ${up ? 'up' : 'dn'}" data-i="${i}" style="left:${cx}px;--c:${c};--i:${i}">`
-          + `<i class="ov-stem" style="height:${L}px"></i><i class="ov-dot"></i>`
+          + `<i class="ov-dot"></i>`
           + `<div class="ov-card" style="--o:${L + 10}px"><small>${fa(e.year)} · ${e.tag}</small><b>${e.title}</b></div>${subs}</div>`;
   });
   ovStage.innerHTML = `<svg class="ov-trunk" width="1600" height="700">${paths}<path class="ov-pulse" d="M${X0 - GAP / 2} ${TY}H${X1 + GAP / 2}" pathLength="1"/></svg><svg class="ov-twigs" width="1600" height="700">${twigs}</svg>`
