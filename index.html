@@ -149,8 +149,10 @@ nav{position:fixed;bottom:0;inset-inline:0;z-index:5;padding:0 clamp(16px,4vw,56
 .viewport{transition:transform 1.1s cubic-bezier(.2,.7,0,1),opacity .7s}
 body.ov .viewport{transform:scale(.32);opacity:0}
 /* fly-to: the tree zooms the clicked event to the centre, the real page grows out of the same spot */
-body.fly .overview{transition:transform 1.05s cubic-bezier(.65,0,.35,1),opacity .45s cubic-bezier(.4,0,1,1) .5s}
-body.fly .viewport{transition:transform 1.1s cubic-bezier(.16,1,.3,1) .45s,opacity .5s .45s}
+/* step 1: the camera dives into the dot and blurs away; step 2: the page comes out of the same spot */
+body.fly .overview{filter:blur(8px);transition:transform .75s cubic-bezier(.7,0,.25,1),opacity .3s ease-in .5s,filter .3s ease-in .5s}
+body.fly .viewport{transition:transform .9s cubic-bezier(.16,1,.3,1) .58s,opacity .4s ease-out .58s,filter .6s ease-out .58s}
+body.ov.fly .viewport{transform:scale(.8);filter:blur(10px);transition:none}
 body.fly .ov-stage .ov-ev.go .ov-dot{transform:scale(2.2);transition:transform .6s cubic-bezier(.34,1.6,.64,1)}
 body.fly .ov-stage:has(.ov-ev.go) .ov-ev:not(.go){opacity:.12}
 nav{transition:opacity .5s}
@@ -445,15 +447,16 @@ function exitOv(i = backTo, el) {
   const b = document.body;
   if (el) {
     // fly the camera so the clicked dot lands on the screen centre, where the real node will appear
-    const r = el.getBoundingClientRect(), z = 4;
+    const r = el.getBoundingClientRect(), z = 3;
     ov.style.setProperty('--tx', z * (innerWidth / 2 - r.left) + 'px');
     ov.style.setProperty('--ty', z * (innerHeight / 2 - r.top) + 'px');
     ov.style.setProperty('--z', z);
     el.classList.add('go'); b.classList.add('fly');
+    document.querySelector('.viewport').offsetWidth;   // commit the page's small, blurred start state
   }
   target = cur = clamp(i * W);
   stops.forEach(s => s.classList.remove('active')); active = -1;   // replay the reveal of the stop we land on
-  holdT = performance.now() + (el ? 650 : 250);                     // ...once the page is actually visible
+  holdT = performance.now() + (el ? 800 : 250);                     // ...once the page is actually visible
   b.classList.remove('ov');
   clearTimeout(flyT);
   flyT = setTimeout(() => { b.classList.remove('ovk', 'fly'); el?.classList.remove('go'); }, 1600);
