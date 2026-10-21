@@ -139,6 +139,18 @@ header{position:fixed;top:0;inset-inline:0;z-index:5;display:flex;justify-conten
 .mock:has(img){border:0;box-shadow:0 24px 60px -24px rgba(0,0,0,.8)}
 .mock small{display:block;margin-top:4px;font-size:11px;opacity:.7}
 .outro{--c:#4f94e6}
+/* last page: every client name drifting in endless rows, matrix-style */
+.names{position:absolute;inset:clamp(64px,10vh,100px) 0 clamp(72px,12vh,104px);display:flex;flex-direction:column;justify-content:space-evenly;overflow:hidden;pointer-events:none;direction:ltr;
+  opacity:var(--a);-webkit-mask-image:radial-gradient(ellipse 58% 46% at 50% 52%,rgba(0,0,0,.12) 30%,#000 88%);
+  mask-image:radial-gradient(ellipse 58% 46% at 50% 52%,rgba(0,0,0,.12) 30%,#000 88%)}
+.names .row{display:flex;width:max-content;white-space:nowrap;animation:marq var(--dur,120s) linear infinite}
+.names .row.rev{animation-direction:reverse}
+@keyframes marq{to{transform:translateX(-50%)}}
+.names span{direction:rtl;padding:0 1.15em;font-size:clamp(12px,1.05vw,15px);font-weight:300;color:rgba(190,215,235,var(--o,.15));
+  transition:color 1.8s,text-shadow 1.8s}
+.names span.lit{color:#e3f0ff;text-shadow:0 0 14px rgba(70,140,255,.95),0 0 2px #fff;transition:color .12s,text-shadow .12s}
+.stop:not(.active) .names .row{animation-play-state:paused}
+.outro .logo{background:rgba(6,20,30,.86);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 .outro .below{width:min(1100px,94vw)}
 .sub li time{display:block;font-size:11.5px;color:var(--mute);margin-bottom:4px}
 .sub li b{font-weight:500;font-size:clamp(12px,1vw,14px);line-height:1.7}
@@ -243,6 +255,7 @@ body.ov .ov-hint{opacity:1;transition-delay:1.2s}
   .head p{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
 }
 @media (prefers-reduced-motion:reduce){
+  .names .row{animation:none}
   .node::after,.hint svg,.spin,.ov-pulse{animation:none}
   .w > span{filter:none}
 }
@@ -263,6 +276,7 @@ body.ov .ov-hint{opacity:1;transition-delay:1.2s}
 <div class="ov-hint">برای ورود به هر رویداد روی آن کلیک کنید · اسکرول به عقب برای بازگشت</div>
 <nav><div class="mini" id="mini"><div class="base"></div><div class="fill" id="miniFill"></div></div></nav>
 
+<script src="clients.js"></script>
 <script>
 /* ================= DATA — edit only this part =================
    tag   : short category chip
@@ -407,10 +421,36 @@ EVENTS.forEach((e, i) => {
 // outro
 {
   const s = $('div','stop outro');
-  s.innerHTML = `<div class="head"><h2>${words("ادامه دارد…")}<span class="note">مسیر ما همچنان در حال ساخته شدن است</span></h2></div>
+  s.innerHTML = `<div class="names" aria-hidden="true"></div><div class="head"><h2>${words("ادامه دارد…")}<span class="note">مسیر ما همچنان در حال ساخته شدن است</span></h2></div>
     <div class="below"><div class="stem"></div><div class="cap">برخی از مشتریان و شرکای ما</div>${logoTiles(CLIENTS)}</div>
     <svg class="star" viewBox="0 0 175.48 183.89" fill="currentColor"><g class="spin"><use href="#sign"/></g></svg>`;
   stops.push(s);
+}
+
+// client names: shuffled into rows that loop forever, each at its own speed and depth; random names flare up
+{
+  const outro = stops[stops.length - 1], box = outro.querySelector('.names');
+  const all = (window.CLIENT_NAMES || []).slice().sort(() => Math.random() - .5);
+  const ROWS = 16, per = Math.ceil(all.length / ROWS);
+  const rows = Array.from({length: ROWS}, (_, r) => {
+    const list = all.slice(r * per, r * per + per);
+    if (!list.length) return null;
+    const row = $('div', 'row' + (r % 2 ? ' rev' : ''));
+    row.style.setProperty('--o', (.08 + Math.random() * .14).toFixed(2));
+    row.innerHTML = [...list, ...list].map(n => `<span>${fa(n)}</span>`).join('');   // two copies -> seamless -50% loop
+    box.append(row);
+    return row;
+  }).filter(Boolean);
+  const pace = () => rows.forEach(row => row.style.setProperty('--dur', (row.scrollWidth / 2 / (18 + Math.random() * 22)).toFixed(1) + 's'));
+  document.fonts.ready.then(pace);
+  const spans = box.getElementsByTagName('span');
+  setInterval(() => {
+    if (reduce || inOv || stops[active] !== outro || !spans.length) return;
+    for (let k = 0; k < 2; k++) {
+      const s = spans[Math.random() * spans.length | 0];
+      s.classList.add('lit'); setTimeout(() => s.classList.remove('lit'), 900 + Math.random() * 900);
+    }
+  }, 150);
 }
 
 const rail = $('div','rail'), fill = $('div','rail-fill'), railEnd = $('div','rail-end'), railHead = $('div','rail-head');
