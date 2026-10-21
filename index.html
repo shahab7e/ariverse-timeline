@@ -157,6 +157,7 @@ header{position:fixed;top:0;inset-inline:0;z-index:5;display:flex;justify-conten
 .names span.f{color:rgba(214,230,246,calc(var(--o,.15) + .22));font-weight:500}
 .names .lg{display:inline-flex;align-items:center}
 .names .lg img{display:block;height:clamp(20px,2vw,30px);width:auto;max-width:130px;opacity:calc(var(--o,.15) + .22);transition:opacity 1.8s,filter 1.8s}
+.names .lg.col img{opacity:calc(var(--o,.15) + .3)}
 .names span.lit img{opacity:1;filter:drop-shadow(0 0 7px rgba(70,140,255,.95));transition:opacity .12s,filter .12s}
 .stop:not(.active) .names .row{animation-play-state:paused}
 .outro .logo{background:rgba(6,20,30,.86);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
@@ -429,7 +430,7 @@ EVENTS.forEach((e, i) => {
 // Well-known brands (logo or famous name) are spread over every row and light up first; the rest flare up afterwards.
 {
   const outro = stops[stops.length - 1], box = outro.querySelector('.names');
-  const LOGOS = window.CLIENT_LOGOS || {}, FAMOUS = new Set(window.CLIENT_FAMOUS || []), usedLogo = new Set();
+  const COLOR = new Set(window.CLIENT_LOGO_COLOR || []), LOGOS = window.CLIENT_LOGOS || {}, FAMOUS = new Set(window.CLIENT_FAMOUS || []), usedLogo = new Set();
   const shuffle = a => a.sort(() => Math.random() - .5);
   const items = (window.CLIENT_NAMES || []).map(name => {
     const logo = LOGOS[name] && !usedLogo.has(LOGOS[name]) && usedLogo.add(LOGOS[name]) ? `assets/logos/${LOGOS[name]}.png` : '';
@@ -443,7 +444,7 @@ EVENTS.forEach((e, i) => {
     shuffle(list);
     const row = $('div', 'row' + (r % 2 ? ' rev' : ''));
     row.style.setProperty('--o', (.08 + Math.random() * .14).toFixed(2));
-    const html = list.map(it => it.logo ? `<span class="f lg"><img src="${it.logo}" alt="${it.name}" loading="lazy"></span>` : `<span${it.famous ? ' class="f"' : ''}>${fa(it.name)}</span>`).join('');
+    const html = list.map(it => it.logo ? `<span class="f lg${COLOR.has(it.logo.split('/').pop().replace('.png','')) ? ' col' : ''}"><img src="${it.logo}" alt="${it.name}" loading="lazy"></span>` : `<span${it.famous ? ' class="f"' : ''}>${fa(it.name)}</span>`).join('');
     row.innerHTML = html + html;   // two copies -> seamless -50% loop
     box.append(row);
     return row;

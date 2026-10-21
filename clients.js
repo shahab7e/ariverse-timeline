@@ -346,6 +346,15 @@ window.CLIENT_NAMES = [
 
 // Brands with a logo file (white PNG in assets/logos) and other well-known names. Famous names light up first on the last page.
 window.CLIENT_LOGOS = {
+ "سازمان مدیریت صنعتی": "imi",
+ "اتاق بازرگانی تهران": "tccim",
+ "میهن": "mihan",
+ "داروسازی دکتر عبیدی": "abidi",
+ "شرکت BVT پارس": "bvt-pars",
+ "پایدار پردازی کوشان": "paydar",
+ "کلینیک سیاره حیوانات": "sayare-heyvanat",
+ "استودیو مریخ": "merikh",
+ "آپرا": "opera",
  "بانک پاسارگاد": "pasargad",
  "بانک صادرات": "saderat",
  "بانک سامان": "saman",
@@ -373,3 +382,5 @@ window.CLIENT_LOGOS = {
  "سرو سامان": "sarv-saman"
 };
 window.CLIENT_FAMOUS = ["وزارت صنعت، معدن و تجارت", "وزارت امور اقتصاد و دارایی", "وزارت امور خارجه", "اتاق بازرگانی تهران", "اتاق دیجیتال تهران", "سازمان مدیریت صنعتی", "همایون شجریان", "میهن", "دیجی کالا", "کنسرسیوم رویه های استثنائات تجاری ایران"];
+// Logos that keep their own colours (their white silhouette would be a solid blob).
+window.CLIENT_LOGO_COLOR = ["mihan"];
