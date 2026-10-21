@@ -343,3 +343,33 @@ window.CLIENT_NAMES = [
 "آژند فیدار پایا سولدوز",
 "همراه تجارت گیسو"
 ];
+
+// Brands with a logo file (white PNG in assets/logos) and other well-known names. Famous names light up first on the last page.
+window.CLIENT_LOGOS = {
+ "بانک پاسارگاد": "pasargad",
+ "بانک صادرات": "saderat",
+ "بانک سامان": "saman",
+ "بانک ملت": "mellat",
+ "بانک اقتصاد نوین": "en-bank",
+ "بانک گردشگری": "tourism-bank",
+ "بانک کارآفرین": "karafarin",
+ "بانک ملی ایران": "melli",
+ "بانک دی": "day",
+ "بلوبانک": "blu-bank",
+ "دیجی‌کالا": "digikala",
+ "شهرداری تهران": "tehran-municipality",
+ "بیمه ایران": "bimeh-iran",
+ "ایران مال": "iranmall",
+ "کاله": "kalleh",
+ "کیپا": "kipa",
+ "فرودگاه پیام": "payam",
+ "سانا فارمد": "sana-pharmed",
+ "کوبل دارو": "cobel-darou",
+ "بهستان دارو": "behestan-darou",
+ "انرژی مدیا": "energy-media",
+ "همراه تل": "../consortium/hamrah-tel",
+ "هما تلکام": "../consortium/homa-telecom",
+ "صدر تل": "../consortium/sadr-tel",
+ "سرو سامان": "sarv-saman"
+};
+window.CLIENT_FAMOUS = ["وزارت صنعت، معدن و تجارت", "وزارت امور اقتصاد و دارایی", "وزارت امور خارجه", "اتاق بازرگانی تهران", "اتاق دیجیتال تهران", "سازمان مدیریت صنعتی", "همایون شجریان", "میهن", "دیجی کالا", "کنسرسیوم رویه های استثنائات تجاری ایران"];

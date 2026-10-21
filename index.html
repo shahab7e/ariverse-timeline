@@ -62,6 +62,7 @@ header{position:fixed;top:0;inset-inline:0;z-index:5;display:flex;justify-conten
 .photo{position:absolute;inset:-3% -1%;background:center/cover no-repeat;opacity:calc(var(--a) * .15);filter:saturate(.8) blur(1.5px);pointer-events:none;
   transform:translateX(calc(var(--d) * -9vw)) scale(1.06);
   -webkit-mask-image:radial-gradient(ellipse 78% 68% at 50% 46%,#000 35%,transparent 100%);mask-image:radial-gradient(ellipse 78% 68% at 50% 46%,#000 35%,transparent 100%)}
+.photo.inv{filter:invert(1) hue-rotate(180deg) saturate(.7) blur(1.5px);opacity:calc(var(--a) * .22)}
 .ghost{position:absolute;left:50%;top:50%;font-weight:900;font-size:min(36vw,56vh);line-height:1;white-space:nowrap;
   color:transparent;-webkit-text-stroke:1px rgba(190,215,235,.09);
   transform:translate(calc(-50% + var(--d) * -28vw),-46%);pointer-events:none;user-select:none}
@@ -153,6 +154,10 @@ header{position:fixed;top:0;inset-inline:0;z-index:5;display:flex;justify-conten
 .names span{direction:rtl;padding:0 1.15em;font-size:clamp(12px,1.05vw,15px);font-weight:300;color:rgba(190,215,235,var(--o,.15));
   transition:color 1.8s,text-shadow 1.8s}
 .names span.lit{color:#e3f0ff;text-shadow:0 0 14px rgba(70,140,255,.95),0 0 2px #fff;transition:color .12s,text-shadow .12s}
+.names span.f{color:rgba(214,230,246,calc(var(--o,.15) + .22));font-weight:500}
+.names .lg{display:inline-flex;align-items:center}
+.names .lg img{display:block;height:clamp(20px,2vw,30px);width:auto;max-width:130px;opacity:calc(var(--o,.15) + .22);transition:opacity 1.8s,filter 1.8s}
+.names span.lit img{opacity:1;filter:drop-shadow(0 0 7px rgba(70,140,255,.95));transition:opacity .12s,filter .12s}
 .stop:not(.active) .names .row{animation-play-state:paused}
 .outro .logo{background:rgba(6,20,30,.86);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 .outro .below{width:min(1100px,94vw)}
@@ -167,7 +172,7 @@ header{position:fixed;top:0;inset-inline:0;z-index:5;display:flex;justify-conten
 .intro h1{font-weight:900;font-size:clamp(38px,6vw,92px);letter-spacing:-2px;line-height:1.15}
 .intro .en{direction:ltr;font-weight:300;font-size:clamp(14px,1.4vw,20px);color:#a9bfd0;letter-spacing:.4px;margin-top:10px}
 .intro .en b{font-weight:700;color:var(--ink)}
-.intro .range{margin-top:22px;display:inline-flex;gap:14px;align-items:center;color:var(--mute);font-size:14px}
+.intro .range{direction:ltr;margin-top:22px;display:inline-flex;gap:14px;align-items:center;color:var(--mute);font-size:14px}
 .intro .range i{width:48px;height:1px;background:var(--faint)}
 .star{position:absolute;left:50%;top:50%;width:clamp(64px,6vw,88px);height:auto;transform:translate(-50%,-50%) scale(calc(.6 + .4 * var(--a))) rotate(calc(var(--d) * 90deg));color:var(--sign);filter:drop-shadow(0 0 24px rgba(21,74,222,.6))}
 .hint{position:absolute;left:50%;top:calc(50% + 70px);transform:translateX(-50%);direction:rtl;display:flex;gap:10px;align-items:center;
@@ -298,32 +303,30 @@ const L_ = name => `assets/logos/${name}.png`;
 const EVENTS = [
   {year:1398, tag:'تفاهم‌نامه', title:'امضای قرارداد و تفاهم‌نامه همکاری با سازمان مدیریت صنعتی',},
   {year:1398, tag:'تفاهم‌نامه', title:'امضای تفاهم‌نامه همکاری با مرکز توسعه تجارت الکترونیکی وزارت صمت', note:'رتبه‌بندی کسب‌وکارهای اینترنتی', photo:'assets/photos/mou.jpg'},
-  {year:1399, tag:'تشکیل',      title:'تشکیل گروه توسعه'},
+  {year:1399, tag:'تاسیس',         title:'تاسیس گروه در سازمان مدیریت صنعتی', note:'بازرگانی، تجارت الکترونیکی، علوم داده'},
   {year:1399, tag:'تاسیس',      title:'تاسیس شرکت مشاوران آری', photo:'assets/photos/consult.jpg'},
   {year:1400, tag:'تاسیس',      title:'تاسیس استودیو دیزاین آری',},
-  {year:1400, tag:'رویداد',     title:'برگزاری رویداد آگاهی‌رسانی و قدردانی از برترین‌های ارزیابی واردکنندگان موبایل', note:'موبیکام — دوره اول', photo:'assets/photos/mobicom.jpg'},
+  {year:1400, tag:'رویداد',     title:'برگزاری رویداد آگاهی‌رسانی و قدردانی از برترین‌های ارزیابی واردکنندگان موبایل', note:'موبیکام', photo:'assets/photos/mobicom.jpg'},
   {year:1401, tag:'تاسیس',      title:'تاسیس دفتر تخصصی مشاوره بازرگانی',},
   {year:1401, tag:'تفاهم‌نامه', title:'امضای تفاهم‌نامه همکاری با دفتر خدمات کسب‌وکار وزارت صمت',},
   {year:1401, tag:'رویداد',     title:'برگزاری روز تجارت الکترونیکی ۷۲۴',
     photo:'assets/photos/e724.jpg',
-    sub:[{date:'۱۴۰۱',title:'دوره اول'},{date:'۱۴۰۲',title:'دوره دوم'},{date:'۱۴۰۳',title:'دوره سوم'},{date:'۱۴۰۴',title:'دوره چهارم'},{date:'۱۴۰۵',title:'دوره پنجم'}]},
+    sub:[{date:'۱۴۰۱',title:'دوره اول'},{date:'۱۴۰۲',title:'دوره دوم'},{date:'۱۴۰۳',title:'دوره سوم'},{date:'۱۴۰۴',title:'دوره چهارم'}]},
   {year:1402, tag:'تفاهم‌نامه', title:'امضای تفاهم‌نامه همکاری با دفتر آماد و توزیع وزارت صمت',},
   {year:1402, tag:'تفاهم‌نامه', title:'امضای تفاهم‌نامه همکاری با بانک سامان', note:'تفاهم‌نامه سه‌جانبه تاسیس صندوق ضمانت تجارت الکترونیکی',
-    logos:[{name:'بانک سامان', src:L_('saman')},{name:'بلوبانک', src:L_('blu-bank')}]},
+    logos:[{name:'بانک سامان', src:L_('saman')}]},
   {year:1402, tag:'تفاهم‌نامه', title:'امضای تفاهم‌نامه همکاری با دفتر تخصصی لوازم خانگی و اداری وزارت صمت',},
   {year:1402, tag:'کارگروه',    title:'تشکیل کارگروه بررسی واردات لوازم خانگی به حکم قائم‌مقام وزیر صمت'},
   {year:1402, tag:'رویداد',     title:'رویداد ملی مدیریت بازرگانی', note:'IMI100 — ارزیابی شرکت‌های حاضر و داشبورد داده‌محور',
     desc:'تهیه‌ی کارنامه‌ی ارزیابی شرکت‌های حاضر در رویداد ملی مدیریت بازرگانی و طراحی داشبورد داده‌محور رویداد ملی IMI100 برای مرکز رتبه‌بندی شرکت‌های برتر سازمان مدیریت صنعتی.',
-    photo:'assets/photos/national.jpg',
-    sub:[{date:'۱۴۰۲',title:'رویداد ملی مدیریت بازرگانی'},{date:'۱۴۰۳',title:'رویداد ملی مدیریت بازرگانی'}]},
-  {year:1402, tag:'رویداد',     title:'برگزاری رویداد آگاهی‌رسانی و قدردانی از برترین‌های ارزیابی واردکنندگان موبایل', note:'موبیکام — دوره دوم', photo:'assets/photos/mobicom.jpg'},
+    photo:'assets/photos/national.jpg'},
   {year:1402, tag:'همکاری',     title:'همکاری با موسیاد', note:'انجمن تجار و صنعتگران ترکیه'},
   {year:1402, tag:'تاسیس',      title:'تاسیس شرکت انرژی مدیا',
     logos:[{name:'انرژی مدیا', src:L_('energy-media')}]},
   {year:1403, tag:'تفاهم‌نامه', title:'امضای تفاهم‌نامه همکاری با مرکز آموزش بازرگانی ایران',
     desc:'همکاری با مرکز آموزش بازرگانی ایران در چارچوب برنامه‌های تخصصی حاکمیتی.'},
   {year:1403, tag:'تاسیس',      title:'تاسیس شرکت سروسامان', note:'در همکاری با بانک سامان',
-    logos:[{name:'سروسامان', src:L_('sarv-saman')},{name:'بانک سامان', src:L_('saman')}]},
+    logos:[{name:'سروسامان', src:L_('sarv-saman')},{name:'بانک سامان', src:L_('saman')},{name:'بلوبانک', src:L_('blu-bank')}]},
   {year:1403, tag:'تاسیس',      title:'تاسیس مرکز داده‌پژوهی ژرفا',
     desc:'در حوزه‌ی داده‌پژوهی بازرگانی؛ از جمله گزارش بازرگانی با ۲۲ کشور هدف برای دفتر قائم‌مقام وزیر صمت، گزارش‌های بازرگانی با پاکستان و عربستان برای وزارت اقتصاد و وزارت امور خارجه، و توسعه‌ی ترینداک AI.',
     photo:'assets/photos/zarfa.jpg',
@@ -340,6 +343,7 @@ const EVENTS = [
            ['آرکا تجارت بیستون','arka'],['تکنولایف','techno-life'],['مهرنجان تجارت اسکندری','mehranjan'],['زرین صنعت سرو','zarin-sarv']]
       .map(([name, f]) => ({name, src: `assets/consortium/${f}.png`}))},
   {year:1405, tag:'انتشار',     title:'تالیف و انتشار کتاب سال بازرگانی ایران',
+    photo:'assets/book-mockup.jpg', photoInv:true,
     image:{src:'assets/book-mockup.jpg', alt:'ماک‌آپ کتاب سال بازرگانی ایران'}},
 ];
 /* last page: major clients and partners (logos cut from the credential deck) */
@@ -399,7 +403,7 @@ EVENTS.forEach((e, i) => {
   const s = $('div','stop');
   s.style.setProperty('--c', c); s.style.setProperty('--t', t);
   s.innerHTML = `${firstOfYear ? `<div class="ghost">${fa(e.year)}</div>` : ''}
-    ${e.photo ? `<div class="photo" style="background-image:url('${e.photo}')"></div>` : ''}
+    ${e.photo ? `<div class="photo${e.photoInv ? ' inv' : ''}" style="background-image:url('${e.photo}')"></div>` : ''}
     <div class="head">
       <div class="meta reveal"><span class="tag">${e.tag}</span><span>${pad(i+1)} / ${pad(N)}</span></div>
       <h2>${words(e.title)}${e.note ? `<span class="note">${e.note}</span>` : ''}</h2>
@@ -421,30 +425,42 @@ EVENTS.forEach((e, i) => {
   stops.push(s);
 }
 
-// client names: shuffled into rows that loop forever, each at its own speed and depth; random names flare up
+// client names: shuffled into rows that loop forever, each at its own speed and depth.
+// Well-known brands (logo or famous name) are spread over every row and light up first; the rest flare up afterwards.
 {
   const outro = stops[stops.length - 1], box = outro.querySelector('.names');
-  const all = (window.CLIENT_NAMES || []).slice().sort(() => Math.random() - .5);
-  const ROWS = 16, per = Math.ceil(all.length / ROWS);
-  const rows = Array.from({length: ROWS}, (_, r) => {
-    const list = all.slice(r * per, r * per + per);
+  const LOGOS = window.CLIENT_LOGOS || {}, FAMOUS = new Set(window.CLIENT_FAMOUS || []), usedLogo = new Set();
+  const shuffle = a => a.sort(() => Math.random() - .5);
+  const items = (window.CLIENT_NAMES || []).map(name => {
+    const logo = LOGOS[name] && !usedLogo.has(LOGOS[name]) && usedLogo.add(LOGOS[name]) ? `assets/logos/${LOGOS[name]}.png` : '';
+    return {name, logo, famous: !!logo || FAMOUS.has(name)};
+  });
+  const ROWS = 16, buckets = Array.from({length: ROWS}, () => []);
+  shuffle(items.filter(i => i.famous)).forEach((it, k) => buckets[k % ROWS].push(it));
+  shuffle(items.filter(i => !i.famous)).forEach(it => buckets.reduce((m, r) => r.length < m.length ? r : m).push(it));
+  const rows = buckets.map((list, r) => {
     if (!list.length) return null;
+    shuffle(list);
     const row = $('div', 'row' + (r % 2 ? ' rev' : ''));
     row.style.setProperty('--o', (.08 + Math.random() * .14).toFixed(2));
-    row.innerHTML = [...list, ...list].map(n => `<span>${fa(n)}</span>`).join('');   // two copies -> seamless -50% loop
+    const html = list.map(it => it.logo ? `<span class="f lg"><img src="${it.logo}" alt="${it.name}" loading="lazy"></span>` : `<span${it.famous ? ' class="f"' : ''}>${fa(it.name)}</span>`).join('');
+    row.innerHTML = html + html;   // two copies -> seamless -50% loop
     box.append(row);
     return row;
   }).filter(Boolean);
   const pace = () => rows.forEach(row => row.style.setProperty('--dur', (row.scrollWidth / 2 / (18 + Math.random() * 22)).toFixed(1) + 's'));
   document.fonts.ready.then(pace);
-  const spans = box.getElementsByTagName('span');
+  const famousEls = [...box.querySelectorAll('.f')], otherEls = [...box.querySelectorAll('span:not(.f)')];
+  const visible = el => { const r = el.getBoundingClientRect(); return r.right > 0 && r.left < innerWidth && r.bottom > 0 && r.top < innerHeight; };
+  const pick = pool => { for (let k = 0; k < 40; k++) { const el = pool[Math.random() * pool.length | 0]; if (el && visible(el)) return el; } };
+  const flare = el => { if (!el) return; el.classList.add('lit'); setTimeout(() => el.classList.remove('lit'), 1100 + Math.random() * 900); };
+  let since = 0;
   setInterval(() => {
-    if (reduce || inOv || stops[active] !== outro || !spans.length) return;
-    for (let k = 0; k < 2; k++) {
-      const s = spans[Math.random() * spans.length | 0];
-      s.classList.add('lit'); setTimeout(() => s.classList.remove('lit'), 900 + Math.random() * 900);
-    }
-  }, 150);
+    if (reduce || inOv || stops[active] !== outro) { since = 0; return; }
+    since = since || performance.now();
+    if (performance.now() - since < 8000) flare(pick(famousEls));                     // first: only the well-known ones
+    else { flare(pick(famousEls)); flare(pick(Math.random() < .3 ? famousEls : otherEls)); }  // then the rest, famous still favoured
+  }, 160);
 }
 
 const rail = $('div','rail'), fill = $('div','rail-fill'), railEnd = $('div','rail-end'), railHead = $('div','rail-head');
