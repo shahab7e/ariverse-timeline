@@ -453,8 +453,6 @@ EVENTS.forEach((e, i) => {
     if (texts.length >= logos.length) {
       for (let j = logos.length - 1; j >= 0; j--) texts.splice(Math.floor((j + .5) * texts.length / logos.length), 0, logos[j]);
       list = texts;
-      const f = list.findIndex(i => i.logo);                              // rows open with a logo, so the first screen is logo-rich
-      if (f > 1) list = list.slice(f - 1).concat(list.slice(0, f - 1));
     } else shuffle(list);
     const row = $('div', 'row' + (r % 2 ? ' rev' : ''));
     row.style.setProperty('--o', (.08 + Math.random() * .14).toFixed(2));
@@ -473,9 +471,11 @@ EVENTS.forEach((e, i) => {
   const imgs = [...box.querySelectorAll('.lg img')];
   Promise.all([document.fonts.ready, ...imgs.map(img => img.decode ? img.decode().catch(() => {}) : 0)]).then(() => {
     imgs.forEach(sizeLogo);
-    rows.forEach(row => {
+    const phase = shuffle(rows.map((_, i) => (i + Math.random()) / rows.length));   // spread evenly over the loop, in random order
+    rows.forEach((row, i) => {
       const dur = row.scrollWidth / 2 / (18 + Math.random() * 20);       // px per second, constant for the row
       row.style.setProperty('--dur', dur.toFixed(1) + 's');
+      row.style.animationDelay = (-phase[i] * dur).toFixed(1) + 's';   // every row starts at its own random point of the loop
     });
     box.classList.add('go');
   });
