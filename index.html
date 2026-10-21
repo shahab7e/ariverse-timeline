@@ -146,9 +146,10 @@ header{position:fixed;top:0;inset-inline:0;z-index:5;display:flex;justify-conten
 .outro{--c:#4f94e6}
 /* last page: every client name drifting in endless rows, matrix-style */
 .names{position:absolute;inset:clamp(64px,10vh,100px) 0 clamp(72px,12vh,104px);display:flex;flex-direction:column;justify-content:space-evenly;overflow:hidden;pointer-events:none;direction:ltr;
-  opacity:var(--a);-webkit-mask-image:radial-gradient(ellipse 44% 44% at 50% 46%,transparent 58%,rgba(0,0,0,.28) 78%,#000 100%);
-  mask-image:radial-gradient(ellipse 44% 44% at 50% 46%,transparent 58%,rgba(0,0,0,.28) 78%,#000 100%)}
-.names .row{display:flex;width:max-content;white-space:nowrap;animation:marq var(--dur,120s) linear infinite}
+  opacity:var(--a);-webkit-mask-image:radial-gradient(ellipse 34% 32% at 50% 45%,transparent 52%,rgba(0,0,0,.4) 80%,#000 100%);
+  mask-image:radial-gradient(ellipse 34% 32% at 50% 45%,transparent 52%,rgba(0,0,0,.4) 80%,#000 100%)}
+.names .row{display:flex;width:max-content;white-space:nowrap;will-change:transform}
+.names.go .row{animation:marq var(--dur,120s) linear infinite}
 .names .row.rev{animation-direction:reverse}
 @keyframes marq{to{transform:translateX(-50%)}}
 .names span{direction:rtl;padding:0 1.15em;font-size:clamp(12px,1.05vw,15px);font-weight:300;color:rgba(190,215,235,var(--o,.15));
@@ -441,20 +442,27 @@ EVENTS.forEach((e, i) => {
     } else shuffle(list);
     const row = $('div', 'row' + (r % 2 ? ' rev' : ''));
     row.style.setProperty('--o', (.08 + Math.random() * .14).toFixed(2));
-    const html = list.map(it => it.logo ? `<span class="f lg${COLOR.has(it.logo.split('/').pop().replace('.png','')) ? ' col' : ''}"><img src="${it.logo}" alt="${it.name}" loading="lazy"></span>` : `<span${it.famous ? ' class="f"' : ''}>${fa(it.name)}</span>`).join('');
+    const html = list.map(it => it.logo ? `<span class="f lg${COLOR.has(it.logo.split('/').pop().replace('.png','')) ? ' col' : ''}"><img src="${it.logo}" alt="${it.name}"></span>` : `<span${it.famous ? ' class="f"' : ''}>${fa(it.name)}</span>`).join('');
     row.innerHTML = html + html;   // two copies -> seamless -50% loop
     box.append(row);
     const kids = [...row.children], half = kids.length / 2;
     kids.forEach((el, i) => { el._twin = kids[(i + half) % kids.length]; });   // lit together so the loop reset never switches one off
     return row;
   }).filter(Boolean);
-  const pace = () => rows.forEach(row => row.style.setProperty('--dur', (row.scrollWidth / 2 / (18 + Math.random() * 22)).toFixed(1) + 's'));
-  document.fonts.ready.then(pace);
   // wide logos look huge next to square ones at the same height, so give every logo the same area
   const AREA = Math.pow(Math.min(Math.max(innerWidth * .018, 18), 26), 2) * 1.35;
   const sizeLogo = img => { const ar = img.naturalWidth / img.naturalHeight; if (!ar) return;
     const hh = Math.min(30, Math.max(13, Math.sqrt(AREA / ar))); img.style.height = hh + 'px'; img.style.maxWidth = Math.min(96, hh * ar) + 'px'; };
-  box.querySelectorAll('.lg img').forEach(img => img.complete ? sizeLogo(img) : img.addEventListener('load', () => sizeLogo(img)));
+  // start the rows only when fonts and logos are final: a width change mid-animation makes the row jump or change speed
+  const imgs = [...box.querySelectorAll('.lg img')];
+  Promise.all([document.fonts.ready, ...imgs.map(img => img.decode ? img.decode().catch(() => {}) : 0)]).then(() => {
+    imgs.forEach(sizeLogo);
+    rows.forEach(row => {
+      const dur = row.scrollWidth / 2 / (18 + Math.random() * 20);       // px per second, constant for the row
+      row.style.setProperty('--dur', dur.toFixed(1) + 's'); row.style.animationDelay = '-' + (Math.random() * dur).toFixed(1) + 's';
+    });
+    box.classList.add('go');
+  });
   const famousEls = [...box.querySelectorAll('.f')], otherEls = [...box.querySelectorAll('span:not(.f)')];
   const visible = el => { const r = el.getBoundingClientRect(); return r.right > 0 && r.left < innerWidth && r.bottom > 0 && r.top < innerHeight; };
   const pick = pool => { for (let k = 0; k < 40; k++) { const el = pool[Math.random() * pool.length | 0]; if (el && visible(el)) return el; } };
