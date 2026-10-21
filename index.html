@@ -129,6 +129,8 @@ header{position:fixed;top:0;inset-inline:0;z-index:5;display:flex;justify-conten
   background:rgba(255,255,255,.035);border:1px solid var(--faint);font-size:12px;color:var(--mute);
   opacity:0;transform:translateY(10px) scale(.96);transition:opacity .5s,transform .7s cubic-bezier(.16,1,.3,1),border-color .3s,background .3s}
 .logo.ph{border-style:dashed}
+.logo.brand{width:auto;height:auto;padding:16px 26px}
+.logo.brand img{width:var(--bw);height:auto;max-width:72vw}
 .logo img{display:block;width:auto;height:auto;max-width:100%;filter:brightness(0) invert(1);opacity:.85}
 .logo:hover{background:rgba(255,255,255,.07);border-color:rgba(190,215,235,.35)}
 .stop.active .logo{opacity:1;transform:none;transition-delay:calc(var(--k) * 55ms + 750ms)}
@@ -306,10 +308,13 @@ const EVENTS = [
   {year:1398, tag:'تفاهم‌نامه', title:'امضای قرارداد و تفاهم‌نامه همکاری با سازمان مدیریت صنعتی',},
   {year:1398, tag:'تفاهم‌نامه', title:'امضای تفاهم‌نامه همکاری با مرکز توسعه تجارت الکترونیکی وزارت صمت', note:'رتبه‌بندی کسب‌وکارهای اینترنتی'},
   {year:1399, tag:'تاسیس',         title:'تاسیس گروه در سازمان مدیریت صنعتی', note:'بازرگانی، تجارت الکترونیکی، علوم داده'},
-  {year:1399, tag:'تاسیس',      title:'تاسیس شرکت مشاوران آری', photo:'assets/photos/consult.jpg'},
-  {year:1400, tag:'تاسیس',      title:'تاسیس استودیو دیزاین آری',},
+  {year:1399, tag:'تاسیس',      title:'تاسیس شرکت مشاوران آری', photo:'assets/photos/consult.jpg',
+    logos:[{name:'مشاوران آری', bw:'min(440px,42vw)', src:L_('moshavaran-ari')}]},
+  {year:1400, tag:'تاسیس',      title:'تاسیس استودیو دیزاین آری',
+    logos:[{name:'استودیو دیزاین آری', bw:'min(230px,22vw)', src:L_('ari-studio')}]},
   {year:1400, tag:'رویداد',     title:'برگزاری رویداد آگاهی‌رسانی و قدردانی از برترین‌های ارزیابی واردکنندگان موبایل', note:'موبیکام', photo:'assets/photos/mobicom.jpg'},
-  {year:1401, tag:'تاسیس',      title:'تاسیس دفتر تخصصی مشاوره بازرگانی',},
+  {year:1401, tag:'تاسیس',      title:'تاسیس دفتر تخصصی مشاوره بازرگانی',
+    logos:[{name:'دفتر تخصصی مشاوره بازرگانی', bw:'min(150px,15vw)', src:L_('daftar-mashavere')}]},
   {year:1401, tag:'تفاهم‌نامه', title:'امضای تفاهم‌نامه همکاری با دفتر خدمات کسب‌وکار وزارت صمت',},
   {year:1401, tag:'رویداد',     title:'برگزاری روز تجارت الکترونیکی ۷۲۴',
     photo:'assets/photos/e724.jpg'},
@@ -361,7 +366,7 @@ const words = s => s.split(' ').map((w, k) => `<span class="w"><span style="--w:
 const $ = (t, c, h) => { const e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; };
 
 // logo tiles, dashboard button and mockup frame shown under the rail
-const logoTiles = list => `<div class="logos">${list.map((l, k) => `<div class="logo${l.src ? '' : ' ph'}" style="--k:${k}" title="${l.name}">${
+const logoTiles = list => `<div class="logos">${list.map((l, k) => `<div class="logo${l.src ? '' : ' ph'}${l.bw ? ' brand' : ''}" style="--k:${k}${l.bw ? `;--bw:${l.bw}` : ''}" title="${l.name}">${
   l.src ? `<img src="${l.src}" alt="${l.name}">` : fa(l.name)}</div>`).join('')}</div>`;
 function extras(e) {
   let s = '';
@@ -375,7 +380,7 @@ function extras(e) {
 
 // every tile logo gets the same visual area (not the same height), so wide wordmarks and square marks look equally big
 function sizeTileLogos(root) {
-  root.querySelectorAll('.logo img').forEach(img => {
+  root.querySelectorAll('.logo:not(.brand) img').forEach(img => {
     const fit = () => { const T = {height: img.parentNode.offsetHeight, width: img.parentNode.offsetWidth}, ar = img.naturalWidth / img.naturalHeight; if (!ar || !T.height) return;
       const hh = Math.min(T.height * .72, Math.sqrt(T.height * .6 * T.height * .6 * 1.5 / ar)), w = Math.min(hh * ar, T.width - 20);
       img.style.height = Math.min(hh, w / ar) + 'px'; img.style.width = w + 'px'; };
