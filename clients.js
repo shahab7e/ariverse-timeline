@@ -1,4 +1,4 @@
-// Client names from «لیست کارفرمایان.xlsx» (Customer + Consulting sheets), brand part only.
+// Client names from «لیست کارفرمایان.xlsx» (Customer + Consulting sheets, the corrected version), brand part only.
 // Regenerate from the spreadsheet when the list changes.
 window.CLIENT_NAMES = [
 "فرودگاه پیام",
@@ -18,7 +18,6 @@ window.CLIENT_NAMES = [
 "بانک صادرات",
 "اتاق دیجیتال تهران",
 "بانک سامان",
-"دبیرخانه رویداد ملی موبیکام 1 و 2",
 "بانک ملت",
 "رستوران جوان",
 "بانک اقتصاد نوین",
@@ -35,11 +34,9 @@ window.CLIENT_NAMES = [
 "سرو سامان",
 "آتی نگر آرتین",
 "بلوبانک",
-"توسعه و گسترش سرو سامان",
 "دیجی کالا",
 "همراه تل",
 "شهرداری تهران",
-"منظومه آری",
 "شرکت گروه توسعه انرژی نفت و گار لاوان",
 "شرکت عمران شهر جدیدی تیس",
 "آپرا",
@@ -65,12 +62,6 @@ window.CLIENT_NAMES = [
 "ایران لج",
 "رستوران آرمن",
 "رستوران چیدنی",
-"استودیو مریخ",
-"شرکت بازرگانی کاربان",
-"سو",
-"پوشه",
-"رویداد ملی مدیریت بازرگانی",
-"رویداد روز ملی تجارت الکترونیکی",
 "سی‌تلکام",
 "هما تلکام",
 "تکتا بازرگانان برنا",
@@ -354,7 +345,6 @@ window.CLIENT_LOGOS = {
  "شرکت BVT پارس": "bvt-pars",
  "پایدار پردازی کوشان": "paydar",
  "کلینیک سیاره حیوانات": "sayare-heyvanat",
- "استودیو مریخ": "merikh",
  "آپرا": "opera",
  "بانک پاسارگاد": "pasargad",
  "بانک صادرات": "saderat",
@@ -384,4 +374,4 @@ window.CLIENT_LOGOS = {
 };
 window.CLIENT_FAMOUS = ["وزارت صنعت، معدن و تجارت", "وزارت امور اقتصاد و دارایی", "وزارت امور خارجه", "اتاق بازرگانی تهران", "اتاق دیجیتال تهران", "سازمان مدیریت صنعتی", "همایون شجریان", "میهن", "دیجی کالا", "کنسرسیوم رویه های استثنائات تجاری ایران"];
 // Logos that keep their own colours (their white silhouette would be a solid blob).
-window.CLIENT_LOGO_COLOR = ["mihan"];
+window.CLIENT_LOGO_COLOR = [];

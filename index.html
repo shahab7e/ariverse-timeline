@@ -59,10 +59,10 @@ header{position:fixed;top:0;inset-inline:0;z-index:5;display:flex;justify-conten
 
 .stop{position:absolute;top:0;height:100%;width:var(--stop);--a:0;--d:0}
 /* event photo: a dim, blurred-edge backdrop that drifts slower than the page */
-.photo{position:absolute;inset:-3% -1%;background:center/cover no-repeat;opacity:calc(var(--a) * .15);filter:saturate(.8) blur(1.5px);pointer-events:none;
+.photo{position:absolute;inset:-3% -1%;background:center/cover no-repeat;opacity:calc(var(--a) * .2);filter:saturate(.85) blur(.6px);pointer-events:none;
   transform:translateX(calc(var(--d) * -9vw)) scale(1.06);
   -webkit-mask-image:radial-gradient(ellipse 78% 68% at 50% 46%,#000 35%,transparent 100%);mask-image:radial-gradient(ellipse 78% 68% at 50% 46%,#000 35%,transparent 100%)}
-.photo.inv{filter:invert(1) hue-rotate(180deg) saturate(.7) blur(1.5px);opacity:calc(var(--a) * .22)}
+.photo.inv{filter:invert(1) hue-rotate(180deg) saturate(.7) blur(.8px);opacity:calc(var(--a) * .22)}
 .ghost{position:absolute;left:50%;top:50%;font-weight:900;font-size:min(36vw,56vh);line-height:1;white-space:nowrap;
   color:transparent;-webkit-text-stroke:1px rgba(190,215,235,.09);
   transform:translate(calc(-50% + var(--d) * -28vw),-46%);pointer-events:none;user-select:none}
@@ -152,15 +152,15 @@ header{position:fixed;top:0;inset-inline:0;z-index:5;display:flex;justify-conten
 .names .row.rev{animation-direction:reverse}
 @keyframes marq{to{transform:translateX(-50%)}}
 .names span{direction:rtl;padding:0 1.15em;font-size:clamp(12px,1.05vw,15px);font-weight:300;color:rgba(190,215,235,var(--o,.15));
-  transition:color 1.8s,text-shadow 1.8s}
-.names span.lit{color:#e3f0ff;text-shadow:0 0 14px rgba(70,140,255,.95),0 0 2px #fff;transition:color .12s,text-shadow .12s}
+  transition:color 1.5s ease-in-out,text-shadow 1.5s ease-in-out}
+.names span.lit{color:#e3f0ff;text-shadow:0 0 12px rgba(70,140,255,.7),0 0 2px rgba(255,255,255,.7);}
 .names span.f{color:rgba(214,230,246,calc(var(--o,.15) + .22));font-weight:500}
 .names .lg{display:inline-flex;align-items:center}
-.names .lg img{display:block;height:clamp(20px,2vw,30px);width:auto;max-width:130px;opacity:calc(var(--o,.15) + .22);transition:opacity 1.8s,filter 1.8s}
+.names .lg img{display:block;height:24px;width:auto;opacity:calc(var(--o,.15) + .22);transition:opacity 1.6s ease-in-out,filter 1.6s ease-in-out}
 .names .lg.col img{opacity:calc(var(--o,.15) + .3)}
-.names span.lit img{opacity:1;filter:drop-shadow(0 0 7px rgba(70,140,255,.95));transition:opacity .12s,filter .12s}
+.names span.lit img{opacity:.95;filter:drop-shadow(0 0 6px rgba(70,140,255,.7))}
 .stop:not(.active) .names .row{animation-play-state:paused}
-.outro .logo{background:rgba(6,20,30,.86);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+
 .outro .below{width:min(1100px,94vw)}
 .sub li time{display:block;font-size:11.5px;color:var(--mute);margin-bottom:4px}
 .sub li b{font-weight:500;font-size:clamp(12px,1vw,14px);line-height:1.7}
@@ -347,12 +347,6 @@ const EVENTS = [
     photo:'assets/book-mockup.jpg', photoInv:true,
     image:{src:'assets/book-mockup.jpg', alt:'ماک‌آپ کتاب سال بازرگانی ایران'}},
 ];
-/* last page: major clients and partners (logos cut from the credential deck) */
-const CLIENTS = [
-  ['دیجی‌کالا','digikala'],['بانک سامان','saman'],['بانک ملت','mellat'],['بانک ملی ایران','melli'],['بانک صادرات ایران','saderat'],
-  ['بانک پاسارگاد','pasargad'],['بانک کارآفرین','karafarin'],['بانک اقتصاد نوین','en-bank'],['بانک دی','day'],['بیمه ایران','bimeh-iran'],
-  ['کاله','kalleh'],['گلرنگ','golrang'],['بهستان دارو','behestan-darou'],['کوبل دارو','cobel-darou'],['سنا فارمد','sana-pharmed'],
-].map(([name, f]) => ({name, src: L_(f)}));
 const PLACEHOLDER = 'توضیحات این رویداد در این بخش قرار می‌گیرد؛ چند جمله‌ی کوتاه درباره‌ی اهمیت، طرف‌های همکاری و دستاوردهای آن.';
 
 /* year palette taken from the credential deck (light → deep navy) */
@@ -421,7 +415,6 @@ EVENTS.forEach((e, i) => {
 {
   const s = $('div','stop outro');
   s.innerHTML = `<div class="names" aria-hidden="true"></div><div class="head"><h2>${words("ادامه دارد…")}<span class="note">مسیر ما همچنان در حال ساخته شدن است</span></h2></div>
-    <div class="below"><div class="stem"></div><div class="cap">برخی از مشتریان و شرکای ما</div>${logoTiles(CLIENTS)}</div>
     <svg class="star" viewBox="0 0 175.48 183.89" fill="currentColor"><g class="spin"><use href="#sign"/></g></svg>`;
   stops.push(s);
 }
@@ -441,20 +434,31 @@ EVENTS.forEach((e, i) => {
   shuffle(items.filter(i => !i.famous)).forEach(it => buckets.reduce((m, r) => r.length < m.length ? r : m).push(it));
   const rows = buckets.map((list, r) => {
     if (!list.length) return null;
-    shuffle(list);
+    const texts = shuffle(list.filter(i => !i.logo)), logos = list.filter(i => i.logo);
+    if (texts.length >= logos.length) {
+      for (let j = logos.length - 1; j >= 0; j--) texts.splice(Math.floor((j + .5) * texts.length / logos.length), 0, logos[j]);
+      list = texts;
+    } else shuffle(list);
     const row = $('div', 'row' + (r % 2 ? ' rev' : ''));
     row.style.setProperty('--o', (.08 + Math.random() * .14).toFixed(2));
     const html = list.map(it => it.logo ? `<span class="f lg${COLOR.has(it.logo.split('/').pop().replace('.png','')) ? ' col' : ''}"><img src="${it.logo}" alt="${it.name}" loading="lazy"></span>` : `<span${it.famous ? ' class="f"' : ''}>${fa(it.name)}</span>`).join('');
     row.innerHTML = html + html;   // two copies -> seamless -50% loop
     box.append(row);
+    const kids = [...row.children], half = kids.length / 2;
+    kids.forEach((el, i) => { el._twin = kids[(i + half) % kids.length]; });   // lit together so the loop reset never switches one off
     return row;
   }).filter(Boolean);
   const pace = () => rows.forEach(row => row.style.setProperty('--dur', (row.scrollWidth / 2 / (18 + Math.random() * 22)).toFixed(1) + 's'));
   document.fonts.ready.then(pace);
+  // wide logos look huge next to square ones at the same height, so give every logo the same area
+  const AREA = Math.pow(Math.min(Math.max(innerWidth * .018, 18), 26), 2) * 1.35;
+  const sizeLogo = img => { const ar = img.naturalWidth / img.naturalHeight; if (!ar) return;
+    const hh = Math.min(30, Math.max(13, Math.sqrt(AREA / ar))); img.style.height = hh + 'px'; img.style.maxWidth = Math.min(96, hh * ar) + 'px'; };
+  box.querySelectorAll('.lg img').forEach(img => img.complete ? sizeLogo(img) : img.addEventListener('load', () => sizeLogo(img)));
   const famousEls = [...box.querySelectorAll('.f')], otherEls = [...box.querySelectorAll('span:not(.f)')];
   const visible = el => { const r = el.getBoundingClientRect(); return r.right > 0 && r.left < innerWidth && r.bottom > 0 && r.top < innerHeight; };
   const pick = pool => { for (let k = 0; k < 40; k++) { const el = pool[Math.random() * pool.length | 0]; if (el && visible(el)) return el; } };
-  const flare = el => { if (!el) return; el.classList.add('lit'); setTimeout(() => el.classList.remove('lit'), 1100 + Math.random() * 900); };
+  const flare = el => { if (!el) return; const both = [el, el._twin]; both.forEach(e => e.classList.add('lit')); setTimeout(() => both.forEach(e => e.classList.remove('lit')), 1800 + Math.random() * 1700); };
   let since = 0;
   setInterval(() => {
     if (reduce || inOv || stops[active] !== outro) { since = 0; return; }
