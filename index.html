@@ -430,15 +430,21 @@ EVENTS.forEach((e, i) => {
     const logo = LOGOS[name] && !usedLogo.has(LOGOS[name]) && usedLogo.add(LOGOS[name]) ? `assets/logos/${LOGOS[name]}.png` : '';
     return {name, logo, famous: !!logo || FAMOUS.has(name)};
   });
-  const ROWS = 16, buckets = Array.from({length: ROWS}, () => []);
-  shuffle(items.filter(i => i.famous)).forEach((it, k) => buckets[k % ROWS].push(it));
-  shuffle(items.filter(i => !i.famous)).forEach(it => buckets.reduce((m, r) => r.length < m.length ? r : m).push(it));
+  const ROWS = 16, buckets = Array.from({length: ROWS}, () => []), weight = Array(ROWS).fill(0);
+  const est = it => it.logo ? 70 : it.name.length * 8 + 34;           // rough on-screen width, so every row ends up equally full
+  const put = (r, it) => { buckets[r].push(it); weight[r] += est(it); };
+  // every brand logo appears three times, in three different rows, so the wall is rich in logos and no row is bare
+  items.filter(i => i.logo).forEach((it, j) => [0, 1, 2].forEach(c => put((j + c * 5) % ROWS, c ? {...it} : it)));
+  shuffle(items.filter(i => !i.logo && i.famous)).forEach(it => put(weight.indexOf(Math.min(...weight)), it));
+  shuffle(items.filter(i => !i.logo && !i.famous)).forEach(it => put(weight.indexOf(Math.min(...weight)), it));
   const rows = buckets.map((list, r) => {
     if (!list.length) return null;
     const texts = shuffle(list.filter(i => !i.logo)), logos = list.filter(i => i.logo);
     if (texts.length >= logos.length) {
       for (let j = logos.length - 1; j >= 0; j--) texts.splice(Math.floor((j + .5) * texts.length / logos.length), 0, logos[j]);
       list = texts;
+      const f = list.findIndex(i => i.logo);                              // rows open with a logo, so the first screen is logo-rich
+      if (f > 1) list = list.slice(f - 1).concat(list.slice(0, f - 1));
     } else shuffle(list);
     const row = $('div', 'row' + (r % 2 ? ' rev' : ''));
     row.style.setProperty('--o', (.08 + Math.random() * .14).toFixed(2));
@@ -459,11 +465,11 @@ EVENTS.forEach((e, i) => {
     imgs.forEach(sizeLogo);
     rows.forEach(row => {
       const dur = row.scrollWidth / 2 / (18 + Math.random() * 20);       // px per second, constant for the row
-      row.style.setProperty('--dur', dur.toFixed(1) + 's'); row.style.animationDelay = '-' + (Math.random() * dur).toFixed(1) + 's';
+      row.style.setProperty('--dur', dur.toFixed(1) + 's');
     });
     box.classList.add('go');
   });
-  const famousEls = [...box.querySelectorAll('.f')], otherEls = [...box.querySelectorAll('span:not(.f)')];
+  const logoEls = [...box.querySelectorAll('.lg')], famousEls = [...box.querySelectorAll('.f')], otherEls = [...box.querySelectorAll('span:not(.f)')];
   const visible = el => { const r = el.getBoundingClientRect(); return r.right > 0 && r.left < innerWidth && r.bottom > 0 && r.top < innerHeight; };
   const pick = pool => { for (let k = 0; k < 40; k++) { const el = pool[Math.random() * pool.length | 0]; if (el && visible(el)) return el; } };
   const flare = el => { if (!el) return; const both = [el, el._twin]; both.forEach(e => e.classList.add('lit')); setTimeout(() => both.forEach(e => e.classList.remove('lit')), 1800 + Math.random() * 1700); };
@@ -471,7 +477,7 @@ EVENTS.forEach((e, i) => {
   setInterval(() => {
     if (reduce || inOv || stops[active] !== outro) { since = 0; return; }
     since = since || performance.now();
-    if (performance.now() - since < 8000) flare(pick(famousEls));                     // first: only the well-known ones
+    if (performance.now() - since < 8000) flare(pick(Math.random() < .7 ? logoEls : famousEls));                     // first: only the well-known ones
     else { flare(pick(famousEls)); flare(pick(Math.random() < .3 ? famousEls : otherEls)); }  // then the rest, famous still favoured
   }, 160);
 }
