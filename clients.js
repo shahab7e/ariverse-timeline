@@ -346,6 +346,13 @@ window.CLIENT_NAMES = [
 
 // Brands with a logo file (white PNG in assets/logos) and other well-known names. Famous names light up first on the last page.
 window.CLIENT_LOGOS = {
+ "کیتا": "kita",
+ "جار": "jar",
+ "ایران لج": "iran-lej",
+ "رستوران جوان": "javan",
+ "رستوران جوان هنرور": "javan",
+ "ژرفا": "zharfa",
+ "بینا": "bina",
  "سازمان مدیریت صنعتی": "imi",
  "اتاق بازرگانی تهران": "tccim",
  "میهن": "mihan",
