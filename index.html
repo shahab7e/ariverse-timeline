@@ -140,7 +140,7 @@ header{position:fixed;top:0;inset-inline:0;z-index:5;display:flex;justify-conten
 .cta-note{display:block;margin-top:10px;font-size:11.5px;color:var(--mute)}
 .mock{margin:0 auto;height:min(22vh,250px);min-width:min(300px,70vw);border-radius:14px;display:grid;place-items:center;overflow:hidden;
   border:1px dashed rgba(190,215,235,.3);background:rgba(255,255,255,.02);color:var(--mute);font-size:12.5px}
-.mock img{display:block;height:min(22vh,250px);width:auto;max-width:92vw}
+.mock img{display:block;height:min(26vh,280px);width:auto;max-width:92vw}
 .mock:has(img){height:auto;min-width:0;width:fit-content;border:0;box-shadow:0 24px 60px -24px rgba(0,0,0,.8)}
 .mock small{display:block;margin-top:4px;font-size:11px;opacity:.7}
 .outro{--c:#4f94e6}
@@ -345,7 +345,7 @@ const EVENTS = [
            ['آرکا تجارت بیستون','arka'],['تکنولایف','techno-life'],['مهرنجان تجارت اسکندری','mehranjan'],['زرین صنعت سرو','zarin-sarv']]
       .map(([name, f]) => ({name, src: `assets/consortium/${f}.png`}))},
   {year:1405, tag:'انتشار',     title:'تالیف و انتشار کتاب سال بازرگانی ایران',
-    photo:'assets/book-mockup.jpg', photoInv:true,
+    desc:'',
     image:{src:'assets/book-mockup.jpg', alt:'ماک‌آپ کتاب سال بازرگانی ایران'}},
 ];
 const PLACEHOLDER = 'توضیحات این رویداد در این بخش قرار می‌گیرد؛ چند جمله‌ی کوتاه درباره‌ی اهمیت، طرف‌های همکاری و دستاوردهای آن.';
@@ -413,7 +413,7 @@ EVENTS.forEach((e, i) => {
     ${e.photo ? `<div class="photo${e.photoInv ? ' inv' : ''}" style="background-image:url('${e.photo}')"></div>` : ''}
     <div class="head">
       <h2>${words(e.title)}${e.note ? `<span class="note">${e.note}</span>` : ''}</h2>
-      <p class="reveal" style="--i:2">${e.desc || PLACEHOLDER}</p>
+      ${e.desc === '' ? '' : `<p class="reveal" style="--i:2">${e.desc || PLACEHOLDER}</p>`}
     </div>
     <div class="node" role="button" aria-label="${e.year}"><svg class="ring" viewBox="0 0 100 100"><circle cx="50" cy="50" r="49" pathLength="1"/></svg><b><i>${fa(e.year)}</i></b></div>
     ${e.sub ? `<div class="sub"><div class="stem"></div><ol>${
