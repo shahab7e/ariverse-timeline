@@ -125,11 +125,11 @@ header{position:fixed;top:0;inset-inline:0;z-index:5;display:flex;justify-conten
 .stop.active .below > :not(.stem){opacity:1;transform:none;transition-delay:.65s}
 .below .cap{font-size:12px;color:var(--mute);margin-bottom:14px;letter-spacing:.2px}
 .logos{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
-.logo{height:clamp(40px,min(5vw,7vh),58px);min-width:clamp(84px,8vw,124px);padding:0 16px;border-radius:12px;display:grid;place-items:center;
+.logo{height:clamp(44px,min(5.2vw,7.4vh),62px);width:clamp(100px,9.5vw,132px);padding:0 10px;border-radius:12px;display:grid;place-items:center;
   background:rgba(255,255,255,.035);border:1px solid var(--faint);font-size:12px;color:var(--mute);
   opacity:0;transform:translateY(10px) scale(.96);transition:opacity .5s,transform .7s cubic-bezier(.16,1,.3,1),border-color .3s,background .3s}
 .logo.ph{border-style:dashed}
-.logo img{display:block;width:auto;height:auto;max-width:min(112px,100%);max-height:clamp(20px,min(2.8vw,3.8vh),34px);filter:brightness(0) invert(1);opacity:.85}
+.logo img{display:block;width:auto;height:auto;max-width:100%;filter:brightness(0) invert(1);opacity:.85}
 .logo:hover{background:rgba(255,255,255,.07);border-color:rgba(190,215,235,.35)}
 .stop.active .logo{opacity:1;transform:none;transition-delay:calc(var(--k) * 55ms + 750ms)}
 .cta{display:inline-flex;align-items:center;gap:9px;padding:12px 24px;border-radius:99px;background:var(--blue);color:#fff;
@@ -376,6 +376,17 @@ function extras(e) {
   return s;
 }
 
+// every tile logo gets the same visual area (not the same height), so wide wordmarks and square marks look equally big
+function sizeTileLogos(root) {
+  root.querySelectorAll('.logo img').forEach(img => {
+    const fit = () => { const T = {height: img.parentNode.offsetHeight, width: img.parentNode.offsetWidth}, ar = img.naturalWidth / img.naturalHeight; if (!ar || !T.height) return;
+      const hh = Math.min(T.height * .72, Math.sqrt(T.height * .6 * T.height * .6 * 1.5 / ar)), w = Math.min(hh * ar, T.width - 20);
+      img.style.height = Math.min(hh, w / ar) + 'px'; img.style.width = w + 'px'; };
+    img.complete ? fit() : img.addEventListener('load', fit);
+    addEventListener('resize', fit);
+  });
+}
+
 const track = document.getElementById('track'), mini = document.getElementById('mini');
 const N = EVENTS.length, STOPS = N + 2;              // intro + events + outro
 const first = EVENTS[0].year, last = EVENTS[N-1].year;
@@ -401,7 +412,6 @@ EVENTS.forEach((e, i) => {
   s.innerHTML = `${firstOfYear ? `<div class="ghost">${fa(e.year)}</div>` : ''}
     ${e.photo ? `<div class="photo${e.photoInv ? ' inv' : ''}" style="background-image:url('${e.photo}')"></div>` : ''}
     <div class="head">
-      <div class="meta reveal"><span class="tag">${e.tag}</span><span>${pad(i+1)} / ${pad(N)}</span></div>
       <h2>${words(e.title)}${e.note ? `<span class="note">${e.note}</span>` : ''}</h2>
       <p class="reveal" style="--i:2">${e.desc || PLACEHOLDER}</p>
     </div>
@@ -484,6 +494,7 @@ EVENTS.forEach((e, i) => {
 
 const rail = $('div','rail'), fill = $('div','rail-fill'), railEnd = $('div','rail-end'), railHead = $('div','rail-head');
 track.append(rail, fill, railHead, railEnd, ...stops);
+stops.forEach(sizeTileLogos);
 
 // brand shapes (circle, cross, corner) floating at different depths behind the track
 const bgfx = $('div','bgfx'); track.parentNode.insertBefore(bgfx, track);
