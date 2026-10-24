@@ -414,7 +414,7 @@ const EVENTS = [
     brand:{name:'رویداد ملی مدیریت بازرگانی', src:'assets/logos/national-event.svg'}, brandTop:true,
     wall:PARTICIPANTS},
   {year:1402, tag:'تاسیس',      title:'تاسیس شرکت انرژی مدیا', note:'سرمایه‌گذاری و بنیان‌گذاری مشترک با گروه گلدیران و گروه مدیا جهت تأمین و واردات تخصصی انواع باتری‌های مصرفی، خانگی و صنعتی.', desc:'',
-    logos:[{name:'انرژی مدیا', src:L_('energy-media')}, ARI, {name:'گروه گلدیران'}, {name:'گروه مدیا'}]},
+    logos:[{name:'انرژی مدیا', src:L_('energy-media')}, ARI, {name:'گروه گلدیران', src:L_('goldiran')}, {name:'گروه مدیا', src:L_('mobicom-r2')}]},
   {year:1403, tag:'تاسیس',      title:'تاسیس شرکت سروسامان', note:'توسعه مدل معامله برخط مبتنی بر اعتبار و ضمانت در بستر ایکامرس و سوشال‌کامرس', desc:'',
     logos:[ARI, {name:'سروسامان', src:L_('sarv-saman')},{name:'بانک سامان', src:L_('saman')},{name:'بلوبانک', src:L_('blu-bank')}],
     sub:[{date:1404, title:'خرید سهام شرکت سروسامان توسط بلوبانک و بازطراحی ونچر بلومارت'}]},
@@ -422,7 +422,7 @@ const EVENTS = [
     photo:'assets/photos/zarfa-data.svg'},
   {year:1404, tag:'همکاری',     title:'آغاز همکاری با اتاق دیجیتال تهران', note:'ایجاد دسترسی به پیشخوان‌های داده‌محور بازرگانی برای اعضای اتاق تهران و انتشار بولتن‌های خبری به‌صورت هفتگی', desc:'',
     logos:[ARI, {name:'اتاق بازرگانی تهران', src:L_('tehran-chamber')}],
-    link:{label:'نمایش داشبورد', href:'https://tccim.ariwise.ir', note:'برای مشاهده، ورود به حساب کاربری لازم است'}},
+    link:{label:'نمایش داشبورد', href:'https://tccim.ariwise.ir'}},
   {year:1404, tag:'پروژه',      title:'توسعه حوزه فعالیت کارفرمایان', note:'اخذ مجوز واردات خودروی سواری', desc:'',
     logos:ph(3, 'لوگوی کارفرما')},
   {year:1404, tag:'پروژه',      title:'توسعه و معرفی رویه استثنائات تجاری', note:'اخذ مجوز کارگزاری ملوانی برای فعالان بازرگانی دارای صلاحیت', desc:'',
@@ -474,9 +474,9 @@ function extras(e) {
   if (e.wall) s += `<div class="wall">${[0, 1, 2].map(r => { const t = e.wall.filter((_, i) => i % 3 === r).map(f => `<div><img src="assets/participants/${f}.png" alt="" loading="lazy"></div>`).join(''); return `<div class="row">${t}${t}</div>`; }).join('')}</div>`;
   if (e.logos) s += logoTiles(e.logos);
   if (e.sub && (e.logos || e.brand)) s += subHTML(e.sub, ' inb');
-  if (e.link) s += `<div><a class="cta" ${e.link.href ? `href="${e.link.href}" target="_blank" rel="noopener"` : 'aria-disabled="true" title="لینک داشبورد به‌زودی اضافه می‌شود"'}>`
+  if (e.link) s += `<div style="margin-top:clamp(22px,4vh,40px)"><a class="cta" ${e.link.href ? `href="${e.link.href}" target="_blank" rel="noopener"` : 'aria-disabled="true" title="لینک داشبورد به‌زودی اضافه می‌شود"'}>`
     + `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1.5" y="2" width="13" height="12" rx="2"/><path d="M4.5 11V8M8 11V5.5M11.5 11V7"/></svg>${e.link.label}</a>`
-    + `${e.link.note ? `<small class="cta-note">${e.link.note}</small>` : ''}</div>`;
+    + `</div>`;
   return s;
 }
 
