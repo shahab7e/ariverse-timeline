@@ -379,7 +379,8 @@ const ph = (n, label) => Array.from({length: n}, (_, k) => ({name: `${label} ${k
 const L_ = name => `assets/logos/${name}.png`;
 // descriptions come from the credential deck; events it says nothing about keep the placeholder
 const ARI = {name:'منظومه آری', src:'assets/logos/ariverse.svg'};        // partnership pages carry the ARi mark
-const PARTICIPANTS = Array.from({length:79}, (_, k) => 'p' + String(k + 1).padStart(2, '0'));   // 1402 national event, mobile traders (logo-site.ai)
+const WALL = (pre, n) => Array.from({length:n}, (_, k) => `assets/participants/${pre}${String(k + 1).padStart(2, '0')}.png`);
+const PARTICIPANTS = WALL('p', 79);   // 1402 national event, mobile traders (logo-site.ai)
 const MOBILE = 'نیکان سروس|مدیا پردازش|لیان همراه پارس|کاریان همراه|جهان پارس تتیس|داریا|سپهر تعامل|سازگار ارقام|همراه گستر نوغره فام|سی\u200cتلکام|کالاتیک'.split('|').map((name, k) => ({name, src:L_('mobicom-r' + (k + 1))}));   // first row of mixed-zone-final.ai, right to left
 const CLIENTS = ['karafarin','pasargad','saderat','mellat','melli','en-bank','tourism-bank','day','digikala','kalleh','abidi','cobel-darou'].map(f => ({name:f, src:L_(f)}));
 const BIG = ['digikala','kalleh','mihan','iranmall','mellat','pasargad'].map(f => ({name:f, src:L_(f)}));
@@ -394,8 +395,8 @@ const EVENTS = [
     logos:CLIENTS},
   {year:1400, tag:'رویداد',     title:'توسعه مدل ارزیابی موبیکام', note:'طراحی مدل ارزیابی، صحت‌سنجی و رشد بازرگانان حوزه واردات تلفن همراه و معرفی برترین‌ها', desc:'',
     photo:'assets/photos/mobicom.jpg', video:'assets/videos/mobicom.mp4',
-    brand:{name:'موبیکام', src:'assets/logos/mobicom.svg'},
-    logos:MOBILE},
+    brand:{name:'موبیکام', src:'assets/logos/mobicom.svg'}, brandTop:true,
+    wall:[...MOBILE.map(m => m.src), ...WALL('m', 25)]},   // rows 1–3 of mixed-zone-final.ai
   {year:1401, tag:'تاسیس',      title:'راه‌اندازی دفتر تخصصی مشاوره بازرگانی سازمان مدیریت صنعتی', note:'با هدف توسعه شبکه خدمات بازرگانی و طراحی مدل‌های احراز صلاحیت و ارزیابی فعالان بازرگانی', desc:'',
     logos:[{name:'دفتر تخصصی مشاوره بازرگانی', src:L_('daftar-mashavere')}],
     // collaborations: each gets a thumbnail slot for the MOU mock-up (doc:'' = placeholder, doc:'path' = image)
@@ -473,7 +474,7 @@ function extras(e) {
   let s = '';
   if (e.image) s += `<div class="mock">${e.image.src ? `<img src="${e.image.src}" alt="${e.image.alt}">` : `<span>${e.image.alt}<small>تصویر به‌زودی</small></span>`}</div>`;
   if (e.brand && !e.brandTop) s += `<div class="ev-brand"><img src="${e.brand.src}" alt="${e.brand.name}"></div>`;
-  if (e.wall) s += `<div class="wall">${[0, 1, 2].map(r => { const t = e.wall.filter((_, i) => i % 3 === r).map(f => `<div><img src="assets/participants/${f}.png" alt="" loading="lazy"></div>`).join(''); return `<div class="row">${t}${t}</div>`; }).join('')}</div>`;
+  if (e.wall) s += `<div class="wall">${[0, 1, 2].map(r => { const t = e.wall.filter((_, i) => i % 3 === r).map(f => `<div><img src="${f}" alt="" loading="lazy"></div>`).join('').repeat(Math.ceil(24 / (e.wall.length / 3))); return `<div class="row">${t}${t}</div>`; }).join('')}</div>`;
   if (e.logos) s += logoTiles(e.logos);
   if (e.sub && (e.logos || e.brand)) s += subHTML(e.sub, ' inb');
   if (e.link) s += `<div style="margin-top:clamp(22px,4vh,40px)"><a class="cta" ${e.link.href ? `href="${e.link.href}" target="_blank" rel="noopener"` : 'aria-disabled="true" title="لینک داشبورد به‌زودی اضافه می‌شود"'}>`
