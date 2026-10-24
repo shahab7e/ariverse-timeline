@@ -4,16 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>مسیر منظومه آری</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@200;300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
-@font-face{font-family:ABarlow;font-weight:200;src:url(assets/fonts/ABarlow-ExtraLight.ttf)}
-@font-face{font-family:ABarlow;font-weight:300;src:url(assets/fonts/ABarlow-Light.ttf)}
-@font-face{font-family:ABarlow;font-weight:400;src:url(assets/fonts/ABarlow-Regular.ttf)}
-@font-face{font-family:ABarlow;font-weight:500;src:url(assets/fonts/ABarlow-Medium.ttf)}
-@font-face{font-family:ABarlow;font-weight:700;src:url(assets/fonts/ABarlow-Bold.ttf)}
-@font-face{font-family:ABarlow;font-weight:900;src:url(assets/fonts/ABarlow-Black.ttf)}
+@font-face{font-family:ABarlow;font-weight:200;font-display:swap;src:url(assets/fonts/ABarlow-ExtraLight.ttf)}
+@font-face{font-family:ABarlow;font-weight:300;font-display:swap;src:url(assets/fonts/ABarlow-Light.ttf)}
+@font-face{font-family:ABarlow;font-weight:400;font-display:swap;src:url(assets/fonts/ABarlow-Regular.ttf)}
+@font-face{font-family:ABarlow;font-weight:500;font-display:swap;src:url(assets/fonts/ABarlow-Medium.ttf)}
+@font-face{font-family:ABarlow;font-weight:700;font-display:swap;src:url(assets/fonts/ABarlow-Bold.ttf)}
+@font-face{font-family:ABarlow;font-weight:900;font-display:swap;src:url(assets/fonts/ABarlow-Black.ttf)}
 :root{
   --bg:#05121a;
   --bg2:#0a1e2b;
@@ -27,7 +24,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);
-  font-family:ABarlow,Vazirmatn,Tahoma,sans-serif;-webkit-font-smoothing:antialiased}
+  font-family:ABarlow,Tahoma,sans-serif;-webkit-font-smoothing:antialiased}
 body{overscroll-behavior:none;touch-action:none}
 
 /* ambient light that takes the colour of the current year */
@@ -77,7 +74,7 @@ body.at-intro:not(.ov) .brand{opacity:0}
 
 .node{position:absolute;left:50%;top:50%;width:clamp(52px,min(8.5vw,14vh),190px);aspect-ratio:1;border-radius:50%;
   display:grid;place-items:center;background:var(--c);color:var(--t,#fff);
-  font-weight:900;font-size:clamp(16px,min(2.1vw,3.6vh),48px);letter-spacing:-.5px;
+  font-weight:900;font-size:clamp(16px,min(2.1vw,3.6vh),48px);
   transform:translate(-50%,-50%) scale(calc(.42 + .58 * var(--a)));
   box-shadow:0 0 0 1px rgba(255,255,255,.12) inset,0 20px 60px -10px color-mix(in srgb,var(--c) 70%,transparent);
   cursor:pointer;z-index:2}
@@ -99,9 +96,9 @@ body.at-intro:not(.ov) .brand{opacity:0}
 .meta{display:inline-flex;align-items:center;gap:10px;font-size:clamp(12px,.9vw,18px);color:var(--mute);margin-bottom:14px}
 .tag{padding:4px 11px;border-radius:99px;border:1px solid var(--faint);color:var(--ink);font-weight:500;
   background:rgba(255,255,255,.03)}
-.head h2{font-weight:700;font-size:clamp(21px,min(3.2vw,5.6vh),80px);line-height:1.35;letter-spacing:-.6px;text-wrap:balance}
+.head h2{font-weight:700;font-size:clamp(21px,min(3.2vw,5.6vh),80px);line-height:1.35;text-wrap:balance}
 .head h2 .note{display:block;font-weight:300;color:#a9bfd0;font-size:min(.58em,36px);line-height:1.75;letter-spacing:0;margin-top:6px;text-wrap:balance}
-.head p{margin-top:14px;font-size:clamp(12px,min(1.05vw,2.5vh),26px);line-height:2;color:var(--mute);font-weight:300;text-wrap:pretty}
+.head p{margin-top:14px;font-size:clamp(14px,min(1.1vw,2.6vh),26px);line-height:2;color:var(--mute);font-weight:400;text-wrap:pretty}
 
 .w{display:inline-block;overflow:hidden;vertical-align:top;padding:.25em .04em .2em;margin:-.25em 0 -.2em}
 .w > span{display:inline-block;transform:translateY(110%) rotate(4deg);filter:blur(8px);opacity:0;
@@ -218,7 +215,7 @@ body.at-intro:not(.ov) .brand{opacity:0}
 
 .outro .below{width:min(max(1100px,60vw),94vw)}
 .outro .head{bottom:50%;transform:translate(calc(-50% + var(--d) * -14vw),50%) skewX(calc(var(--v,0) * -7deg));transform-origin:50% 50%}
-.sub li time{display:block;font-size:clamp(10px,.8vw,16px);color:var(--mute);margin-bottom:4px}
+.sub li time{display:block;font-size:clamp(11px,.8vw,16px);color:var(--mute);margin-bottom:4px}
 .sub li:has(.doc) b{display:block}
 .doc{display:grid;place-items:center;width:46px;height:58px;margin:8px auto 0;border-radius:4px;border:1px dashed rgba(190,215,235,.35);background:rgba(255,255,255,.03);color:var(--mute);overflow:hidden}
 .doc svg{width:20px;opacity:.7}
@@ -239,8 +236,8 @@ body.at-intro:not(.ov) .brand{opacity:0}
 .below .sub.inb li::before{top:-24px}
 .sub li.gap::before{display:none}
 .sub.inb li{padding:0 4px}
-.sub.inb li b{font-size:clamp(10px,.8vw,18px);line-height:1.6}
-.sub.inb li time{font-size:clamp(10px,.65vw,14px)}
+.sub.inb li b{font-size:clamp(11px,.8vw,18px);line-height:1.6}
+.sub.inb li time{font-size:clamp(11px,.65vw,14px)}
 .sub.inb:has(.doc) .doc{height:38px;width:30px}
 .sub li b{font-weight:500;font-size:clamp(12px,1vw,21px);line-height:1.7}
 .stop.active .stem{transform:none}
@@ -251,7 +248,7 @@ body.at-intro:not(.ov) .brand{opacity:0}
 /* intro + outro */
 .intro{--star:clamp(44px,min(6vw,11vh),130px)}
 .intro .head{bottom:calc(50% + var(--star) / 2 + 26px)}
-.intro h1{font-weight:700;font-size:clamp(28px,min(4.6vw,9vh),112px);letter-spacing:-1px;line-height:1.2}
+.intro h1{font-weight:700;font-size:clamp(28px,min(4.6vw,9vh),112px);line-height:1.3}
 .intro .en{direction:ltr;font-weight:300;font-size:clamp(13px,min(1.4vw,3vh),32px);color:#a9bfd0;letter-spacing:.4px;margin-top:10px}
 .intro .en b{font-weight:700;color:var(--ink)}
 .intro .range{direction:ltr;margin-top:clamp(10px,2.4vh,30px);display:inline-flex;gap:14px;align-items:center;color:var(--mute);font-size:clamp(13px,1vw,22px)}
@@ -272,7 +269,7 @@ nav{position:fixed;bottom:0;inset-inline:0;z-index:5;padding:0 max(clamp(16px,4v
 .mini button:hover::after{transform:scale(1.5);background:#9dbbd3}
 .mini button.on::after{background:var(--ink);transform:scale(1.7)}
 .mini button:focus-visible{outline:1px solid var(--blue);border-radius:50%}
-.mini .yr{position:absolute;top:22px;transform:translateX(-50%);font-size:clamp(9.5px,.75vw,15px);color:var(--mute);direction:rtl;transition:color .3s}
+.mini .yr{position:absolute;top:22px;transform:translateX(-50%);font-size:clamp(10.5px,.75vw,15px);color:var(--mute);direction:rtl;transition:color .3s}
 .mini .yr.on{color:var(--ink);font-weight:700}
 
 /* ---------- overview: zoomed-out tree ---------- */
@@ -340,9 +337,9 @@ body.ov .ov-hint{opacity:1;transition-delay:1.2s}
 @media (max-width:640px){
   .ov-hint{font-size:10.5px}
   .ov-btn span{display:none}
-  .sub li b{font-size:11.5px}
-  .sub li time{font-size:10px}
-  .mini .yr{font-size:9.5px}
+  .sub li b{font-size:12px}
+  .sub li time{font-size:11px}
+  .mini .yr{font-size:10.5px}
   .head p{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
 }
 /* portrait: the book page stacks under its text instead of squeezing beside it */
@@ -764,7 +761,8 @@ function fit() {
     const h = s.querySelector('.head'), blk = s.querySelector(':scope > .below, :scope > .sub');
     if (h) {
       const w = h.offsetWidth, cx = s.classList.contains('bookpage') && vw > vh ? vw * .26 : vw / 2;
-      const clash = bars.some(b => b.left < cx + w / 2 && b.right > cx - w / 2);
+      // the counter is empty at load and fills in later, so reserve its room instead of measuring the header's current width
+      const clash = cx - w / 2 < bars[1].left + 250 || cx + w / 2 > bars[0].right - bars[0].width - 24;
       const bottom = vh - parseFloat(getComputedStyle(h).bottom), room = bottom - (clash ? hdr : 8);
       h.style.setProperty('--fit', Math.max(.55, Math.min(1, room / h.offsetHeight)).toFixed(3));
     }
