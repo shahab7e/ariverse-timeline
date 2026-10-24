@@ -8,6 +8,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@200;300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
+@font-face{font-family:ABarlow;font-weight:200;src:url(assets/fonts/ABarlow-ExtraLight.ttf)}
+@font-face{font-family:ABarlow;font-weight:300;src:url(assets/fonts/ABarlow-Light.ttf)}
+@font-face{font-family:ABarlow;font-weight:400;src:url(assets/fonts/ABarlow-Regular.ttf)}
+@font-face{font-family:ABarlow;font-weight:500;src:url(assets/fonts/ABarlow-Medium.ttf)}
+@font-face{font-family:ABarlow;font-weight:700;src:url(assets/fonts/ABarlow-Bold.ttf)}
+@font-face{font-family:ABarlow;font-weight:900;src:url(assets/fonts/ABarlow-Black.ttf)}
 :root{
   --bg:#05121a;
   --bg2:#0a1e2b;
@@ -21,7 +27,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);
-  font-family:Vazirmatn,Tahoma,sans-serif;-webkit-font-smoothing:antialiased}
+  font-family:ABarlow,Vazirmatn,Tahoma,sans-serif;-webkit-font-smoothing:antialiased}
 body{overscroll-behavior:none;touch-action:none}
 
 /* ambient light that takes the colour of the current year */
@@ -97,7 +103,7 @@ body.at-intro:not(.ov) .brand{opacity:0}
 .head h2 .note{display:block;font-weight:300;color:#a9bfd0;font-size:min(.58em,23px);line-height:1.75;letter-spacing:0;margin-top:6px;text-wrap:balance}
 .head p{margin-top:14px;font-size:clamp(13px,1.05vw,15.5px);line-height:2;color:var(--mute);font-weight:300;text-wrap:pretty}
 
-.w{display:inline-block;overflow:hidden;vertical-align:top;padding:0 .04em .12em;margin-bottom:-.12em}
+.w{display:inline-block;overflow:hidden;vertical-align:top;padding:.25em .04em .2em;margin:-.25em 0 -.2em}
 .w > span{display:inline-block;transform:translateY(110%) rotate(4deg);filter:blur(8px);opacity:0;
   transition:transform 1s cubic-bezier(.16,1,.3,1),filter .8s,opacity .6s}
 .stop.active .w > span{transform:none;filter:none;opacity:1;transition-delay:calc(var(--w) * 60ms + 180ms)}
@@ -133,8 +139,18 @@ body.at-intro:not(.ov) .brand{opacity:0}
 .logo.ph{border-style:dashed}
 .ev-brand{margin-bottom:clamp(6px,1.4vh,18px)}
 .ev-brand img{display:block;margin:0 auto;height:clamp(36px,min(5.5vw,7.2vh),76px);width:auto;filter:brightness(0) invert(1);opacity:.9}
-.logos.many .logo{height:clamp(44px,min(5.2vw,7.4vh),62px);width:clamp(100px,9.5vw,132px);padding:0 10px}   /* ten consortium tiles must fit above the rail */
+.below:has(.logos.many){width:min(940px,94vw)}   /* seven per row: two rows, not three */
+.logos.many .logo{height:clamp(40px,min(4.6vw,6.6vh),56px);width:clamp(92px,8.4vw,120px);padding:0 8px}   /* thirteen consortium tiles must fit above the rail */
 .logo img{display:block;width:auto;height:auto;max-width:100%;filter:brightness(0) invert(1);opacity:.85}
+.below:has(.wall){width:100vw}
+.wall{direction:ltr;overflow:hidden;display:grid;gap:8px;-webkit-mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.wall .row{display:flex;gap:8px;width:max-content;animation:wall 70s linear infinite}
+.wall .row:nth-child(2){animation-duration:85s;animation-direction:reverse}
+.wall .row:nth-child(3){animation-duration:75s}
+.wall .row div{flex:none;width:clamp(78px,7vw,104px);height:clamp(44px,4.4vw,60px);padding:6px 9px;border-radius:8px;background:rgba(255,255,255,.035);border:1px solid var(--faint);display:grid;place-items:center}
+.wall .row div{position:relative}
+.wall img{position:absolute;inset:6px 9px;width:calc(100% - 18px);height:calc(100% - 12px);object-fit:contain;filter:brightness(0) invert(1);opacity:.85}
+@keyframes wall{to{transform:translateX(-50%)}}
 .logo:hover{background:rgba(255,255,255,.07);border-color:rgba(190,215,235,.35)}
 .stop.active .logo{opacity:1;transform:none;transition-delay:calc(var(--k) * 55ms + 750ms)}
 .cta{display:inline-flex;align-items:center;gap:9px;padding:12px 24px;border-radius:99px;background:var(--blue);color:#fff;
@@ -188,11 +204,11 @@ body.at-intro:not(.ov) .brand{opacity:0}
 .names span{direction:rtl;padding:0 1.15em;font-size:clamp(12px,1.05vw,15px);font-weight:300;color:rgba(190,215,235,var(--o,.15));
   transition:color 1.5s ease-in-out,text-shadow 1.5s ease-in-out}
 .names span.lit{color:#e3f0ff;text-shadow:0 0 12px rgba(70,140,255,.7),0 0 2px rgba(255,255,255,.7);}
-.names span.f{color:rgba(214,230,246,calc(var(--o,.15) + .22));font-weight:500}
+.names span.f{color:rgba(214,230,246,calc(var(--o,.15) + .22))}
 .names .lg{display:inline-flex;align-items:center}
-.names .lg img{display:block;height:24px;width:auto;opacity:calc(var(--o,.15) + .22);transition:opacity 1.6s ease-in-out,filter 1.6s ease-in-out}
-.names .lg.col img{opacity:calc(var(--o,.15) + .3)}
-.names span.lit img{opacity:.95;filter:drop-shadow(0 0 6px rgba(70,140,255,.7))}
+.names .lg img{display:block;height:24px;width:auto;filter:brightness(0) invert(1);opacity:calc(var(--o,.15) + .22);transition:opacity 1.6s ease-in-out,filter 1.6s ease-in-out}
+.names .lg.col img{opacity:calc(var(--o,.15) + .3);filter:none}
+.names span.lit img{opacity:.95;filter:brightness(0) invert(1) drop-shadow(0 0 6px rgba(70,140,255,.7))}
 .stop:not(.active) .names .row{animation-play-state:paused}
 
 .outro .below{width:min(1100px,94vw)}
@@ -202,11 +218,25 @@ body.at-intro:not(.ov) .brand{opacity:0}
 .doc{display:grid;place-items:center;width:46px;height:58px;margin:8px auto 0;border-radius:4px;border:1px dashed rgba(190,215,235,.35);background:rgba(255,255,255,.03);color:var(--mute);overflow:hidden}
 .doc svg{width:20px;opacity:.7}
 .doc img{width:100%;height:100%;object-fit:cover}
-.sub:has(.doc){width:min(1020px,94vw)}
+.sub:has(.doc){width:min(1280px,96vw);padding-top:clamp(40px,min(5vw,7vh),72px)}
+.sub:has(.doc) .stem{height:clamp(40px,min(5vw,7vh),72px)}
+.sub:has(.doc) li{padding:0 14px}
+@media(min-width:1200px){.sub:has(.doc) li b{white-space:nowrap}}
+.sub:has(.doc) .doc{margin-top:6px;height:46px;width:38px}
 /* a nested timeline that sits under the logo tiles instead of replacing them */
 .below .sub.inb{position:relative;left:auto;top:auto;transform:none;width:min(560px,90vw);margin:clamp(10px,2vh,22px) auto 0;padding-top:0;opacity:1}
+.below:has(.sub.inb){padding-top:clamp(44px,min(7vw,10vh),92px)}
+.below:has(.sub.inb) .stem{height:clamp(44px,min(7vw,10vh),92px)}
+.below:has(.sub.inb .doc){width:min(1560px,98vw)}
+.sub.inb:has(.doc) ol{direction:ltr}   /* oldest on the left, like the main rail */
+.below .sub.inb:has(.doc){width:100%}
 .below .sub.inb ol{padding-top:20px}
 .below .sub.inb li::before{top:-24px}
+.sub li.gap::before{display:none}
+.sub.inb li{padding:0 4px}
+.sub.inb li b{font-size:clamp(10px,.8vw,12px);line-height:1.6}
+.sub.inb li time{font-size:10px}
+.sub.inb:has(.doc) .doc{height:38px;width:30px}
 .sub li b{font-weight:500;font-size:clamp(12px,1vw,14px);line-height:1.7}
 .stop.active .stem{transform:none}
 .stop.active .sub ol::before{transform:none}
@@ -214,7 +244,7 @@ body.at-intro:not(.ov) .brand{opacity:0}
 
 /* intro + outro */
 .intro .head{bottom:calc(50% + 70px)}
-.intro h1{font-weight:900;font-size:clamp(38px,6vw,92px);letter-spacing:-2px;line-height:1.15}
+.intro h1{font-weight:700;font-size:clamp(32px,min(4.6vw,9vh),72px);letter-spacing:-1px;line-height:1.2}
 .intro .en{direction:ltr;font-weight:300;font-size:clamp(14px,1.4vw,20px);color:#a9bfd0;letter-spacing:.4px;margin-top:10px}
 .intro .en b{font-weight:700;color:var(--ink)}
 .intro .range{direction:ltr;margin-top:22px;display:inline-flex;gap:14px;align-items:center;color:var(--mute);font-size:14px}
@@ -286,8 +316,8 @@ body.ovk .ov-card,body.ovk .ov-sub{opacity:1}
 .ov-card small{display:block;font-size:11px;color:var(--c);margin-bottom:3px}
 .ov-card b{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font-weight:500;font-size:14px;line-height:1.6;transition:color .3s}
 .ov-ev:hover .ov-card b{color:#fff;text-shadow:0 0 18px color-mix(in srgb,var(--c) 70%,transparent)}
-.ov-sub{width:78px;margin-left:-39px;font-size:11px;line-height:1.55;color:#a9bfd0;transition-delay:calc(var(--i) * 45ms + 950ms)}
-.ov-sub time{display:block;color:var(--mute);font-size:9.5px}
+.ov-sub{width:78px;margin-left:-39px;font-size:10px;line-height:1.5;color:#a9bfd0;transition-delay:calc(var(--i) * 45ms + 950ms)}
+.ov-sub time{display:block;color:var(--mute);font-size:9px}
 .ov-stage circle{fill:var(--bg);stroke-width:1.5;opacity:0;transition:opacity .4s calc(var(--i) * 45ms + 900ms)}
 body.ovk .ov-stage circle{opacity:1}
 body:not(.ovk) .overview *{transition-delay:0s!important;transition-duration:.3s!important}
@@ -347,42 +377,42 @@ const ph = (n, label) => Array.from({length: n}, (_, k) => ({name: `${label} ${k
 const L_ = name => `assets/logos/${name}.png`;
 // descriptions come from the credential deck; events it says nothing about keep the placeholder
 const ARI = {name:'منظومه آری', src:'assets/logos/ariverse.svg'};        // partnership pages carry the ARi mark
-const MOBILE = ['اپل','سامسونگ','شیائومی','هوآوی','آنر','نوکیا','ریلمی','موتورولا','پوکو','تکنو'].map(name => ({name}));   // placeholders until the ten logos arrive
-const CLIENTS = ['karafarin','pasargad','saderat','mellat','melli','en-bank','tourism-bank','day','digikala','kalleh'].map(f => ({name:f, src:L_(f)}));
+const PARTICIPANTS = Array.from({length:79}, (_, k) => 'p' + String(k + 1).padStart(2, '0'));   // 1402 national event, mobile traders (logo-site.ai)
+const MOBILE = 'نیکان سروس|مدیا پردازش|لیان همراه پارس|کاریان همراه|جهان پارس تتیس|داریا|سپهر تعامل|سازگار ارقام|همراه گستر نوغره فام|سی\u200cتلکام|کالاتیک'.split('|').map((name, k) => ({name, src:L_('mobicom-r' + (k + 1))}));   // first row of mixed-zone-final.ai, right to left
+const CLIENTS = ['karafarin','pasargad','saderat','mellat','melli','en-bank','tourism-bank','day','digikala','kalleh','abidi','cobel-darou'].map(f => ({name:f, src:L_(f)}));
 const BIG = ['digikala','kalleh','mihan','iranmall','mellat','pasargad'].map(f => ({name:f, src:L_(f)}));
 // video: optional silent background clip (assets/videos/…); the photo is shown until it exists
 const EVENTS = [
   {year:1398, tag:'تفاهم‌نامه', title:'امضای تفاهم‌نامه همکاری با سازمان مدیریت صنعتی', note:'راه‌اندازی «گروه تخصصی مشاوره بازرگانی، تجارت الکترونیکی و علوم داده»',
     desc:'پروژه‌ها: پشتیبانی سامانه جامع تجارت / رتبه‌بندی حوزه تجارت الکترونیکی (اینماد)',
-    logos:[ARI, {name:'سازمان مدیریت صنعتی', src:L_('imi')}]},
+    logos:[{name:'سازمان مدیریت صنعتی', src:L_('imi')}]},
   {year:1399, tag:'تاسیس',      title:'تاسیس شرکت مشاوره بازرگانی آری', note:'به عنوان پارتنر تخصصی حوزه مشاوره بازرگانی، تجارت الکترونیکی و علوم داده سازمان مدیریت صنعتی', desc:'', photo:'assets/photos/consult.jpg',
     logos:[{name:'مشاوران آری', src:L_('moshavaran-ari')}]},
   {year:1400, tag:'تاسیس',      title:'بازطراحی سرویس‌ها و راه‌اندازی استودیو دیزاین آری', note:'ارائه سرویس‌های مارکتینگ، برندینگ و تبلیغات', desc:'',
-    brand:{name:'استودیو دیزاین آری', src:L_('ari-studio')},
     logos:CLIENTS},
   {year:1400, tag:'رویداد',     title:'توسعه مدل ارزیابی موبیکام', note:'طراحی مدل ارزیابی، صحت‌سنجی و رشد بازرگانان حوزه واردات تلفن همراه و معرفی برترین‌ها', desc:'',
     photo:'assets/photos/mobicom.jpg', video:'assets/videos/mobicom.mp4',
+    brand:{name:'موبیکام', src:'assets/logos/mobicom.svg'},
     logos:MOBILE},
   {year:1401, tag:'تاسیس',      title:'راه‌اندازی دفتر تخصصی مشاوره بازرگانی سازمان مدیریت صنعتی', note:'با هدف توسعه شبکه خدمات بازرگانی و طراحی مدل‌های احراز صلاحیت و ارزیابی فعالان بازرگانی', desc:'',
     logos:[{name:'دفتر تخصصی مشاوره بازرگانی', src:L_('daftar-mashavere')}],
     // collaborations: each gets a thumbnail slot for the MOU mock-up (doc:'' = placeholder, doc:'path' = image)
-    sub:[{date:1401, title:'دفتر خدمات کسب‌وکار وزارت صمت', doc:''},
-         {date:1402, title:'دفتر آماد و توزیع وزارت صمت', doc:''},
-         {date:1402, title:'دفتر تخصصی لوازم خانگی و اداری وزارت صمت', doc:'assets/photos/mou.jpg'},
-         {date:1402, title:'موسیاد (انجمن تجار و صنعتگران ترکیه)', doc:''},
-         {date:1403, title:'مرکز آموزش بازرگانی ایران', doc:''},
-         {date:1405, title:'دفتر برنامه‌ریزی تامین، توزیع و تنظیم بازار وزارت صمت', doc:''}]},
+    sub:[{date:1401, title:'دفتر خدمات کسب‌وکار<br>وزارت صمت', doc:''},
+         {date:1402, title:'دفتر آماد و توزیع<br>وزارت صمت', doc:''},
+         {date:1402, title:'دفتر تخصصی لوازم خانگی و اداری<br>وزارت صمت', doc:'assets/photos/mou.jpg'},
+         {date:1402, title:'موسیاد<br>(انجمن تجار و صنعتگران ترکیه)', doc:''},
+         {date:1403, title:'مرکز آموزش<br>بازرگانی ایران', doc:''},
+         {date:1405, title:'دفتر برنامه‌ریزی تامین، توزیع<br>و تنظیم بازار وزارت صمت', doc:''}]},
   {year:1401, tag:'رویداد',     title:'برگزاری رویداد روز ملی تجارت الکترونیکی (۲۴ مهر) / ۱۴۰۰-۱۴۰۴', note:'معرفی برترین کسب‌وکارهای حوزه تجارت الکترونیکی در مدل ارزیابی اینماد', desc:'',
     photo:'assets/photos/e724.jpg', video:'assets/videos/e724.mp4',
     brand:{name:'روز ملی تجارت الکترونیکی و اقتصاد دیجیتالی', src:L_('e724')},
     logos:BIG},
   {year:1402, tag:'تفاهم‌نامه', title:'امضای تفاهم‌نامه همکاری با بانک سامان و مرکز توسعه تجارت الکترونیکی', note:'معرفی پروژه صندوق ضمانت تجارت الکترونیکی و جذب سرمایه از بانک سامان', desc:'',
     logos:[ARI, {name:'بانک سامان', src:L_('saman')}]},
-  {year:1402, tag:'کارگروه',    title:'تشکیل کارگروه بررسی واردات لوازم خانگی به حکم قائم‌مقام وزیر صمت', note:'بررسی واردات و ممنوعیت واردات لوازم خانگی و اثرات آن بر تولید داخل و معیشت مردم', desc:''},
   {year:1402, tag:'رویداد',     title:'رویداد ملی مدیریت بازرگانی', note:'پایش، سنجش کارشناسی و رتبه‌بندی ۱۰۰ شرکت واردکننده و زنجیره تأمین تجهیزات دیجیتال', desc:'',
     photo:'assets/photos/national.jpg', video:'assets/videos/national.mp4',
-    brand:{name:'رویداد ملی مدیریت بازرگانی', src:'assets/logos/national-event.svg'},
-    logos:MOBILE},
+    brand:{name:'رویداد ملی مدیریت بازرگانی', src:'assets/logos/national-event.svg'}, brandTop:true,
+    wall:PARTICIPANTS},
   {year:1402, tag:'تاسیس',      title:'تاسیس شرکت انرژی مدیا', note:'سرمایه‌گذاری و بنیان‌گذاری مشترک با گروه گلدیران و گروه مدیا جهت تأمین و واردات تخصصی انواع باتری‌های مصرفی، خانگی و صنعتی.', desc:'',
     logos:[{name:'انرژی مدیا', src:L_('energy-media')}, ARI, {name:'گروه گلدیران'}, {name:'گروه مدیا'}]},
   {year:1403, tag:'تاسیس',      title:'تاسیس شرکت سروسامان', note:'توسعه مدل معامله برخط مبتنی بر اعتبار و ضمانت در بستر ایکامرس و سوشال‌کامرس', desc:'',
@@ -400,12 +430,14 @@ const EVENTS = [
   {year:1405, tag:'تاسیس',      title:'تاسیس کنسرسیوم توسعه و تسهیل تجارت',
     brand:{name:'کنسرسیوم توسعه و تسهیل تجارت', src:'assets/consortium/consortium-logo.png'},
     note:'ائتلاف استراتژیک ۱۳ شرکت فعال در حوزه‌های بازرگانی مواد غذایی، لوازم خانگی و کالای دیجیتال جهت تسهیل و رفع موانع رویه‌های واردات', desc:'',
-    logos:[['دیجی‌کالا','digikala-fa'],['گروه صنعتی گلرنگ','golrang-group'],['همراه تل','hamrah-tel'],['هما تلکام','homa-telecom'],['صدر تل','sadr-tel'],
+    logos:[ARI, ...[['دیجی‌کالا','digikala-fa'],['گروه صنعتی گلرنگ','golrang-gd'],['همراه تل','hamrah-tel'],['هما تلکام','homa-telecom'],['صدر تل','sadr-tel'],
            ['آرکا تجارت بیستون','arka'],['تکنولایف','techno-life'],['مهرنجان تجارت اسکندری','mehranjan'],['زرین صنعت سرو','zarin-sarv']]
-      .map(([name, f]) => ({name, src: `assets/consortium/${f}.png`}))},
+      .map(([name, f]) => ({name, src: `assets/consortium/${f}.png`})),
+      ...[{name:'لیان همراه', src:'assets/consortium/lian-hamrah.png'}, {name:'گروه روزبه', src:'assets/consortium/roozbeh.png'}, {name:'توسعه همکاری‌های آری', src:'assets/consortium/tosee-hamkari-ari.png'}]]},
+  {year:1405, tag:'کارگروه',    title:'تشکیل کارگروه بررسی واردات لوازم خانگی به حکم قائم‌مقام وزیر صمت', note:'بررسی واردات و ممنوعیت واردات لوازم خانگی و اثرات آن بر تولید داخل و معیشت مردم', desc:''},
   {year:1405, tag:'انتشار',     title:'تالیف و انتشار کتاب سال بازرگانی ایران', note:'تدوین نخستین سند جامع داده‌محور از تحلیل تجارت خارجی ایران به همراه تحلیل‌های صاحب‌نظران و مدیران ارشد اقتصادی', desc:'',
     // the book opens and its pages turn; each page is a place for one of the important contributors (name, role, portrait)
-    book:{title:'کتاب سال بازرگانی ایران', spreads:5}},
+    book:{title:'کتاب سال بازرگانی ایران', spreads:7}},
 ];
 const PLACEHOLDER = 'توضیحات این رویداد در این بخش قرار می‌گیرد؛ چند جمله‌ی کوتاه درباره‌ی اهمیت، طرف‌های همکاری و دستاوردهای آن.';
 
@@ -432,11 +464,14 @@ const bookHTML = b => {
     Array.from({length: n - 1}, (_, k) => `<div class="leaf" style="--i:${k + 1};--zr:${n - k};--zl:${k + 2}">${L(k + 1)}${R(k + 2)}</div>`).join('')}<div class="leaf end">${L(n)}</div></div>`;
 };
 const subHTML = (sub, cls = '') => `<div class="sub${cls}">${cls ? '' : '<div class="stem"></div>'}<ol>${
-  sub.map((x, k) => `<li style="--i:${k}"><time>${fa(x.date)}</time><b>${x.title}</b>${x.doc === undefined ? '' : `<span class="doc">${x.doc ? `<img src="${x.doc}" alt="">` : '<svg viewBox="0 0 24 30" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 1h13l5 5v23H3zM16 1v5h5M7 12h10M7 16h10M7 20h6"/></svg>'}</span>`}</li>`).join('')}</ol></div>`;
+  // evenly spaced, independent of the main timeline's year scale
+  sub.map(x => [x, 1])
+  .map((p, k) => { if (!p) return '<li class="gap" style="flex:1;pointer-events:none"></li>'; const x = p[0]; return `<li style="--i:${k};flex:${p[1]}"><time>${fa(x.date)}</time><b>${x.title}</b>${x.doc === undefined ? '' : `<span class="doc">${x.doc ? `<img src="${x.doc}" alt="">` : '<svg viewBox="0 0 24 30" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 1h13l5 5v23H3zM16 1v5h5M7 12h10M7 16h10M7 20h6"/></svg>'}</span>`}</li>`; }).join('')}</ol></div>`;
 function extras(e) {
   let s = '';
   if (e.image) s += `<div class="mock">${e.image.src ? `<img src="${e.image.src}" alt="${e.image.alt}">` : `<span>${e.image.alt}<small>تصویر به‌زودی</small></span>`}</div>`;
-  if (e.brand) s += `<div class="ev-brand"><img src="${e.brand.src}" alt="${e.brand.name}"></div>`;
+  if (e.brand && !e.brandTop) s += `<div class="ev-brand"><img src="${e.brand.src}" alt="${e.brand.name}"></div>`;
+  if (e.wall) s += `<div class="wall">${[0, 1, 2].map(r => { const t = e.wall.filter((_, i) => i % 3 === r).map(f => `<div><img src="assets/participants/${f}.png" alt="" loading="lazy"></div>`).join(''); return `<div class="row">${t}${t}</div>`; }).join('')}</div>`;
   if (e.logos) s += logoTiles(e.logos);
   if (e.sub && (e.logos || e.brand)) s += subHTML(e.sub, ' inb');
   if (e.link) s += `<div><a class="cta" ${e.link.href ? `href="${e.link.href}" target="_blank" rel="noopener"` : 'aria-disabled="true" title="لینک داشبورد به‌زودی اضافه می‌شود"'}>`
@@ -481,6 +516,7 @@ EVENTS.forEach((e, i) => {
   s.innerHTML = `${firstOfYear ? `<div class="ghost">${fa(e.year)}</div>` : ''}
     ${e.photo || e.video ? `<div class="photo${e.photoInv ? ' inv' : ''}"${e.photo ? ` style="background-image:url('${e.photo}')"` : ''}>${e.video ? `<video src="${e.video}" muted loop playsinline preload="metadata" onerror="this.remove()"></video>` : ''}</div>` : ''}
     <div class="head">
+      ${e.brand && e.brandTop ? `<div class="ev-brand"><img src="${e.brand.src}" alt="${e.brand.name}"></div>` : ''}
       <h2>${words(e.title)}${e.note ? `<span class="note">${e.note}</span>` : ''}</h2>
       ${e.desc === '' ? '' : `<p class="reveal" style="--i:2">${e.desc || PLACEHOLDER}</p>`}
     </div>
@@ -629,27 +665,31 @@ const ov = document.getElementById('ov'), ovStage = document.getElementById('ovS
       });
     list.forEach((i, k) => {
       if (T[k] === undefined) {
-        const cand = [0, 1, 2].filter(t => t !== T[k - 1] && t !== T[k + 1]);
-        T[k] = cand.find(t => t !== T[k - 2]) ?? cand[0];
+        const cand = (EVENTS.some((e, n) => e.sub && n % 2 === side) ? [0, 1] : [0, 1, 2]).filter(t => t !== T[k - 1] && t !== T[k + 1]);
+        T[k] = cand.find(t => t !== T[k - 2]) ?? cand[0] ?? 0;
       }
       tier[i] = T[k];
     });
   }
   EVENTS.forEach((e, i) => {
     const up = i % 2 === 0, s = up ? -1 : 1, c = OV_COLOR[e.year], cx = ox(i);
-    const L = tier[i] === 'S' ? 150 : [56, 176, 296][tier[i]];
+    const L = tier[i] === 'S' ? 100 : [56, 176, 296][tier[i]];
     // stem fades from the trunk outward (userSpaceOnUse: a zero-width line has no bounding box for the gradient)
     twigs += `<linearGradient id="st${i}" gradientUnits="userSpaceOnUse" x1="${cx}" y1="${TY}" x2="${cx}" y2="${TY + s * L}">`
            + `<stop offset="0" stop-color="${c}"/><stop offset="1" stop-color="${c}" stop-opacity=".25"/></linearGradient>`
            + `<path d="M${cx} ${TY}V${TY + s * L}" stroke="url(#st${i})" pathLength="1" style="--i:${i + 4}" data-ev="${i}"/>`;
     let subs = '';
     if (e.sub) {
-      const n = e.sub.length, y0 = L + 92, y1 = L + 128;
+      // parallel mini trunk above the cards: same x scale as the main trunk, so every date sits over its own year
+      const y0 = L + 108, y1 = 280;
+      const place = (x, j, n) => { const a = EVENTS.findIndex(v => v.year === x.date), b = EVENTS.findLastIndex(v => v.year === x.date);
+        return ox((a + b) / 2) + ((j + .5) / n - .5) * (b - a + 1) * GAP; };
+      const xs = e.sub.map(x => { const same = e.sub.filter(v => v.date === x.date); return place(x, same.indexOf(x), same.length); });
+      twigs += `<path d="M${cx} ${TY + s * y0}V${TY + s * y1}" stroke="${c}" pathLength="1" style="--i:${i + 6}" data-ev="${i}"/>`
+             + `<path d="M${Math.min(cx, ...xs)} ${TY + s * y1}H${Math.max(cx, ...xs)}" stroke="${c}" pathLength="1" style="--i:${i + 7}" data-ev="${i}"/>`;
       e.sub.forEach((x, j) => {
-        const sx = cx + (j - (n - 1) / 2) * 80;
-        twigs += `<path d="M${cx} ${TY + s * y0}C${cx} ${TY + s * (y0 + 24)} ${sx} ${TY + s * (y1 - 24)} ${sx} ${TY + s * y1}" stroke="${c}" pathLength="1" style="--i:${i + 6}" data-ev="${i}"/>`
-               + `<circle cx="${sx}" cy="${TY + s * y1}" r="3.5" stroke="${c}" style="--i:${i}" data-ev="${i}"/>`;
-        subs += `<div class="ov-sub" style="left:${sx - cx}px;--o:${y1 + 9}px"><time>${fa(x.date)}</time>${x.title}</div>`;
+        twigs += `<circle cx="${xs[j]}" cy="${TY + s * y1}" r="3" stroke="${c}" style="--i:${i}" data-ev="${i}"/>`;
+        subs += `<div class="ov-sub" style="left:${xs[j] - cx}px;--o:${y1 + 8}px"><time>${fa(x.date)}</time>${x.title}</div>`;
       });
     }
     html += `<div class="ov-ev ${up ? 'up' : 'dn'}" data-i="${i}" style="left:${cx}px;--c:${c};--i:${i}">`
