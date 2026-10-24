@@ -140,6 +140,7 @@ body.at-intro:not(.ov) .brand{opacity:0}
 .ev-brand{margin-bottom:clamp(6px,1.4vh,18px)}
 .ev-brand img{display:block;margin:0 auto;height:clamp(36px,min(5.5vw,7.2vh),76px);width:auto;filter:brightness(0) invert(1);opacity:.9}
 .below:has(.logos.many){width:min(940px,94vw)}   /* seven per row: two rows, not three */
+.below:has(.logos.wide){width:min(1080px,96vw)}   /* eight per row: three rows for 23 tiles */
 .logos.many .logo{height:clamp(40px,min(4.6vw,6.6vh),56px);width:clamp(92px,8.4vw,120px);padding:0 8px}   /* thirteen consortium tiles must fit above the rail */
 .logo img{display:block;width:auto;height:auto;max-width:100%;filter:brightness(0) invert(1);opacity:.85}
 .below:has(.wall){width:100vw}
@@ -382,7 +383,7 @@ const ARI = {name:'منظومه آری', src:'assets/logos/ariverse.svg'};      
 const WALL = (pre, n) => Array.from({length:n}, (_, k) => `assets/participants/${pre}${String(k + 1).padStart(2, '0')}.png`);
 const PARTICIPANTS = WALL('p', 79);   // 1402 national event, mobile traders (logo-site.ai)
 const MOBILE = 'نیکان سروس|مدیا پردازش|لیان همراه پارس|کاریان همراه|جهان پارس تتیس|داریا|سپهر تعامل|سازگار ارقام|همراه گستر نوغره فام|سی\u200cتلکام|کالاتیک'.split('|').map((name, k) => ({name, src:L_('mobicom-r' + (k + 1))}));   // first row of mixed-zone-final.ai, right to left
-const CLIENTS = ['karafarin','pasargad','saderat','mellat','melli','en-bank','tourism-bank','day','digikala','kalleh','abidi','cobel-darou'].map(f => ({name:f, src:L_(f)}));
+const CLIENTS = ['tehran-municipality','payam','bimeh-iran','saderat','mellat','karafarin','saman','pasargad','digikala','kalleh','abidi','en-bank','tourism-bank','day','cobel-darou','melli','kipa','opera','ornate-ns','merikh','sayare-heyvanat','paydar','iranmall'].map(f => ({name:f, src:L_(f)}));
 const BIG = ['digikala','kalleh','mihan','iranmall','mellat','pasargad'].map(f => ({name:f, src:L_(f)}));
 // video: optional silent background clip (assets/videos/…); the photo is shown until it exists
 const EVENTS = [
@@ -392,6 +393,7 @@ const EVENTS = [
   {year:1399, tag:'تاسیس',      title:'تاسیس شرکت مشاوره بازرگانی آری', note:'به عنوان پارتنر تخصصی حوزه مشاوره بازرگانی، تجارت الکترونیکی و علوم داده سازمان مدیریت صنعتی', desc:'', photo:'assets/photos/consult.jpg',
     logos:[{name:'مشاوران آری', src:L_('moshavaran-ari')}]},
   {year:1400, tag:'تاسیس',      title:'بازطراحی سرویس‌ها و راه‌اندازی استودیو دیزاین آری', note:'ارائه سرویس‌های مارکتینگ، برندینگ و تبلیغات', desc:'',
+    brand:{name:'استودیو دیزاین آری', src:'assets/logos/ari-studio.svg'}, brandTop:true,
     logos:CLIENTS},
   {year:1400, tag:'رویداد',     title:'توسعه مدل ارزیابی موبیکام', note:'طراحی مدل ارزیابی، صحت‌سنجی و رشد بازرگانان حوزه واردات تلفن همراه و معرفی برترین‌ها', desc:'',
     photo:'assets/photos/mobicom.jpg', video:'assets/videos/mobicom.mp4',
@@ -458,7 +460,7 @@ const words = s => s.split(' ').map((w, k) => `<span class="w"><span style="--w:
 const $ = (t, c, h) => { const e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; };
 
 // logo tiles, dashboard button and mockup frame shown under the rail
-const logoTiles = list => `<div class="logos${list.length > 3 ? ' many' : ''}">${list.map((l, k) => `<div class="logo${l.src ? '' : ' ph'}" style="--k:${k}" title="${l.name}">${
+const logoTiles = list => `<div class="logos${list.length > 20 ? ' many wide' : list.length > 3 ? ' many' : ''}">${list.map((l, k) => `<div class="logo${l.src ? '' : ' ph'}" style="--k:${k}" title="${l.name}">${
   l.src ? `<img src="${l.src}" alt="${l.name}">` : fa(l.name)}</div>`).join('')}</div>`;
 const bookHTML = b => {
   const im = (c, f) => `<div class="${c} im"><img src="assets/photos/book-${f}.jpg" alt=""></div>`, n = b.spreads, L = k => im('f', k + 'l'), R = k => im('bk', k + 'r');
