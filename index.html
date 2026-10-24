@@ -125,7 +125,8 @@ body.at-intro:not(.ov) .brand{opacity:0}
 .sub li::before{content:"";position:absolute;top:-26px;left:50%;width:9px;height:9px;margin-left:-4.5px;border-radius:50%;
   background:var(--bg);border:1.5px solid var(--c2,#9dbbd3)}
 .sub li::before{transform:scale(0);transition:transform .3s}
-.stop.active .sub li::before{transform:scale(1);transition:transform .6s cubic-bezier(.34,1.9,.64,1) calc(var(--i) * 120ms + 950ms)}
+.stop.active .sub li.on::before{transform:scale(1);transition:transform .6s cubic-bezier(.34,1.9,.64,1) calc(var(--k) * 120ms + 950ms)}
+.sub.stepped li::before{transition-delay:calc(var(--k) * 120ms + 150ms)!important}
 .below{position:absolute;left:50%;top:50%;width:min(780px,92vw);transform:translateX(-50%);padding-top:clamp(56px,min(9vw,13vh),118px);
   direction:rtl;text-align:center;opacity:var(--a)}
 .below .stem{height:clamp(56px,min(9vw,13vh),118px)}
@@ -225,7 +226,7 @@ body.at-intro:not(.ov) .brand{opacity:0}
 .sub:has(.doc) .stem{height:clamp(40px,min(5vw,7vh),72px)}
 .sub:has(.doc) li{padding:0 14px}
 @media(min-width:1200px){.sub:has(.doc) li b{white-space:nowrap}}
-.sub:has(.doc) .doc{margin-top:6px;height:46px;width:38px}
+.sub .doc{display:none}   /* thumbnails hidden; the markup stays so the wide layout keyed on :has(.doc) still applies */
 /* a nested timeline that sits under the logo tiles instead of replacing them */
 .below .sub.inb{position:relative;left:auto;top:auto;transform:none;width:min(560px,90vw);margin:clamp(10px,2vh,22px) auto 0;padding-top:0;opacity:1}
 .below:has(.sub.inb){padding-top:clamp(44px,min(7vw,10vh),92px)}
@@ -243,7 +244,8 @@ body.at-intro:not(.ov) .brand{opacity:0}
 .sub li b{font-weight:500;font-size:clamp(12px,1vw,14px);line-height:1.7}
 .stop.active .stem{transform:none}
 .stop.active .sub ol::before{transform:none}
-.stop.active .sub li{opacity:1;transform:none;transition-delay:calc(var(--i) * 120ms + 800ms)}
+.stop.active .sub li.on{opacity:1;transform:none;transition-delay:calc(var(--k) * 120ms + 800ms)}
+.sub.stepped li{transition-delay:calc(var(--k) * 120ms)!important}
 
 /* intro + outro */
 .intro .head{bottom:calc(50% + 70px)}
@@ -384,7 +386,6 @@ const WALL = (pre, n) => Array.from({length:n}, (_, k) => `assets/participants/$
 const PARTICIPANTS = WALL('p', 79);   // 1402 national event, mobile traders (logo-site.ai)
 const MOBILE = 'نیکان سروس|مدیا پردازش|لیان همراه پارس|کاریان همراه|جهان پارس تتیس|داریا|سپهر تعامل|سازگار ارقام|همراه گستر نوغره فام|سی\u200cتلکام|کالاتیک'.split('|').map((name, k) => ({name, src:L_('mobicom-r' + (k + 1))}));   // first row of mixed-zone-final.ai, right to left
 const CLIENTS = ['tehran-municipality','payam','bimeh-iran','saderat','mellat','karafarin','saman','pasargad','digikala','kalleh','abidi','en-bank','tourism-bank','day','cobel-darou','melli','kipa','opera','ornate-ns','merikh','sayare-heyvanat','paydar','iranmall'].map(f => ({name:f, src:L_(f)}));
-const BIG = ['digikala','kalleh','mihan','iranmall','mellat','pasargad'].map(f => ({name:f, src:L_(f)}));
 // video: optional silent background clip (assets/videos/…); the photo is shown until it exists
 const EVENTS = [
   {year:1398, tag:'تفاهم‌نامه', title:'امضای تفاهم‌نامه همکاری با سازمان مدیریت صنعتی', note:'راه‌اندازی «گروه تخصصی مشاوره بازرگانی، تجارت الکترونیکی و علوم داده»',
@@ -410,8 +411,8 @@ const EVENTS = [
          {date:1405, title:'دفتر برنامه‌ریزی تامین، توزیع<br>و تنظیم بازار وزارت صمت', doc:''}]},
   {year:1401, tag:'رویداد',     title:'برگزاری رویداد روز ملی تجارت الکترونیکی (۲۴ مهر) / ۱۴۰۰-۱۴۰۴', note:'معرفی برترین کسب‌وکارهای حوزه تجارت الکترونیکی در مدل ارزیابی اینماد', desc:'',
     photo:'assets/photos/e724.jpg', video:'assets/videos/e724.mp4',
-    brand:{name:'روز ملی تجارت الکترونیکی و اقتصاد دیجیتالی', src:L_('e724')},
-    logos:BIG},
+    brand:{name:'روز ملی تجارت الکترونیکی و اقتصاد دیجیتالی', src:L_('e724')}, brandTop:true,
+    wall:WALL('e', 21)},   // logos from the 724 photo wall (فوتوال.pdf)
   {year:1402, tag:'تفاهم‌نامه', title:'امضای تفاهم‌نامه همکاری با بانک سامان و مرکز توسعه تجارت الکترونیکی', note:'معرفی پروژه صندوق ضمانت تجارت الکترونیکی و جذب سرمایه از بانک سامان', desc:'',
     logos:[ARI, {name:'بانک سامان', src:L_('saman')}]},
   {year:1402, tag:'رویداد',     title:'رویداد ملی مدیریت بازرگانی', note:'پایش، سنجش کارشناسی و رتبه‌بندی ۱۰۰ شرکت واردکننده و زنجیره تأمین تجهیزات دیجیتال', desc:'',
@@ -471,7 +472,7 @@ const bookHTML = b => {
 const subHTML = (sub, cls = '') => `<div class="sub${cls}">${cls ? '' : '<div class="stem"></div>'}<ol>${
   // evenly spaced, independent of the main timeline's year scale
   sub.map(x => [x, 1])
-  .map((p, k) => { if (!p) return '<li class="gap" style="flex:1;pointer-events:none"></li>'; const x = p[0]; return `<li style="--i:${k};flex:${p[1]}"><time>${fa(x.date)}</time><b>${x.title}</b>${x.doc === undefined ? '' : `<span class="doc">${x.doc ? `<img src="${x.doc}" alt="">` : '<svg viewBox="0 0 24 30" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 1h13l5 5v23H3zM16 1v5h5M7 12h10M7 16h10M7 20h6"/></svg>'}</span>`}</li>`; }).join('')}</ol></div>`;
+  .map((p, k) => { if (!p) return '<li class="gap" style="flex:1;pointer-events:none"></li>'; const x = p[0]; return `<li data-g="${k}" style="--k:0;flex:${p[1]}"><time>${fa(x.date)}</time><b>${x.title}</b>${x.doc === undefined ? '' : `<span class="doc">${x.doc ? `<img src="${x.doc}" alt="">` : '<svg viewBox="0 0 24 30" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 1h13l5 5v23H3zM16 1v5h5M7 12h10M7 16h10M7 20h6"/></svg>'}</span>`}</li>`; }).join('')}</ol></div>`;
 function extras(e) {
   let s = '';
   if (e.image) s += `<div class="mock">${e.image.src ? `<img src="${e.image.src}" alt="${e.image.alt}">` : `<span>${e.image.alt}<small>تصویر به‌زودی</small></span>`}</div>`;
@@ -604,6 +605,7 @@ EVENTS.forEach((e, i) => {
 const rail = $('div','rail'), fill = $('div','rail-fill'), railEnd = $('div','rail-end'), railHead = $('div','rail-head');
 track.append(rail, fill, railHead, railEnd, ...stops);
 stops.forEach(sizeTileLogos);
+stops.forEach(s => s._groups = new Set([...s.querySelectorAll('.sub li')].map(l => l.dataset.g)).size);
 
 // the book: opens, turns its pages one by one, rests, then closes the same way (driven by timers so z-order can swap mid-turn)
 document.querySelectorAll('.book').forEach(book => {
@@ -729,6 +731,20 @@ function layout() {
   railEnd.style.left = ((STOPS - 2) * W + W / 2) + 'px';
   railEnd.style.width = (W - 3.8 * Math.min(46, Math.max(24, W * .032)) - 28) + 'px';   // stops just short of the closing line
 }
+/* sub-timeline pages reveal one year group per scroll step before the page itself moves on */
+let subStep = 0, subLock = 0;
+const subMax = () => (stops[active]?._groups || 1) - 1;
+const subSettled = () => !inOv && Math.round(target / W) === active && Math.abs(cur - target) < W * .05;
+const subPending = dir => subSettled() && (dir > 0 ? subStep < subMax() : subStep > 0);
+function showSub() { stops[active]?.querySelectorAll('.sub li').forEach(l => l.classList.toggle('on', +l.dataset.g <= subStep)); }
+function stepSub(dir) {   // true when the scroll was used up by the sub-timeline (swallows trackpad momentum right after a step)
+  if (!dir || !subMax() || !subSettled()) return false;
+  if (performance.now() < subLock) return true;
+  if (!subPending(dir)) return false;
+  subStep += dir; subLock = performance.now() + 700;
+  stops[active].querySelector('.sub').classList.add('stepped'); showSub();
+  return true;
+}
 const clamp = v => Math.max(0, Math.min((STOPS - 1) * W, v));
 const go = i => { target = clamp(i * W); };
 
@@ -790,6 +806,7 @@ addEventListener('wheel', e => {
   if (inOv) { if (d < -20) exitOv(); return; }
   if (d > 0 && atEnd()) { if ((over += d) > 120) enterOv(); return; }
   over = 0;
+  if (stepSub(Math.sign(d))) return;
   nudge(d * 1.6);
 }, {passive:false});
 
@@ -801,12 +818,14 @@ addEventListener('touchmove', e => {
   const x = e.touches[0].clientX, y = e.touches[0].clientY;
   const dx = tx - x, dy = ty - y; tx = x; ty = y;
   if (inOv) return;   // the overview pans natively
+  if (subPending(Math.sign(Math.abs(dx) > Math.abs(dy) ? dx : dy))) return;
   lastDir = Math.sign(Math.abs(dx) > Math.abs(dy) ? dx : dy) || lastDir;
   target = clamp(target + (Math.abs(dx) > Math.abs(dy) ? dx : dy) * 1.3);
 }, {passive:true});
 addEventListener('touchend', () => {
   const dx = sx0 - tx, dy = sy0 - ty, horiz = Math.abs(dx) > Math.abs(dy), d = horiz ? dx : dy;
   if (inOv) { if ((!horiz && dy < -90) || (horiz && dx < -90 && ov.scrollLeft <= 0)) exitOv(); return; }
+  if (Math.abs(d) > 40 && stepSub(Math.sign(d))) return;
   if (startEnd && d > 70) return enterOv();
   snap();
 });
@@ -815,6 +834,7 @@ addEventListener('keydown', e => {
   const back = ['ArrowLeft','ArrowUp','PageUp','Escape'].includes(e.key), fwd = ['ArrowRight','ArrowDown','PageDown',' '].includes(e.key);
   if (back || fwd) e.preventDefault();
   if (inOv) { if (back) exitOv(); return; }
+  if (stepSub(fwd ? 1 : back && e.key !== 'Escape' ? -1 : 0)) return;
   const i = Math.round(target / W) || 0;
   if (fwd) i >= STOPS - 1 ? enterOv() : go(i + 1);
   if (back && e.key !== 'Escape') go(i - 1);
@@ -853,7 +873,9 @@ function frame() {
   if (idx !== active && performance.now() > holdT) {
     stops[active]?.classList.remove('active');
     stops[idx].classList.add('active');
-    active = idx;
+    const from = active; active = idx;
+    subStep = from > idx ? subMax() : 0;   // coming back from the next page shows every item
+    stops[idx].querySelector('.sub')?.classList.remove('stepped'); showSub();
     const ev = EVENTS[idx - 1];
     if (!inOv) counter.innerHTML = ev ? `<b>${pad(idx)}</b> / ${pad(N)}` : '';
     document.documentElement.style.setProperty('--glow', ev ? (YEAR_COLOR[ev.year]||['#2a6db8'])[0] : '#2a6db8');
