@@ -142,6 +142,7 @@ body.at-intro:not(.ov) .brand{opacity:0}
 .ev-brand img{display:block;margin:0 auto;height:clamp(36px,min(5.5vw,7.2vh),76px);width:auto;filter:brightness(0) invert(1);opacity:.9}
 .below:has(.logos.many){width:min(940px,94vw)}   /* seven per row: two rows, not three */
 .below:has(.logos.wide){width:min(1080px,96vw)}   /* eight per row: three rows for 23 tiles */
+.logos.many:has(:nth-child(8):last-child){margin:0 auto;max-width:calc(4 * clamp(92px,8.4vw,120px) + 30px)}   /* eight tiles: two rows of four, not seven + one */
 .logos.many .logo{height:clamp(40px,min(4.6vw,6.6vh),56px);width:clamp(92px,8.4vw,120px);padding:0 8px}   /* thirteen consortium tiles must fit above the rail */
 .logo img{display:block;width:auto;height:auto;max-width:100%;filter:brightness(0) invert(1);opacity:.85}
 .below:has(.wall){width:100vw}
@@ -430,9 +431,16 @@ const EVENTS = [
     logos:[ARI, {name:'اتاق بازرگانی تهران', src:L_('tehran-chamber')}],
     link:{label:'نمایش داشبورد', href:'https://tccim.ariwise.ir'}},
   {year:1404, tag:'پروژه',      title:'توسعه حوزه فعالیت کارفرمایان', note:'اخذ مجوز واردات خودروی سواری', desc:'',
-    logos:ph(3, 'لوگوی کارفرما')},
+    // a company without a logo yet shows its name in a dashed tile (just leave out src)
+    logos:[{name:'شرکت توسعه همکاری‌های آری', src:'assets/consortium/tosee-hamkari-ari.png'}, {name:'سامان همراه مرسده'}, {name:'همراه گستر نقره فام', src:'assets/logos/hamrah-gostar-noghreh-fam.svg'}, {name:'اتحاد اخوان کازرون', src:L_('ettehad-akhavan')},
+           {name:'مهرنجان تجارت اسکندری', src:'assets/consortium/mehranjan.png'}, {name:'رز همراه فروهر', src:L_('hashtag-kala')}, {name:'هایا تجارت همراه باختر', src:L_('haya-tejarat')}, {name:'همراه پژواک سانلی', src:L_('sanli-service')}]},
   {year:1404, tag:'پروژه',      title:'توسعه و معرفی رویه استثنائات تجاری', note:'اخذ مجوز کارگزاری ملوانی برای فعالان بازرگانی دارای صلاحیت', desc:'',
-    logos:ph(3, 'لوگوی کارفرما')},
+    // a company without a logo yet shows its name in a dashed tile (just leave out src)
+    logos:[['گروه توسعه همراه تل','consortium/hamrah-tel'],['تکنولایف','consortium/techno-life'],['نقره فام','logos/hamrah-gostar-noghreh-fam.svg'],['ژرف آیین پارت','logos/japart'],['پرتو تجارت صدر','consortium/sadr-tel'],
+           ['آرکا تجارت بیستون','consortium/arka'],['آتی نگر آرتین','logos/ati-negar-artin'],['رز همراه فروهر','logos/hashtag-kala'],['زرین صنعت سرو','consortium/zarin-sarv'],['روزبه الکترونیک الوند','consortium/roozbeh'],
+           ['اسپیناس تجارت نیکان','logos/espinans-nikan'],['اتصالات همراه تجارت گویا','logos/ettesalat-goya'],['داریا همراه پایتخت','logos/mobicom-r6'],['همراه پارسیک ایرانیان','logos/parsik'],['پارس پردیس شهر'],['جهان پیشگام فرمان','logos/jahan-pishgam'],
+           ['مهرنجان تجارت اسکندری','consortium/mehranjan'],['کاریان همراه','logos/mobicom-r4'],['روزبه همراه اروند','consortium/roozbeh']]
+      .map(([name, f]) => ({name, src: f && `assets/${f}${f.includes('.') ? '' : '.png'}`}))},
   {year:1405, tag:'تاسیس',      title:'تاسیس کنسرسیوم توسعه و تسهیل تجارت',
     brand:{name:'کنسرسیوم توسعه و تسهیل تجارت', src:'assets/consortium/consortium-logo.png'},
     note:'ائتلاف استراتژیک ۱۳ شرکت فعال در حوزه‌های بازرگانی مواد غذایی، لوازم خانگی و کالای دیجیتال جهت تسهیل و رفع موانع رویه‌های واردات', desc:'',
