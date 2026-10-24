@@ -446,7 +446,7 @@ const EVENTS = [
   {year:1402, tag:'تاسیس',      title:'تاسیس شرکت انرژی مدیا', note:'سرمایه‌گذاری و بنیان‌گذاری مشترک با گروه گلدیران و گروه مدیا جهت تأمین و واردات تخصصی انواع باتری‌های مصرفی، خانگی و صنعتی.', desc:'',
     logos:[{name:'انرژی مدیا', src:L_('energy-media')}, ARI, {name:'گروه گلدیران', src:L_('goldiran')}, {name:'گروه مدیا', src:L_('mobicom-r2')}]},
   {year:1403, tag:'تاسیس',      title:'تاسیس شرکت سروسامان', note:'توسعه مدل معامله برخط مبتنی بر اعتبار و ضمانت در بستر ایکامرس و سوشال‌کامرس', desc:'',
-    logos:[ARI, {name:'سروسامان', src:L_('sarv-saman')},{name:'بانک سامان', src:L_('saman')},{name:'بلوبانک', src:L_('blu-bank')}],
+    logos:[{name:'سروسامان', src:L_('sarv-saman')}, ARI, {name:'بانک سامان', src:L_('saman')},{name:'بلوبانک', src:L_('blu-bank')}],
     sub:[{date:1404, title:'خرید سهام شرکت سروسامان توسط بلوبانک و بازطراحی ونچر بلومارت'}]},
   {year:1403, tag:'تاسیس',      title:'تاسیس مرکز داده‌پژوهی ژرفا', note:'راه‌اندازی دپارتمان تخصصی رصد مستمر بازار، اقتصاد و شاخص‌های کلیدی بازرگانی', desc:'',
     photo:'assets/photos/zarfa-data.svg'},
@@ -488,7 +488,7 @@ const YEAR_COLOR = {1398:['#c9d9e6','#0b2232'],1399:['#9dbbd3','#0b2232'],1400:[
 const fa = s => String(s).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
 const pad = n => fa(String(n).padStart(2,'0'));
 // split a title into words so each can rise on its own (letters can't be split: Persian joins them)
-const words = s => s.split(' ').map((w, k) => `<span class="w"><span style="--w:${k}">${w}</span></span>`).join(' ');
+const words = s => s.split(' ').map((w, k) => w === '|' ? '<br>' : `<span class="w"><span style="--w:${k}">${w}</span></span>`).join(' ');   // a lone | forces a line break
 const $ = (t, c, h) => { const e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; };
 
 // logo tiles, dashboard button and mockup frame shown under the rail
@@ -537,7 +537,7 @@ const stops = [];
 {
   const s = $('div','stop intro');
   s.innerHTML = `<div class="ghost">ARi</div>
-    <div class="head"><h1>${words("منظومه آری، از نقطه شروع")}</h1>
+    <div class="head"><h1>${words("منظومه آری، | از نقطه شروع")}</h1>
       <div class="en reveal" style="--i:1"><b>Ariverse</b>, From the Big Bang</div>
       <div class="range reveal" style="--i:2"><span>${fa(first)}</span><i></i><span>${fa(last)}</span></div></div>
     <svg class="star" viewBox="0 0 175.48 183.89" fill="currentColor"><g class="spin"><use href="#sign"/></g></svg>
