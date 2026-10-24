@@ -171,7 +171,7 @@ body.at-intro:not(.ov) .brand{opacity:0}
 /* the book opens and its leaves turn, one important page after another */
 .bookbox{position:absolute;left:68%;top:50%;opacity:var(--a);z-index:1;
   transform:translate(-50%,calc(-50% + (1 - var(--a)) * 34vh)) scale(calc(.7 + .3 * var(--a)))}
-.stop.bookpage .head{left:26%;width:min(440px,40vw)}
+.stop.bookpage .head{left:26%;width:min(440px,calc(34vw - 48px))}   /* its right edge stays clear of the open book (which starts at 43vw) */
 .stop.bookpage .node{left:26%}
 .book{position:relative;direction:ltr;width:var(--bw,min(380px,25vw));height:var(--bh,min(512px,33.7vw,62vh));perspective:1800px;transition:transform 1s cubic-bezier(.5,0,.3,1);
   filter:drop-shadow(0 2px 3px rgba(0,0,0,.35)) drop-shadow(0 22px 28px rgba(0,0,0,.45))}
@@ -239,8 +239,8 @@ body.at-intro:not(.ov) .brand{opacity:0}
 .below .sub.inb li::before{top:-24px}
 .sub li.gap::before{display:none}
 .sub.inb li{padding:0 4px}
-.sub.inb li b{font-size:clamp(10px,.8vw,12px);line-height:1.6}
-.sub.inb li time{font-size:10px}
+.sub.inb li b{font-size:clamp(10px,.8vw,18px);line-height:1.6}
+.sub.inb li time{font-size:clamp(10px,.65vw,14px)}
 .sub.inb:has(.doc) .doc{height:38px;width:30px}
 .sub li b{font-weight:500;font-size:clamp(12px,1vw,21px);line-height:1.7}
 .stop.active .stem{transform:none}
