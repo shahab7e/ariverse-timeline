@@ -195,6 +195,73 @@ body.at-intro:not(.ov) .brand{opacity:0}
 .book u{display:block;height:4px;border-radius:2px;background:#c9c5b9;width:100%}
 .book u:nth-of-type(2n){width:82%}
 .book .leaf.end{z-index:0}
+/* dashboard page: text, year and logos in the left column (like the book page), two floating dashboard windows on the right */
+.dashbox{--dw:min(660px,48vw,calc((100vh - 170px) / .86))}
+.dash{position:relative;width:var(--dw);aspect-ratio:1/.86;direction:ltr}
+.win{position:absolute;width:84%;aspect-ratio:16/11;container-type:inline-size;border-radius:10px;overflow:hidden;background:#f4f6f8;color:#1c2733;direction:rtl;
+  box-shadow:0 2px 3px rgba(0,0,0,.3),0 26px 40px -12px rgba(0,0,0,.65);animation:drift 8s ease-in-out infinite}
+.win.w2{right:0;top:0;filter:brightness(.86);animation-duration:10s;animation-delay:-4s}
+.win.w1{left:0;bottom:0}
+@keyframes drift{50%{translate:0 -3%}}
+.win .bar{height:4.6cqw;background:#e4e8ed;display:flex;gap:1.1cqw;align-items:center;padding:0 2cqw;direction:ltr}
+.win .bar i{width:1.4cqw;height:1.4cqw;border-radius:50%;background:#c2c9d2}
+.win .bar span{margin-left:3cqw;height:2.2cqw;width:30cqw;border-radius:1.1cqw;background:#f4f6f8}
+.win .scr{display:flex;height:calc(100% - 4.6cqw)}
+.win aside{width:20cqw;flex:none;background:#fff;padding:2cqw 1.4cqw;display:flex;flex-direction:column;gap:.5cqw;font-size:1.6cqw;color:#46535f;overflow:hidden}
+.win aside img{display:block;width:88%;height:auto;margin:.4cqw 0 1cqw .6cqw}
+.win aside h5{font-size:1.35cqw;font-weight:500;color:#9aa5b1;margin:1.4cqw .6cqw .2cqw}
+.win aside s{display:flex;align-items:center;gap:1cqw;height:3.4cqw;padding:0 1cqw;border-radius:1cqw;text-decoration:none;white-space:nowrap}
+.win aside s i{width:1.7cqw;height:1.7cqw;border-radius:.5cqw;border:.28cqw solid #b4bec9;flex:none}
+.win aside s.on{background:#e3f4ec;color:#14774f;font-weight:700}
+.win aside s.on i{border-color:#1b9a6a}
+.win aside s.out{margin-top:auto;color:#d0463c}
+.win aside s.out i{border-color:#e0928c}
+.win .mn{flex:1;padding:2.2cqw 2.4cqw;min-width:0;display:flex;flex-direction:column;gap:1.8cqw}
+.win .hd{display:flex;justify-content:space-between;align-items:flex-start;gap:2cqw}
+.win h4{font-size:3.3cqw;font-weight:700;line-height:1.4}
+.win .hd p{font-size:1.6cqw;color:#7b8794;margin-top:.2cqw}
+.win .btn{font-style:normal;flex:none;font-size:1.5cqw;font-weight:500;color:#fff;background:#1b9a6a;border-radius:1cqw;padding:1.1cqw 1.8cqw;white-space:nowrap}
+.win.w2 .hd .btn{background:#fff;color:#1b9a6a;box-shadow:0 0 0 .25cqw #e3e7ec}
+.win .yr{display:flex;justify-content:space-between;background:#fff;border-radius:1.2cqw;padding:1.3cqw 2cqw;font-size:1.6cqw;color:#7b8794;box-shadow:0 0 0 .25cqw #e8ebef}
+.win .yr .on{color:#1c2733;font-weight:700}
+.win .fl{background:#fff;border-radius:1.2cqw;padding:1.4cqw 1.8cqw;box-shadow:0 0 0 .25cqw #e8ebef;display:flex;justify-content:space-between;align-items:center;gap:1.6cqw}
+.win .fl b{font-size:1.8cqw;font-weight:700;white-space:nowrap}
+.win .fl > div{display:flex;gap:1cqw;align-items:center}
+.win .sel{font-size:1.4cqw;color:#7b8794;background:#f4f6f8;border-radius:1cqw;padding:1cqw 1.6cqw;white-space:nowrap}
+.win .btn.g{font-size:1.4cqw}
+.win .kp{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4cqw}
+.win .kp u{display:block;background:#fff;border-radius:1.2cqw;padding:1.4cqw 1.5cqw;box-shadow:0 0 0 .25cqw #e8ebef;text-decoration:none}
+.win .kp .t{display:flex;justify-content:space-between;align-items:center}
+.win .kp .t b{font-size:1.5cqw;font-weight:500}
+.win .kp .ic{width:3cqw;height:3cqw;border-radius:.9cqw;background:#e3f4ec}
+.win .kp u:nth-child(2) .ic{background:#e2f6ea}
+.win .kp u:nth-child(3) .ic{background:#e8e9fb}
+.win .kp u:nth-child(4) .ic{background:#fdf0dc}
+.win .kp .v{display:block;height:2.8cqw;width:68%;border-radius:.7cqw;background:#2c3a4a;margin-top:1cqw;transform-origin:100% 50%;animation:kp 5s ease-in-out infinite}
+.win .kp u:nth-child(2) .v{animation-delay:-1.2s;width:58%}
+.win .kp u:nth-child(3) .v{animation-delay:-2.4s;width:78%}
+.win .kp u:nth-child(4) .v{animation-delay:-3.6s;width:64%}
+@keyframes kp{50%{transform:scaleX(.62);opacity:.6}}
+.win .kp small{display:block;font-size:1.15cqw;color:#9aa5b1;margin-top:.9cqw;line-height:1.5}
+.win .ch{background:#fff;border-radius:1.2cqw;padding:1.4cqw 1.8cqw;box-shadow:0 0 0 .25cqw #e8ebef;flex:1;min-height:0;display:flex;flex-direction:column;gap:.8cqw}
+.win .ct{display:flex;justify-content:space-between;align-items:center}
+.win .ct b{font-size:2cqw;font-weight:700}
+.win .ct small{font-size:1.4cqw;color:#9aa5b1}
+.win .ct .chip{display:inline-block;width:5cqw;height:2.6cqw;border-radius:.9cqw;background:#f4f6f8;box-shadow:0 0 0 .25cqw #e3e7ec;margin-right:1cqw}
+.win .ct .chip:first-of-type{margin-right:0}
+.win .ct > div{flex:1}
+.win .ch svg{display:block;width:100%;flex:1;min-height:0;overflow:visible}
+.win .ch path.g,.win .ch path.b{fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:draw 7s cubic-bezier(.6,0,.2,1) infinite}
+.win .ch .g{stroke:#1b9a6a}
+.win .ch .b{stroke:#3a7ca5;animation-delay:.5s}
+.win.w2 .ch .g{animation-delay:-3s}
+.win.w2 .ch .b{animation-delay:-2.5s}
+.win .ch .dt{animation:dots 7s ease-in-out infinite}
+.win.w2 .ch .dt{animation-delay:-3s}
+@keyframes draw{0%{stroke-dashoffset:1}45%,88%{stroke-dashoffset:0}100%{stroke-dashoffset:-1}}
+@keyframes dots{0%,30%{opacity:0}50%,88%{opacity:1}100%{opacity:0}}
+.stop:not(.active) .win,.stop:not(.active) .win *{animation-play-state:paused}
+@media (min-aspect-ratio:1/1){.stop.dashpage .below{left:26%;width:min(440px,calc(34vw - 48px))}}
 /* last page: every client name drifting in endless rows, matrix-style */
 .names{position:absolute;inset:clamp(64px,10vh,100px) 0 clamp(72px,12vh,104px);display:flex;flex-direction:column;justify-content:space-evenly;overflow:hidden;pointer-events:none;direction:ltr;
   opacity:var(--a);-webkit-mask-image:radial-gradient(ellipse 22% 9% at 50% 49%,transparent 50%,rgba(0,0,0,.4) 80%,#000 100%);
@@ -345,6 +412,7 @@ body.ov .ov-hint{opacity:1;transition-delay:1.2s}
 }
 /* portrait: the book page stacks under its text instead of squeezing beside it */
 @media (max-aspect-ratio:1/1){
+  .dashbox{display:none}   /* portrait keeps the centred logos and button instead */
   .stop.bookpage .head{left:50%;width:min(440px,86vw)}
   .stop.bookpage .node{left:50%}
   .bookbox{left:50%;top:calc(50% + clamp(54px,min(8vw,12vh),170px) + 12px);transform:translate(-50%,calc((1 - var(--a)) * 34vh)) scale(calc(.7 + .3 * var(--a)));transform-origin:50% 0}
@@ -370,7 +438,8 @@ body.ov .ov-hint{opacity:1;transition-delay:1.2s}
 }
 @media (prefers-reduced-motion:reduce){
   .names .row{animation:none}
-  .node::after,.hint svg,.spin,.ov-pulse{animation:none}
+  .node::after,.hint svg,.spin,.ov-pulse,.win,.win .kp span{animation:none}
+  .win .ch path.g,.win .ch path.b{animation:none;stroke-dashoffset:0}
   .book .leaf,.book{transition:none}
   .w > span{filter:none}
 }
@@ -453,7 +522,7 @@ const EVENTS = [
     photo:'assets/photos/zarfa-data.svg'},
   {year:1404, tag:'همکاری',     title:'آغاز همکاری با اتاق دیجیتال تهران', note:'ایجاد دسترسی به پیشخوان‌های داده‌محور بازرگانی برای اعضای اتاق تهران و انتشار بولتن‌های خبری به‌صورت هفتگی', desc:'',
     logos:[ARI, {name:'اتاق بازرگانی تهران', src:L_('tehran-chamber')}],
-    link:{label:'نمایش داشبورد', href:'https://tccim.ariwise.ir'}},
+    dash:true},
   {year:1404, tag:'پروژه',      title:'توسعه حوزه فعالیت کارفرمایان', note:'اخذ مجوز واردات خودروی سواری', desc:'',
     // a company without a logo yet shows its name in a dashed tile (just leave out src)
     logos:[{name:'شرکت توسعه همکاری‌های آری', src:'assets/consortium/tosee-hamkari-ari.png'}, {name:'سامان همراه مرسده'}, {name:'همراه گستر نقره فام', src:'assets/logos/hamrah-gostar-noghreh-fam.svg'}, {name:'اتحاد اخوان کازرون', src:L_('ettehad-akhavan')},
@@ -495,6 +564,24 @@ const $ = (t, c, h) => { const e = document.createElement(t); if (c) e.className
 // logo tiles, dashboard button and mockup frame shown under the rail
 const logoTiles = list => `<div class="logos${list.length > 20 ? ' many wide' : list.length > 3 ? ' many' : ''}">${list.map((l, k) => `<div class="logo${l.src ? '' : ' ph'}" style="--k:${k}" title="${l.name}">${
   l.src ? `<img src="${l.src}" alt="${l.name}">` : fa(l.name)}</div>`).join('')}</div>`;
+/* a symbolic motion mock-up of the two dashboards: skeleton UI, drifting windows, charts that keep drawing themselves */
+const DASH_SIDE = [['آمار کل و تجارت', ['تجارت سالانه', 'ارزش کل مبادلات', 'تعداد کشورها']], ['گمرک‌ها و مناطق', ['گمرک‌های نخست', 'روند ارزش گمرک‌های برتر']], ['کالاها و ارزش‌گذاری', ['تعداد کالاها', 'کالاهای نخست', 'توزیع فصل‌ها']]];
+const DASH_KPI = [['کل تجارت', 'مجموع ارزش تجارت خارجی'], ['صادرات کل', 'ارزش کل صادرات در دوره انتخاب‌شده'], ['واردات کل', 'ارزش کل واردات در دوره انتخاب‌شده'], ['تراز تجاری', 'تفاوت ارزش صادرات و واردات']];
+const dashWin = (cls, title, filter) => `<div class="win ${cls}"><div class="bar"><i></i><i></i><i></i><span></span></div><div class="scr">
+  <aside><img src="assets/logos/ariwise-fa.svg" alt="">${DASH_SIDE.map(([h, l], g) => `<h5>${h}</h5>${l.map((t, k) => `<s${g + k === 0 ? ' class="on"' : ''}><i></i>${t}</s>`).join('')}`).join('')}<s class="out"><i></i>خروج از پیشخوان</s></aside>
+  <div class="mn">
+    <div class="hd"><div><h4>${title}</h4><p>داده‌های تجارت و بازرگانی سالانه ایران به صورت تحلیلی</p></div><em class="btn">${filter ? 'فیلترها' : 'انتخاب از تقویم'}</em></div>
+    ${filter ? `<div class="fl"><b>فیلترهای تحلیل</b><div><span class="sel">سال: ${fa(1399)} تا ${fa(1404)}</span><span class="sel">کشورها (${fa(0)})</span><span class="sel">گروه‌ها (${fa(0)})</span><em class="btn g">اعمال فیلتر</em></div></div>`
+      : `<div class="yr">${[1395, 1396, 1397, 1398, 1399, 1400, 1401, 1402, 1403, 1404].map(y => `<span${y === 1404 ? ' class="on"' : ''}>${fa(y)}</span>`).join('')}</div>`}
+    <div class="kp">${DASH_KPI.map(([t, d]) => `<u><div class="t"><b>${t}</b><i class="ic"></i></div><span class="v"></span><small>${d}</small></u>`).join('')}</div>
+    <div class="ch"><div class="ct"><div><b>روند تجارت سالانه</b><small> / میلیارد دلار</small></div><span class="chip"></span><span class="chip"></span></div>
+      <svg viewBox="0 0 212 50"><g stroke="#e3e7ec" stroke-width=".5" stroke-dasharray="2 2"><path d="M12 8H212M12 20H212M12 32H212M12 44H212"/></g>
+        <g fill="#9aa5b1" font-size="4"><text x="0" y="9.5">۸۰</text><text x="0" y="21.5">۶۰</text><text x="0" y="33.5">۴۰</text><text x="0" y="45.5">۲۰</text></g>
+        <g transform="translate(12 0)"><path class="g" pathLength="1" d="M0 37C20 36 30 29 50 31S80 22 100 29S130 41 150 24S185 10 200 21"/><path class="b" pathLength="1" d="M0 17C20 19 34 13 54 16S86 24 106 17S140 8 160 10S190 7 200 16"/>
+          <g class="dt"><circle cx="50" cy="31" r="1.7" fill="#1b9a6a"/><circle cx="100" cy="29" r="1.7" fill="#1b9a6a"/><circle cx="150" cy="24" r="1.7" fill="#1b9a6a"/><circle cx="54" cy="16" r="1.7" fill="#3a7ca5"/><circle cx="106" cy="17" r="1.7" fill="#3a7ca5"/><circle cx="160" cy="10" r="1.7" fill="#3a7ca5"/></g>
+          <circle r="2.6" fill="#fff" stroke="#1b9a6a" stroke-width="1.2"><animateMotion dur="7s" begin="${filter ? '-3s' : '0s'}" repeatCount="indefinite" calcMode="linear" keyPoints="0;1;1" keyTimes="0;.45;1" path="M0 37C20 36 30 29 50 31S80 22 100 29S130 41 150 24S185 10 200 21"/></circle></g></svg></div>
+  </div></div></div>`;
+const dashHTML = () => `<div class="dash" aria-hidden="true">${dashWin('w2', 'پیشخوان شرکای بازرگانی ایران', true)}${dashWin('w1', 'پیشخوان نمای بازرگانی ایران', false)}</div>`;
 const bookHTML = b => {
   const im = (c, f) => `<div class="${c} im"><img src="assets/photos/book-${f}.jpg" alt=""></div>`, n = b.spreads, L = k => im('f', k + 'l'), R = k => im('bk', k + 'r');
   // cover + all but the last spread turn; each leaf is a left page (front) and the next right page (back), so the open book always shows a full spread
@@ -549,7 +636,7 @@ const stops = [];
 EVENTS.forEach((e, i) => {
   const [c, t] = YEAR_COLOR[e.year] || ['#3c82d8','#fff'];
   const firstOfYear = i === 0 || EVENTS[i-1].year !== e.year;
-  const s = $('div','stop' + (e.book ? ' bookpage' : ''));
+  const s = $('div','stop' + (e.book || e.dash ? ' bookpage' : '') + (e.dash ? ' dashpage' : ''));
   s.style.setProperty('--c', c); s.style.setProperty('--t', t);
   s.innerHTML = `${firstOfYear ? `<div class="ghost">${fa(e.year)}</div>` : ''}
     ${e.photo || e.video ? `<div class="photo${e.photoInv ? ' inv' : ''}"${e.photo ? ` style="background-image:url('${e.photo}')"` : ''}>${e.video ? `<video src="${e.video}" muted loop playsinline preload="metadata" onerror="this.remove()"></video>` : ''}</div>` : ''}
@@ -561,6 +648,7 @@ EVENTS.forEach((e, i) => {
     <div class="node" role="button" aria-label="${e.year}"><svg class="ring" viewBox="0 0 100 100"><circle cx="50" cy="50" r="49" pathLength="1"/></svg><b><i>${fa(e.year)}</i></b></div>
     ${e.sub && !(e.logos || e.brand) ? subHTML(e.sub) : ''}
     ${e.book ? `<div class="bookbox">${bookHTML(e.book)}</div>` : ''}
+    ${e.dash ? `<div class="bookbox dashbox">${dashHTML()}</div>` : ''}
     ${e.logos || e.brand || e.link || e.image ? `<div class="below"><div class="stem"></div>${extras(e)}</div>` : ''}`;
   stops.push(s);
 });
