@@ -91,14 +91,14 @@ body.at-intro:not(.ov) .brand{opacity:0}
 @keyframes pulse{from{transform:scale(1);opacity:.6}to{transform:scale(1.5);opacity:0}}
 
 /* text block above the rail */
-.head{position:absolute;left:50%;bottom:calc(50% + clamp(54px,min(8vw,12vh),170px));width:min(max(680px,38vw),86vw);
+.head{position:absolute;left:50%;bottom:calc(50% + clamp(54px,min(8vw,12vh),170px));width:min(max(780px,56vw),86vw,1280px);   /* a long measure on purpose: fewer lines keeps the block out of the header */
   direction:rtl;text-align:center;transform:translateX(calc(-50% + var(--d) * -14vw)) skewX(calc(var(--v,0) * -7deg)) scale(var(--fit,1));transform-origin:50% 100%;opacity:var(--a)}
 .meta{display:inline-flex;align-items:center;gap:10px;font-size:clamp(12px,.9vw,18px);color:var(--mute);margin-bottom:14px}
 .tag{padding:4px 11px;border-radius:99px;border:1px solid var(--faint);color:var(--ink);font-weight:500;
   background:rgba(255,255,255,.03)}
 .head h2{font-weight:700;font-size:clamp(21px,min(3.2vw,5.6vh),80px);line-height:1.35;text-wrap:balance}
 .head h2 .note{display:block;font-weight:300;color:#a9bfd0;font-size:min(.58em,36px);line-height:1.75;letter-spacing:0;margin-top:6px;text-wrap:balance}
-.head p{margin-top:14px;font-size:clamp(14px,min(1.1vw,2.6vh),26px);line-height:2;color:var(--mute);font-weight:400;text-wrap:pretty}
+.head p{margin-top:14px;font-size:clamp(14px,min(1.1vw,2.6vh),26px);line-height:1.9;color:var(--mute);font-weight:400;text-wrap:pretty}
 
 .w{display:inline-block;overflow:hidden;vertical-align:top;padding:.25em .04em .2em;margin:-.25em 0 -.2em}
 .w > span{display:inline-block;transform:translateY(110%) rotate(4deg);filter:blur(8px);opacity:0;
@@ -239,6 +239,7 @@ body.at-intro:not(.ov) .brand{opacity:0}
 .sub.inb li b{font-size:clamp(11px,.8vw,18px);line-height:1.6}
 .sub.inb li time{font-size:clamp(11px,.65vw,14px)}
 .sub.inb:has(.doc) .doc{height:38px;width:30px}
+.sub li .pre{display:block;font-weight:300;color:var(--mute)}
 .sub li b{font-weight:500;font-size:clamp(12px,1vw,21px);line-height:1.7}
 .stop.active .stem{transform:none}
 .stop.active .sub ol::before{transform:none}
@@ -427,12 +428,12 @@ const EVENTS = [
   {year:1401, tag:'تاسیس',      title:'راه‌اندازی دفتر تخصصی مشاوره بازرگانی سازمان مدیریت صنعتی', note:'با هدف توسعه شبکه خدمات بازرگانی و طراحی مدل‌های احراز صلاحیت و ارزیابی فعالان بازرگانی', desc:'',
     logos:[{name:'دفتر تخصصی مشاوره بازرگانی', src:L_('daftar-mashavere')}],
     // collaborations: each gets a thumbnail slot for the MOU mock-up (doc:'' = placeholder, doc:'path' = image)
-    sub:[{date:1401, title:'دفتر خدمات کسب‌وکار<br>وزارت صمت', doc:''},
-         {date:1402, title:'دفتر آماد و توزیع<br>وزارت صمت', doc:''},
-         {date:1402, title:'دفتر تخصصی لوازم خانگی و اداری<br>وزارت صمت', doc:'assets/photos/mou.jpg'},
-         {date:1402, title:'موسیاد<br>(انجمن تجار و صنعتگران ترکیه)', doc:''},
-         {date:1403, title:'مرکز آموزش<br>بازرگانی ایران', doc:''},
-         {date:1405, title:'دفتر برنامه‌ریزی تامین، توزیع<br>و تنظیم بازار وزارت صمت', doc:''}]},
+    sub:[{pre:'امضا تفاهم‌نامه با', date:1401, title:'دفتر خدمات کسب‌وکار<br>وزارت صمت', doc:''},
+         {pre:'امضا تفاهم‌نامه با', date:1402, title:'دفتر آماد و توزیع<br>وزارت صمت', doc:''},
+         {pre:'امضا تفاهم‌نامه با', date:1402, title:'دفتر تخصصی لوازم خانگی و اداری<br>وزارت صمت', doc:'assets/photos/mou.jpg'},
+         {pre:'امضا تفاهم‌نامه با', date:1402, title:'موسیاد<br>(انجمن تجار و صنعتگران ترکیه)', doc:''},
+         {pre:'امضا تفاهم‌نامه با', date:1403, title:'مرکز آموزش<br>بازرگانی ایران', doc:''},
+         {pre:'امضا تفاهم‌نامه با', date:1405, title:'دفتر برنامه‌ریزی تامین، توزیع<br>و تنظیم بازار وزارت صمت', doc:''}]},
   {year:1401, tag:'رویداد',     title:'برگزاری رویداد روز ملی تجارت الکترونیکی (۲۴ مهر) / ۱۴۰۰-۱۴۰۴', note:'معرفی برترین کسب‌وکارهای حوزه تجارت الکترونیکی در مدل ارزیابی اینماد', desc:'',
     photo:'assets/photos/e724.jpg', video:'assets/videos/e724.mp4',
     brand:{name:'روز ملی تجارت الکترونیکی و اقتصاد دیجیتالی', src:L_('e724')}, brandTop:true,
@@ -503,7 +504,7 @@ const bookHTML = b => {
 const subHTML = (sub, cls = '') => `<div class="sub${cls}">${cls ? '' : '<div class="stem"></div>'}<ol>${
   // evenly spaced, independent of the main timeline's year scale
   sub.map(x => [x, 1])
-  .map((p, k) => { if (!p) return '<li class="gap" style="flex:1;pointer-events:none"></li>'; const x = p[0]; return `<li data-g="${k}" style="--k:0;flex:${p[1]}"><time>${fa(x.date)}</time><b>${x.title}</b>${x.doc === undefined ? '' : `<span class="doc">${x.doc ? `<img src="${x.doc}" alt="">` : '<svg viewBox="0 0 24 30" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 1h13l5 5v23H3zM16 1v5h5M7 12h10M7 16h10M7 20h6"/></svg>'}</span>`}</li>`; }).join('')}</ol></div>`;
+  .map((p, k) => { if (!p) return '<li class="gap" style="flex:1;pointer-events:none"></li>'; const x = p[0]; return `<li data-g="${k}" style="--k:0;flex:${p[1]}"><time>${fa(x.date)}</time><b>${x.pre ? `<span class="pre">${x.pre}</span>` : ''}${x.title}</b>${x.doc === undefined ? '' : `<span class="doc">${x.doc ? `<img src="${x.doc}" alt="">` : '<svg viewBox="0 0 24 30" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 1h13l5 5v23H3zM16 1v5h5M7 12h10M7 16h10M7 20h6"/></svg>'}</span>`}</li>`; }).join('')}</ol></div>`;
 function extras(e) {
   let s = '';
   if (e.image) s += `<div class="mock">${e.image.src ? `<img src="${e.image.src}" alt="${e.image.alt}">` : `<span>${e.image.alt}<small>تصویر به‌زودی</small></span>`}</div>`;
@@ -760,10 +761,8 @@ function fit() {
   stops.forEach(s => {
     const h = s.querySelector('.head'), blk = s.querySelector(':scope > .below, :scope > .sub');
     if (h) {
-      const w = h.offsetWidth, cx = s.classList.contains('bookpage') && vw > vh ? vw * .26 : vw / 2;
-      // the counter is empty at load and fills in later, so reserve its room instead of measuring the header's current width
-      const clash = cx - w / 2 < bars[1].left + 250 || cx + w / 2 > bars[0].right - bars[0].width - 24;
-      const bottom = vh - parseFloat(getComputedStyle(h).bottom), room = bottom - (clash ? hdr : 8);
+      // always keep the text below the header band, even where it would not touch the logo or counter
+      const bottom = vh - parseFloat(getComputedStyle(h).bottom), room = bottom - hdr - 6;
       h.style.setProperty('--fit', Math.max(.55, Math.min(1, room / h.offsetHeight)).toFixed(3));
     }
     if (blk && !blk.querySelector('.wall')) {
